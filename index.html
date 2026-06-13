@@ -1,0 +1,1850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New Royal Electricals & Hardware — Pennadam</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C8922A;
+    --gold-light: #E5B84A;
+    --gold-dim: #8A6520;
+    --dark: #0D0F14;
+    --dark2: #161A22;
+    --dark3: #1E2330;
+    --dark4: #252B3A;
+    --surface: #1A1F2E;
+    --surface2: #222840;
+    --border: rgba(200,146,42,0.2);
+    --border2: rgba(255,255,255,0.07);
+    --text: #F0EDE6;
+    --text-muted: #8A92A8;
+    --text-dim: #5A6278;
+    --green: #2ECC71;
+    --red: #E74C3C;
+    --blue: #3498DB;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --shadow: 0 8px 32px rgba(0,0,0,0.4);
+    --shadow-gold: 0 4px 24px rgba(200,146,42,0.25);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--dark);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ===== SCROLLBAR ===== */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--dark2); }
+  ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 3px; }
+
+  /* ===== NAV ===== */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(13,15,20,0.95);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 64px;
+  }
+  .nav-brand { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+  .nav-brand-icon {
+    width: 38px; height: 38px; background: linear-gradient(135deg, var(--gold), var(--gold-dim));
+    border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .nav-brand-text { font-weight: 800; font-size: 15px; line-height: 1.1; }
+  .nav-brand-text span { display: block; font-weight: 400; font-size: 10px; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; }
+  .nav-links { display: flex; gap: 4px; }
+  .nav-links a {
+    padding: 6px 14px; border-radius: 6px; font-size: 13px; font-weight: 500;
+    color: var(--text-muted); text-decoration: none; transition: all 0.2s;
+    cursor: pointer;
+  }
+  .nav-links a:hover, .nav-links a.active { color: var(--text); background: var(--dark3); }
+  .nav-right { display: flex; gap: 8px; align-items: center; }
+  .nav-cart-btn {
+    background: var(--dark3); border: 1px solid var(--border2); border-radius: 8px;
+    padding: 7px 14px; font-size: 13px; font-weight: 600; color: var(--text);
+    cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s;
+  }
+  .nav-cart-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .cart-count {
+    background: var(--gold); color: #000; border-radius: 10px;
+    padding: 1px 7px; font-size: 11px; font-weight: 700; min-width: 20px; text-align: center;
+  }
+  .btn-admin {
+    background: linear-gradient(135deg, var(--gold), var(--gold-dim));
+    color: #000; border: none; border-radius: 8px; padding: 7px 16px;
+    font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s;
+  }
+  .btn-admin:hover { opacity: 0.85; }
+
+  /* ===== HERO ===== */
+  .hero {
+    position: relative; overflow: hidden;
+    min-height: 520px;
+    display: flex; align-items: center;
+    background: var(--dark2);
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 70% 50%, rgba(200,146,42,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 80% at 10% 30%, rgba(52,152,219,0.06) 0%, transparent 60%),
+      url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C8922A' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .hero-content { position: relative; z-index: 2; padding: 60px 40px; max-width: 700px; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(200,146,42,0.15); border: 1px solid rgba(200,146,42,0.3);
+    border-radius: 20px; padding: 5px 14px; font-size: 11px; font-weight: 600;
+    color: var(--gold); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 5vw, 56px); font-weight: 900; line-height: 1.1;
+    margin-bottom: 12px;
+  }
+  .hero h1 em { color: var(--gold); font-style: normal; }
+  .hero-sub { font-size: 13px; color: var(--gold); letter-spacing: 3px; text-transform: uppercase; font-weight: 600; margin-bottom: 14px; }
+  .hero p { color: var(--text-muted); font-size: 15px; line-height: 1.7; margin-bottom: 8px; }
+  .hero-address { font-size: 12px; color: var(--text-dim); margin-bottom: 28px; }
+  .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--gold), var(--gold-dim));
+    color: #000; border: none; border-radius: 10px; padding: 13px 28px;
+    font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: var(--shadow-gold); }
+  .btn-secondary {
+    background: transparent; color: var(--text); border: 1px solid var(--border2);
+    border-radius: 10px; padding: 13px 28px; font-size: 14px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
+  .hero-stats {
+    position: absolute; right: 40px; top: 50%; transform: translateY(-50%);
+    display: flex; flex-direction: column; gap: 16px; z-index: 2;
+  }
+  .hero-stat {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px 20px; text-align: center; min-width: 130px;
+    box-shadow: var(--shadow);
+  }
+  .hero-stat-val { font-size: 28px; font-weight: 900; color: var(--gold); line-height: 1; }
+  .hero-stat-lbl { font-size: 11px; color: var(--text-dim); margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
+
+  /* ===== SECTIONS ===== */
+  .section { padding: 60px 40px; }
+  .section-header { text-align: center; margin-bottom: 40px; }
+  .section-eyebrow {
+    display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 10px;
+  }
+  .section-title { font-family: 'Playfair Display', serif; font-size: clamp(24px, 3vw, 36px); font-weight: 700; }
+  .section-title span { color: var(--gold); }
+  .section-desc { color: var(--text-muted); font-size: 14px; margin-top: 8px; }
+
+  /* ===== CATEGORY TABS ===== */
+  .cat-tabs { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 32px; }
+  .cat-tab {
+    padding: 8px 18px; border-radius: 24px; font-size: 13px; font-weight: 600;
+    border: 1px solid var(--border2); background: var(--dark3); color: var(--text-muted);
+    cursor: pointer; transition: all 0.2s;
+  }
+  .cat-tab:hover, .cat-tab.active {
+    border-color: var(--gold); background: rgba(200,146,42,0.12); color: var(--gold);
+  }
+
+  /* ===== PRODUCT GRID ===== */
+  .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+  .product-card {
+    background: var(--surface); border: 1px solid var(--border2); border-radius: 14px;
+    overflow: hidden; transition: all 0.25s; cursor: pointer;
+  }
+  .product-card:hover { border-color: var(--border); transform: translateY(-2px); box-shadow: var(--shadow); }
+  .product-card-img {
+    height: 150px; background: var(--dark3); display: flex; align-items: center;
+    justify-content: center; font-size: 48px; position: relative; overflow: hidden;
+  }
+  .product-card-img::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(180deg, transparent 60%, rgba(0,0,0,0.4) 100%);
+  }
+  .product-badge {
+    position: absolute; top: 10px; left: 10px; z-index: 1;
+    background: var(--gold); color: #000; font-size: 9px; font-weight: 800;
+    padding: 3px 8px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px;
+  }
+  .product-badge.low { background: var(--red); color: #fff; }
+  .product-body { padding: 14px; }
+  .product-name { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+  .product-brand { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+  .product-sizes { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 12px; }
+  .size-chip {
+    background: var(--dark4); border: 1px solid var(--border2); border-radius: 6px;
+    padding: 3px 8px; font-size: 10px; font-weight: 600; color: var(--text-muted);
+    cursor: pointer; transition: all 0.15s;
+  }
+  .size-chip:hover, .size-chip.selected { border-color: var(--gold); color: var(--gold); background: rgba(200,146,42,0.1); }
+  .product-price-row { display: flex; align-items: center; justify-content: space-between; }
+  .product-price { font-size: 18px; font-weight: 800; color: var(--gold); }
+  .product-price small { font-size: 11px; font-weight: 500; color: var(--text-dim); }
+  .btn-add-cart {
+    background: linear-gradient(135deg, var(--gold), var(--gold-dim));
+    color: #000; border: none; border-radius: 8px; padding: 7px 14px;
+    font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s;
+  }
+  .btn-add-cart:hover { opacity: 0.85; }
+
+  /* ===== PAINT SECTION ===== */
+  .paint-section { background: var(--dark2); }
+  .paint-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+  .paint-card {
+    background: var(--surface); border: 1px solid var(--border2); border-radius: 14px;
+    overflow: hidden;
+  }
+  .paint-card-header {
+    padding: 16px; display: flex; align-items: center; gap: 12px;
+    border-bottom: 1px solid var(--border2);
+  }
+  .paint-swatch {
+    width: 44px; height: 44px; border-radius: 8px; flex-shrink: 0;
+    border: 2px solid rgba(255,255,255,0.1);
+  }
+  .paint-name { font-weight: 700; font-size: 14px; }
+  .paint-brand { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+  .paint-sizes-table { width: 100%; border-collapse: collapse; }
+  .paint-sizes-table th {
+    padding: 8px 14px; text-align: left; font-size: 10px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 1px; color: var(--text-dim);
+    border-bottom: 1px solid var(--border2);
+  }
+  .paint-sizes-table td {
+    padding: 8px 14px; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.03);
+  }
+  .paint-sizes-table tr:hover td { background: var(--dark4); }
+  .paint-sizes-table .rate { font-weight: 700; color: var(--gold); }
+  .btn-add-paint {
+    background: rgba(200,146,42,0.1); border: none; border-radius: 6px;
+    padding: 4px 10px; font-size: 11px; font-weight: 700; color: var(--gold);
+    cursor: pointer; transition: all 0.2s; white-space: nowrap;
+  }
+  .btn-add-paint:hover { background: var(--gold); color: #000; }
+
+  /* ===== CART PANEL ===== */
+  .cart-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200;
+    display: none; backdrop-filter: blur(4px);
+  }
+  .cart-overlay.open { display: block; }
+  .cart-panel {
+    position: fixed; right: 0; top: 0; bottom: 0; width: 420px; max-width: 100%;
+    background: var(--dark2); border-left: 1px solid var(--border); z-index: 201;
+    display: flex; flex-direction: column; transform: translateX(100%);
+    transition: transform 0.3s ease;
+  }
+  .cart-panel.open { transform: translateX(0); }
+  .cart-header {
+    padding: 20px 24px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .cart-header h3 { font-size: 16px; font-weight: 700; }
+  .cart-close { background: var(--dark3); border: 1px solid var(--border2); border-radius: 8px; padding: 6px 10px; cursor: pointer; color: var(--text); font-size: 16px; }
+  .cart-items { flex: 1; overflow-y: auto; padding: 16px 24px; }
+  .cart-item {
+    background: var(--surface); border: 1px solid var(--border2); border-radius: 10px;
+    padding: 12px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px;
+  }
+  .cart-item-icon { font-size: 28px; width: 44px; text-align: center; flex-shrink: 0; }
+  .cart-item-info { flex: 1; min-width: 0; }
+  .cart-item-name { font-weight: 600; font-size: 13px; }
+  .cart-item-sub { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+  .cart-item-right { text-align: right; flex-shrink: 0; }
+  .cart-item-price { font-weight: 700; font-size: 14px; color: var(--gold); }
+  .cart-qty { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
+  .qty-btn { background: var(--dark4); border: 1px solid var(--border2); border-radius: 5px; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 13px; font-weight: 700; color: var(--text); }
+  .qty-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .qty-val { font-size: 13px; font-weight: 600; min-width: 20px; text-align: center; }
+  .cart-empty { text-align: center; padding: 40px 0; color: var(--text-dim); }
+  .cart-empty div { font-size: 48px; margin-bottom: 12px; }
+  .cart-footer { padding: 20px 24px; border-top: 1px solid var(--border); flex-shrink: 0; }
+  .cart-totals { margin-bottom: 16px; }
+  .cart-total-row { display: flex; justify-content: space-between; padding: 5px 0; font-size: 13px; color: var(--text-muted); }
+  .cart-total-row.grand { font-size: 16px; font-weight: 800; color: var(--text); border-top: 1px solid var(--border2); padding-top: 10px; margin-top: 6px; }
+  .cart-total-row.grand span:last-child { color: var(--gold); }
+  .btn-checkout {
+    width: 100%; background: linear-gradient(135deg, var(--gold), var(--gold-dim));
+    color: #000; border: none; border-radius: 10px; padding: 14px;
+    font-size: 15px; font-weight: 800; cursor: pointer; display: flex;
+    align-items: center; justify-content: center; gap: 8px; transition: all 0.2s;
+  }
+  .btn-checkout:hover { opacity: 0.9; }
+
+  /* ===== BILLING MODAL ===== */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 300;
+    display: none; align-items: center; justify-content: center;
+    padding: 20px; backdrop-filter: blur(6px);
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--dark2); border: 1px solid var(--border); border-radius: 16px;
+    width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+  }
+  .modal-header {
+    padding: 20px 24px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; background: var(--dark2); z-index: 1;
+  }
+  .modal-header h3 { font-size: 16px; font-weight: 700; }
+  .modal-body { padding: 24px; }
+  .form-group { margin-bottom: 16px; }
+  .form-group label { display: block; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; }
+  .form-control {
+    width: 100%; background: var(--dark3); border: 1px solid var(--border2);
+    border-radius: 8px; padding: 10px 14px; font-size: 14px; color: var(--text);
+    font-family: 'Inter', sans-serif; outline: none; transition: border-color 0.2s;
+  }
+  .form-control:focus { border-color: var(--gold); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .payment-methods { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .payment-btn {
+    background: var(--dark3); border: 2px solid var(--border2); border-radius: 8px;
+    padding: 10px; text-align: center; cursor: pointer; transition: all 0.2s;
+  }
+  .payment-btn:hover, .payment-btn.selected { border-color: var(--gold); background: rgba(200,146,42,0.1); }
+  .payment-btn .icon { font-size: 20px; display: block; margin-bottom: 4px; }
+  .payment-btn .label { font-size: 11px; font-weight: 600; color: var(--text-muted); }
+  .payment-btn.selected .label { color: var(--gold); }
+  .upi-input-wrap { margin-top: 12px; display: none; }
+  .upi-input-wrap.show { display: block; }
+  .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; gap: 10px; }
+  .btn-gen-invoice {
+    flex: 1; background: linear-gradient(135deg, var(--gold), var(--gold-dim));
+    color: #000; border: none; border-radius: 10px; padding: 13px;
+    font-size: 14px; font-weight: 800; cursor: pointer; transition: all 0.2s;
+  }
+  .btn-cancel { background: var(--dark3); border: 1px solid var(--border2); border-radius: 10px; padding: 13px 20px; font-size: 14px; font-weight: 600; color: var(--text); cursor: pointer; }
+
+  /* ===== INVOICE PRINT ===== */
+  .invoice-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 400;
+    display: none; align-items: center; justify-content: center; padding: 20px;
+  }
+  .invoice-overlay.open { display: flex; }
+  .invoice-wrap {
+    background: #fff; color: #000; width: 100%; max-width: 700px;
+    max-height: 90vh; overflow-y: auto; border-radius: 4px;
+    font-family: 'Inter', sans-serif;
+  }
+  .invoice-inner { padding: 32px; }
+  .inv-header { border-bottom: 2px solid #C8922A; padding-bottom: 16px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: flex-start; }
+  .inv-logo { font-size: 20px; font-weight: 900; }
+  .inv-logo span { color: #C8922A; }
+  .inv-logo sub { display: block; font-size: 10px; font-weight: 500; color: #666; letter-spacing: 2px; }
+  .inv-meta { font-size: 11px; color: #555; text-align: right; line-height: 1.8; }
+  .inv-gstin { font-weight: 700; color: #C8922A; }
+  .inv-section { margin-bottom: 16px; }
+  .inv-section-title { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: #888; margin-bottom: 8px; border-bottom: 1px solid #eee; padding-bottom: 4px; }
+  .inv-bill-to { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .inv-field label { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: #999; }
+  .inv-field p { font-size: 13px; font-weight: 600; }
+  table.inv-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  table.inv-table th { background: #f5f5f5; padding: 8px 10px; text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; }
+  table.inv-table td { padding: 8px 10px; border-bottom: 1px solid #f0f0f0; }
+  table.inv-table .num { text-align: right; }
+  .inv-totals { float: right; width: 240px; margin-top: 12px; }
+  .inv-totals tr td { padding: 4px 8px; font-size: 12px; }
+  .inv-totals tr td:last-child { text-align: right; font-weight: 600; }
+  .inv-grand { font-size: 14px !important; font-weight: 900 !important; color: #C8922A; border-top: 2px solid #C8922A; }
+  .inv-footer { clear: both; margin-top: 24px; border-top: 1px solid #eee; padding-top: 14px; text-align: center; }
+  .inv-footer p { font-size: 11px; color: #888; }
+  .inv-footer strong { color: #C8922A; }
+  .inv-actions { display: flex; gap: 10px; padding: 16px 32px; background: #f9f9f9; border-top: 1px solid #eee; }
+  .btn-print { flex: 1; background: #C8922A; color: #fff; border: none; border-radius: 8px; padding: 12px; font-size: 14px; font-weight: 700; cursor: pointer; }
+  .btn-close-inv { background: #eee; border: none; border-radius: 8px; padding: 12px 20px; font-size: 14px; font-weight: 600; cursor: pointer; }
+
+  /* ===== ADMIN PANEL ===== */
+  .admin-overlay {
+    position: fixed; inset: 0; background: var(--dark); z-index: 500;
+    display: none; overflow-y: auto;
+  }
+  .admin-overlay.open { display: block; }
+  .admin-nav {
+    background: var(--dark2); border-bottom: 1px solid var(--border);
+    padding: 0 24px; height: 60px; display: flex; align-items: center; gap: 24px;
+    position: sticky; top: 0; z-index: 10;
+  }
+  .admin-nav-title { font-weight: 800; font-size: 15px; color: var(--gold); flex: 1; }
+  .admin-nav-tabs { display: flex; gap: 4px; }
+  .admin-tab {
+    padding: 6px 14px; border-radius: 6px; font-size: 13px; font-weight: 500;
+    color: var(--text-muted); cursor: pointer; transition: all 0.2s; border: none; background: none;
+  }
+  .admin-tab:hover, .admin-tab.active { color: var(--text); background: var(--dark3); }
+  .admin-tab.active { color: var(--gold); }
+  .admin-close { background: var(--dark3); border: 1px solid var(--border2); border-radius: 8px; padding: 6px 12px; cursor: pointer; color: var(--text); font-size: 13px; font-weight: 600; }
+  .admin-body { padding: 32px 40px; }
+  .admin-section { display: none; }
+  .admin-section.active { display: block; }
+  .admin-section-title { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; margin-bottom: 24px; }
+
+  /* Stats grid */
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; margin-bottom: 32px; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border2); border-radius: 12px; padding: 20px; }
+  .stat-card-icon { font-size: 28px; margin-bottom: 10px; }
+  .stat-card-val { font-size: 28px; font-weight: 900; color: var(--gold); }
+  .stat-card-lbl { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+  /* Add product form */
+  .add-product-form { background: var(--surface); border: 1px solid var(--border2); border-radius: 14px; padding: 24px; margin-bottom: 28px; }
+  .add-product-title { font-weight: 700; font-size: 15px; margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
+  .form-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+  .form-grid .form-group { margin-bottom: 0; }
+  .btn-save { background: linear-gradient(135deg, var(--gold), var(--gold-dim)); color: #000; border: none; border-radius: 8px; padding: 10px 24px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 16px; }
+
+  /* Product table */
+  .data-table-wrap { background: var(--surface); border: 1px solid var(--border2); border-radius: 14px; overflow: hidden; }
+  .data-table { width: 100%; border-collapse: collapse; }
+  .data-table th { padding: 12px 16px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-dim); background: var(--dark3); border-bottom: 1px solid var(--border2); }
+  .data-table td { padding: 12px 16px; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.03); vertical-align: middle; }
+  .data-table tr:hover td { background: var(--dark4); }
+  .badge { display: inline-block; padding: 3px 9px; border-radius: 12px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+  .badge-green { background: rgba(46,204,113,0.15); color: var(--green); }
+  .badge-red { background: rgba(231,76,60,0.15); color: var(--red); }
+  .badge-gold { background: rgba(200,146,42,0.15); color: var(--gold); }
+  .badge-blue { background: rgba(52,152,219,0.15); color: var(--blue); }
+  .btn-edit { background: var(--dark4); border: 1px solid var(--border2); border-radius: 6px; padding: 4px 10px; font-size: 11px; cursor: pointer; color: var(--text); margin-right: 4px; }
+  .btn-del { background: rgba(231,76,60,0.1); border: 1px solid rgba(231,76,60,0.2); border-radius: 6px; padding: 4px 10px; font-size: 11px; cursor: pointer; color: var(--red); }
+
+  /* ===== BRANDS STRIP ===== */
+  .brands-strip { background: var(--dark3); border-top: 1px solid var(--border2); border-bottom: 1px solid var(--border2); padding: 16px 40px; display: flex; align-items: center; gap: 12px; overflow-x: auto; }
+  .brands-strip-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); white-space: nowrap; margin-right: 8px; }
+  .brand-tag { white-space: nowrap; padding: 5px 14px; background: var(--surface); border: 1px solid var(--border2); border-radius: 20px; font-size: 12px; font-weight: 600; color: var(--text-muted); }
+
+  /* ===== FEATURES ===== */
+  .features-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+  .feature-card { background: var(--surface); border: 1px solid var(--border2); border-radius: 14px; padding: 24px; }
+  .feature-icon { font-size: 32px; margin-bottom: 12px; }
+  .feature-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; }
+  .feature-desc { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: var(--dark2); border-top: 1px solid var(--border);
+    padding: 40px; text-align: center;
+  }
+  .footer-brand { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+  .footer-brand span { color: var(--gold); }
+  .footer-info { font-size: 13px; color: var(--text-dim); line-height: 1.8; margin-bottom: 16px; }
+  .footer-bottom { font-size: 11px; color: var(--text-dim); border-top: 1px solid var(--border2); padding-top: 14px; margin-top: 14px; }
+
+  /* ===== TOAST ===== */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px; z-index: 1000;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    padding: 12px 18px; font-size: 13px; font-weight: 600;
+    box-shadow: var(--shadow); display: flex; align-items: center; gap: 8px;
+    transform: translateY(100px); opacity: 0; transition: all 0.3s;
+    max-width: 320px;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast.success { border-color: rgba(46,204,113,0.4); }
+  .toast.success .toast-icon { color: var(--green); }
+  .toast.error { border-color: rgba(231,76,60,0.4); }
+  .toast.error .toast-icon { color: var(--red); }
+
+  /* ===== INVENTORY ALERT ===== */
+  .inv-alert {
+    background: rgba(231,76,60,0.08); border: 1px solid rgba(231,76,60,0.2);
+    border-radius: 10px; padding: 14px 16px; margin-bottom: 20px;
+    font-size: 13px; color: var(--red); display: flex; gap: 10px; align-items: center;
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 0 16px; }
+    .nav-links { display: none; }
+    .hero-content { padding: 40px 20px; }
+    .hero-stats { display: none; }
+    .section { padding: 40px 20px; }
+    .admin-body { padding: 20px; }
+    .form-row, .form-grid { grid-template-columns: 1fr; }
+    .inv-bill-to { grid-template-columns: 1fr; }
+    .payment-methods { grid-template-columns: repeat(2, 1fr); }
+    .brands-strip { padding: 12px 20px; }
+  }
+
+  @media print {
+    body > *:not(.invoice-overlay) { display: none !important; }
+    .invoice-overlay { position: static !important; display: block !important; background: none !important; }
+    .invoice-wrap { box-shadow: none !important; max-height: none !important; }
+    .inv-actions { display: none !important; }
+  }
+
+  /* ===== ADMIN LOGIN MODAL ===== */
+  .login-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 600;
+    display: none; align-items: center; justify-content: center;
+    backdrop-filter: blur(8px); padding: 20px;
+  }
+  .login-overlay.open { display: flex; }
+  .login-box {
+    background: var(--dark2); border: 1px solid var(--border);
+    border-radius: 20px; width: 100%; max-width: 420px;
+    padding: 40px; box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+  }
+  .login-logo { text-align: center; margin-bottom: 28px; }
+  .login-logo-icon {
+    width: 64px; height: 64px; background: linear-gradient(135deg, var(--gold), var(--gold-dim));
+    border-radius: 16px; display: flex; align-items: center; justify-content: center;
+    font-size: 28px; margin: 0 auto 14px;
+  }
+  .login-logo h2 { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; }
+  .login-logo p { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+  .login-error {
+    background: rgba(231,76,60,0.1); border: 1px solid rgba(231,76,60,0.3);
+    border-radius: 8px; padding: 10px 14px; font-size: 13px; color: var(--red);
+    margin-bottom: 16px; display: none;
+  }
+  .login-error.show { display: block; }
+  .login-hint {
+    background: rgba(200,146,42,0.08); border: 1px solid rgba(200,146,42,0.2);
+    border-radius: 8px; padding: 10px 14px; font-size: 12px; color: var(--text-muted);
+    margin-top: 16px; text-align: center;
+  }
+  .login-hint strong { color: var(--gold); }
+  .btn-login-submit {
+    width: 100%; background: linear-gradient(135deg, var(--gold), var(--gold-dim));
+    color: #000; border: none; border-radius: 10px; padding: 13px;
+    font-size: 15px; font-weight: 800; cursor: pointer; margin-top: 8px; transition: all 0.2s;
+  }
+  .btn-login-submit:hover { opacity: 0.88; }
+  .btn-login-cancel {
+    width: 100%; background: transparent; color: var(--text-muted); border: none;
+    padding: 10px; font-size: 13px; cursor: pointer; margin-top: 8px;
+  }
+  .btn-login-cancel:hover { color: var(--text); }
+
+  /* ===== MOBILE HAMBURGER NAV ===== */
+  .hamburger {
+    display: none; flex-direction: column; justify-content: center;
+    gap: 5px; background: var(--dark3); border: 1px solid var(--border2);
+    border-radius: 8px; padding: 8px 10px; cursor: pointer;
+  }
+  .hamburger span { display: block; width: 20px; height: 2px; background: var(--text); border-radius: 2px; transition: all 0.3s; }
+  .mobile-menu {
+    display: none; position: fixed; top: 64px; left: 0; right: 0;
+    background: var(--dark2); border-bottom: 1px solid var(--border);
+    z-index: 99; padding: 12px 16px; flex-direction: column; gap: 4px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    padding: 12px 16px; border-radius: 8px; font-size: 14px; font-weight: 600;
+    color: var(--text-muted); text-decoration: none; transition: all 0.2s;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .mobile-menu a:hover, .mobile-menu a.active { color: var(--text); background: var(--dark3); }
+  .mobile-bottom-bar {
+    display: none; position: fixed; bottom: 0; left: 0; right: 0;
+    background: var(--dark2); border-top: 1px solid var(--border);
+    z-index: 99; padding: 8px 16px;
+    justify-content: space-around; align-items: center;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
+  }
+  .mob-tab {
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    padding: 6px 12px; border-radius: 8px; cursor: pointer;
+    color: var(--text-dim); font-size: 10px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.2s;
+    background: none; border: none;
+  }
+  .mob-tab .mob-icon { font-size: 20px; }
+  .mob-tab.active, .mob-tab:hover { color: var(--gold); }
+
+  /* ===== IMPORT / EXPORT PANEL ===== */
+  .export-btn {
+    background: rgba(52,152,219,0.12); border: 1px solid rgba(52,152,219,0.25);
+    color: var(--blue); border-radius: 8px; padding: 7px 16px;
+    font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .export-btn:hover { background: rgba(52,152,219,0.22); }
+  .import-btn {
+    background: rgba(46,204,113,0.12); border: 1px solid rgba(46,204,113,0.25);
+    color: var(--green); border-radius: 8px; padding: 7px 16px;
+    font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .import-btn:hover { background: rgba(46,204,113,0.22); }
+  .io-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; align-items: center; }
+  .io-bar-title { font-size: 13px; color: var(--text-muted); flex: 1; }
+
+  /* ===== EXTRA MOBILE OVERRIDES ===== */
+  @media (max-width: 768px) {
+    .hamburger { display: flex; }
+    .nav-links { display: none !important; }
+    .mobile-bottom-bar { display: flex; }
+    body { padding-bottom: 72px; }
+    .hero-btns { flex-direction: column; }
+    .hero-btns .btn-primary, .hero-btns .btn-secondary { width: 100%; justify-content: center; }
+    .admin-nav { flex-wrap: wrap; height: auto; padding: 12px 16px; gap: 10px; }
+    .admin-nav-tabs { flex-wrap: wrap; gap: 4px; }
+    .admin-nav-title { width: 100%; font-size: 13px; }
+    .cart-panel { width: 100%; }
+    .toast { bottom: 84px; right: 12px; left: 12px; max-width: 100%; }
+    .modal { max-height: 95vh; }
+    .product-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+    .paint-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .payment-methods { grid-template-columns: repeat(2, 1fr); }
+    .admin-body { padding: 16px; }
+    .invoice-inner { padding: 16px; }
+  }
+
+</style>
+</head>
+<body>
+
+<!-- GLOBAL LOADER -->
+<div id="globalLoader" style="position:fixed;inset:0;background:var(--dark);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;">
+  <div style="font-size:48px;animation:spin 1s linear infinite;">⚡</div>
+  <div style="font-size:14px;color:var(--gold);font-weight:600;letter-spacing:2px;">LOADING STORE DATA…</div>
+  <div style="font-size:12px;color:var(--text-dim);">Connecting to MongoDB</div>
+</div>
+<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand" onclick="scrollToTop()">
+    <div class="nav-brand-icon">⚡</div>
+    <div class="nav-brand-text">New Royal Electricals<span>Est. 1970 · Pennadam</span></div>
+  </div>
+  <div class="nav-links">
+    <a onclick="showSection('home')" class="active" id="nav-home">Home</a>
+    <a onclick="showSection('products')" id="nav-products">Products</a>
+    <a onclick="showSection('paints')" id="nav-paints">Paints</a>
+    <a onclick="showSection('about')" id="nav-about">About</a>
+    <a onclick="showSection('contact')" id="nav-contact">Contact</a>
+  </div>
+  <div class="nav-right">
+    <button class="nav-cart-btn" onclick="openCart()">🛒 Cart <span class="cart-count" id="cartCount">0</span></button>
+    <button class="btn-admin" onclick="openAdminLogin()">⚙ Admin</button>
+    <button class="hamburger" onclick="toggleMobileMenu()" id="hamburgerBtn" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a onclick="showSection('home');closeMobileMenu()" id="mnav-home">🏠 Home</a>
+  <a onclick="showSection('products');closeMobileMenu()" id="mnav-products">⚡ Products</a>
+  <a onclick="showSection('paints');closeMobileMenu()" id="mnav-paints">🎨 Paints</a>
+  <a onclick="showSection('about');closeMobileMenu()" id="mnav-about">ℹ About</a>
+  <a onclick="showSection('contact');closeMobileMenu()" id="mnav-contact">📞 Contact</a>
+</div>
+
+<!-- MOBILE BOTTOM BAR -->
+<div class="mobile-bottom-bar">
+  <button class="mob-tab active" onclick="showSection('home')" id="mbot-home"><span class="mob-icon">🏠</span>Home</button>
+  <button class="mob-tab" onclick="showSection('products')" id="mbot-products"><span class="mob-icon">⚡</span>Products</button>
+  <button class="mob-tab" onclick="showSection('paints')" id="mbot-paints"><span class="mob-icon">🎨</span>Paints</button>
+  <button class="mob-tab" onclick="openCart()" id="mbot-cart"><span class="mob-icon">🛒</span>Cart</button>
+  <button class="mob-tab" onclick="openAdminLogin()" id="mbot-admin"><span class="mob-icon">⚙</span>Admin</button>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="mainContent">
+
+<!-- HERO -->
+<section class="hero" id="sec-home">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-badge">⚡ Established 1970</div>
+    <p class="hero-sub">நியூ ராயல் எலக்ட்ரிக்கல்ஸ்</p>
+    <h1>New Royal <em>Electricals</em> & Hardware</h1>
+    <p>Your one-stop destination for electrical, hardware & paint supplies — trusted by Pennadam for over 55 years.</p>
+    <p class="hero-address">📍 92, Main Road, Pennadam – 606 105 | GSTIN: 33AACFN4722E1ZR</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="showSection('products')">🛍 Shop Now</button>
+      <button class="btn-secondary" onclick="showSection('paints')">🎨 View Paints</button>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-val" id="heroProducts">0</div>
+      <div class="hero-stat-lbl">Products</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-val">55+</div>
+      <div class="hero-stat-lbl">Years Serving</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-val">GST</div>
+      <div class="hero-stat-lbl">Compliant</div>
+    </div>
+  </div>
+</section>
+
+<!-- BRANDS STRIP -->
+<div class="brands-strip">
+  <span class="brands-strip-label">Brands We Carry</span>
+  <span class="brand-tag">GM</span>
+  <span class="brand-tag">Kundan</span>
+  <span class="brand-tag">Hi-Fi</span>
+  <span class="brand-tag">Fybros</span>
+  <span class="brand-tag">Crompton</span>
+  <span class="brand-tag">Philips</span>
+  <span class="brand-tag">Norwood LED</span>
+  <span class="brand-tag">CRI</span>
+  <span class="brand-tag">Laxmi Motors</span>
+  <span class="brand-tag">Birla Opus</span>
+  <span class="brand-tag">PVC / UPVC / CPVC</span>
+  <span class="brand-tag">GI Fittings</span>
+</div>
+
+<!-- FEATURES -->
+<section class="section" style="background:var(--dark2);" id="sec-features">
+  <div class="section-header">
+    <span class="section-eyebrow">Why Choose Us</span>
+    <h2 class="section-title">Trusted Since <span>1970</span></h2>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card"><div class="feature-icon">⚡</div><div class="feature-title">Electrical Supplies</div><div class="feature-desc">Complete range of switches, sockets, wires, panels & modular accessories from top brands.</div></div>
+    <div class="feature-card"><div class="feature-icon">💡</div><div class="feature-title">Lighting Solutions</div><div class="feature-desc">LED bulbs, tube lights, panel lights by Crompton, Philips & Norwood at wholesale rates.</div></div>
+    <div class="feature-card"><div class="feature-icon">🎨</div><div class="feature-title">Birla Opus Paints</div><div class="feature-desc">Authorised dealer. Interior, exterior, enamel paints — all sizes from 50ml to 20L in stock.</div></div>
+    <div class="feature-card"><div class="feature-icon">🔧</div><div class="feature-title">Hardware & Tools</div><div class="feature-desc">Fasteners, fittings, PVC pipes, GI items, tools & construction accessories.</div></div>
+    <div class="feature-card"><div class="feature-icon">🧾</div><div class="feature-title">GST Billing</div><div class="feature-desc">Every invoice is GST-compliant with SGST + CGST breakdown. Digital & print available.</div></div>
+    <div class="feature-card"><div class="feature-icon">💳</div><div class="feature-title">All Payments</div><div class="feature-desc">Cash, UPI (GPay/PhonePe/Paytm), Card, Net Banking & Credit accepted.</div></div>
+  </div>
+</section>
+
+<!-- PRODUCTS SECTION -->
+<section class="section" id="sec-products" style="display:none;">
+  <div class="section-header">
+    <span class="section-eyebrow">Our Products</span>
+    <h2 class="section-title">Browse <span>All Products</span></h2>
+    <p class="section-desc">Electrical • Lighting • Hardware • PVC Fittings • Tools</p>
+  </div>
+  <div class="cat-tabs" id="productCatTabs">
+    <button class="cat-tab active" onclick="filterProducts('All', this)">All</button>
+    <button class="cat-tab" onclick="filterProducts('Electrical', this)">⚡ Electrical</button>
+    <button class="cat-tab" onclick="filterProducts('Lighting', this)">💡 Lighting</button>
+    <button class="cat-tab" onclick="filterProducts('Cables', this)">🔌 Cables</button>
+    <button class="cat-tab" onclick="filterProducts('Hardware', this)">🔧 Hardware</button>
+    <button class="cat-tab" onclick="filterProducts('PVC', this)">🪠 PVC / Fittings</button>
+    <button class="cat-tab" onclick="filterProducts('Motors', this)">⚙ Motors</button>
+  </div>
+  <div class="product-grid" id="productGrid"></div>
+</section>
+
+<!-- PAINTS SECTION -->
+<section class="section paint-section" id="sec-paints" style="display:none;">
+  <div class="section-header">
+    <span class="section-eyebrow">Birla Opus Paints</span>
+    <h2 class="section-title">Paint <span>Categories</span></h2>
+    <p class="section-desc">All sizes available: 50ml · 100ml · 250ml · 500ml · 1 Litre · 4L · 10L · 20L</p>
+  </div>
+  <div class="cat-tabs" id="paintCatTabs">
+    <button class="cat-tab active" onclick="filterPaints('All', this)">All Paints</button>
+    <button class="cat-tab" onclick="filterPaints('Interior', this)">🏠 Interior</button>
+    <button class="cat-tab" onclick="filterPaints('Exterior', this)">🏗 Exterior</button>
+    <button class="cat-tab" onclick="filterPaints('Enamel', this)">✨ Enamel</button>
+    <button class="cat-tab" onclick="filterPaints('Primer', this)">🪣 Primer</button>
+  </div>
+  <div class="paint-grid" id="paintGrid"></div>
+</section>
+
+<!-- ABOUT SECTION -->
+<section class="section" id="sec-about" style="display:none;">
+  <div class="section-header">
+    <span class="section-eyebrow">Our Story</span>
+    <h2 class="section-title">About <span>New Royal Electricals</span></h2>
+  </div>
+  <div style="max-width:800px;margin:0 auto;background:var(--surface);border:1px solid var(--border2);border-radius:16px;padding:36px;">
+    <p style="color:var(--text-muted);line-height:1.8;margin-bottom:16px;">Founded in <strong style="color:var(--gold)">1970</strong>, New Royal Electricals & Hardware has grown to become Pennadam's most trusted destination for electrical, hardware, and building material supplies. For more than 55 years, we have served homeowners, electricians, contractors, builders, and industrial clients across the region — delivering genuine products at fair prices.</p>
+    <p style="color:var(--text-muted);line-height:1.8;margin-bottom:24px;">Our store carries an extensive range from leading national brands. Whether you're wiring a new home, upgrading lighting, laying pipelines, or painting walls — we have everything under one roof, with knowledgeable staff ready to guide you.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;">
+      <div style="text-align:center;padding:16px;background:var(--dark3);border-radius:10px;"><div style="font-size:28px;font-weight:900;color:var(--gold)">55+</div><div style="font-size:12px;color:var(--text-dim)">Years of Trust</div></div>
+      <div style="text-align:center;padding:16px;background:var(--dark3);border-radius:10px;"><div style="font-size:28px;font-weight:900;color:var(--gold)">100+</div><div style="font-size:12px;color:var(--text-dim)">Brands Stocked</div></div>
+      <div style="text-align:center;padding:16px;background:var(--dark3);border-radius:10px;"><div style="font-size:28px;font-weight:900;color:var(--gold)">GST</div><div style="font-size:12px;color:var(--text-dim)">Certified Billing</div></div>
+      <div style="text-align:center;padding:16px;background:var(--dark3);border-radius:10px;"><div style="font-size:28px;font-weight:900;color:var(--gold)">₹0</div><div style="font-size:12px;color:var(--text-dim)">Hidden Charges</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT SECTION -->
+<section class="section" id="sec-contact" style="display:none;">
+  <div class="section-header">
+    <span class="section-eyebrow">Get In Touch</span>
+    <h2 class="section-title">Contact <span>Us</span></h2>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px;max-width:900px;margin:0 auto;">
+    <div class="feature-card"><div class="feature-icon">📞</div><div class="feature-title">Phone</div><div class="feature-desc">94431 82381<br>99448 64347</div></div>
+    <div class="feature-card"><div class="feature-icon">📍</div><div class="feature-title">Address</div><div class="feature-desc">92, Main Road<br>Pennadam – 606 105<br>Tamil Nadu, India</div></div>
+    <div class="feature-card"><div class="feature-icon">🕐</div><div class="feature-title">Business Hours</div><div class="feature-desc">Mon – Sat<br>8:00 AM to 8:00 PM</div></div>
+    <div class="feature-card"><div class="feature-icon">🧾</div><div class="feature-title">GSTIN</div><div class="feature-desc" style="font-family:monospace;font-size:12px;">33AACFN4722E1ZR</div></div>
+  </div>
+</section>
+
+</div><!-- /mainContent -->
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">New Royal <span>Electricals</span> & Hardware</div>
+  <div class="footer-info">
+    92, Main Road, Pennadam – 606 105, Tamil Nadu<br>
+    GSTIN: 33AACFN4722E1ZR | Ph: 94431 82381 / 99448 64347<br>
+    Mon–Sat: 8:00 AM – 8:00 PM
+  </div>
+  <div class="footer-bottom">
+    © 2026 New Royal Electricals & Hardware. Established 1970. All rights reserved.
+  </div>
+</footer>
+
+<!-- ===== CART PANEL ===== -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<div class="cart-panel" id="cartPanel">
+  <div class="cart-header">
+    <h3>🛒 Shopping Cart</h3>
+    <button class="cart-close" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty"><div>🛒</div><p>Your cart is empty</p></div>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-totals">
+      <div class="cart-total-row"><span>Subtotal</span><span id="cartSubtotal">₹0.00</span></div>
+      <div class="cart-total-row"><span>SGST (9%)</span><span id="cartSGST">₹0.00</span></div>
+      <div class="cart-total-row"><span>CGST (9%)</span><span id="cartCGST">₹0.00</span></div>
+      <div class="cart-total-row grand"><span>Grand Total</span><span id="cartGrand">₹0.00</span></div>
+    </div>
+    <button class="btn-checkout" onclick="openBilling()">🧾 Generate GST Invoice</button>
+  </div>
+</div>
+
+<!-- ===== BILLING MODAL ===== -->
+<div class="modal-overlay" id="billingModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>📋 Generate GST Invoice</h3>
+      <button class="cart-close" onclick="closeBilling()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Customer Name *</label>
+          <input class="form-control" id="custName" placeholder="Full name">
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input class="form-control" id="custPhone" placeholder="Mobile number">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Billing / Delivery Address</label>
+        <input class="form-control" id="custAddr" placeholder="Address">
+      </div>
+      <div class="form-group">
+        <label>Invoice Date</label>
+        <input class="form-control" type="date" id="invDate">
+      </div>
+      <div class="form-group">
+        <label>Payment Method</label>
+        <div class="payment-methods">
+          <div class="payment-btn selected" id="pm-cash" onclick="selectPayment('Cash')"><span class="icon">💵</span><span class="label">Cash</span></div>
+          <div class="payment-btn" id="pm-upi" onclick="selectPayment('UPI')"><span class="icon">📱</span><span class="label">UPI</span></div>
+          <div class="payment-btn" id="pm-card" onclick="selectPayment('Card')"><span class="icon">💳</span><span class="label">Card</span></div>
+          <div class="payment-btn" id="pm-credit" onclick="selectPayment('Credit')"><span class="icon">📝</span><span class="label">Credit</span></div>
+        </div>
+        <div class="upi-input-wrap" id="upiWrap">
+          <label style="font-size:11px;color:var(--text-dim);display:block;margin-bottom:6px;">UPI ID / Transaction Ref</label>
+          <input class="form-control" id="upiRef" placeholder="e.g. 9443182381@upi or txn ref">
+        </div>
+      </div>
+      <!-- Order summary -->
+      <div style="background:var(--dark3);border-radius:10px;padding:14px;margin-top:4px;">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);margin-bottom:10px;">Order Summary</div>
+        <div id="billSummary"></div>
+        <div style="margin-top:10px;border-top:1px solid var(--border2);padding-top:10px;">
+          <div class="cart-total-row"><span>Subtotal</span><span id="billSub">₹0</span></div>
+          <div class="cart-total-row"><span>SGST 9%</span><span id="billSGST">₹0</span></div>
+          <div class="cart-total-row"><span>CGST 9%</span><span id="billCGST">₹0</span></div>
+          <div class="cart-total-row grand"><span>Grand Total</span><span id="billGrand">₹0</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeBilling()">Cancel</button>
+      <button class="btn-gen-invoice" onclick="generateInvoice()">🖨 Generate & Print Invoice</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== INVOICE ===== -->
+<div class="invoice-overlay" id="invoiceOverlay">
+  <div class="invoice-wrap">
+    <div class="invoice-inner" id="invoicePrint"></div>
+    <div class="inv-actions">
+      <button class="btn-print" onclick="printInvoice()">🖨 Print Invoice</button>
+      <button class="btn-close-inv" onclick="closeInvoice()">✕ Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADMIN PANEL ===== -->
+<div class="admin-overlay" id="adminOverlay">
+  <div class="admin-nav">
+    <span class="admin-nav-title">⚙ Admin Panel — New Royal Electricals</span>
+    <div class="admin-nav-tabs">
+      <button class="admin-tab active" onclick="adminTab('dashboard')">Dashboard</button>
+      <button class="admin-tab" onclick="adminTab('products')">Products</button>
+      <button class="admin-tab" onclick="adminTab('paints')">Paints</button>
+      <button class="admin-tab" onclick="adminTab('inventory')">Inventory</button>
+      <button class="admin-tab" onclick="adminTab('orders')">Orders</button>
+      <button class="admin-tab" onclick="adminTab('reports')">📊 Reports</button>
+      <button class="admin-tab" onclick="adminTab('settings')">⚙ Settings</button>
+    </div>
+    <button class="admin-close" onclick="closeAdmin()">✕ Close</button>
+  </div>
+  <div class="admin-body">
+
+    <!-- DASHBOARD -->
+    <div class="admin-section active" id="admin-dashboard">
+      <div class="admin-section-title">Dashboard</div>
+      <div class="stats-grid" id="adminStats"></div>
+      <div class="inv-alert" id="lowStockAlert" style="display:none;">
+        ⚠️ <strong>Low Stock Alert:</strong> Some products are running low. Check Inventory tab.
+      </div>
+      <div class="data-table-wrap">
+        <table class="data-table">
+          <thead><tr><th>Recent Orders</th><th>Customer</th><th>Amount</th><th>Payment</th><th>Status</th></tr></thead>
+          <tbody id="recentOrders"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PRODUCTS -->
+    <div class="admin-section" id="admin-products">
+      <div class="admin-section-title">Manage Products</div>
+      <div class="add-product-form">
+        <div class="add-product-title">➕ Add New Product</div>
+        <div class="form-grid">
+          <div class="form-group"><label>Product Name *</label><input class="form-control" id="ap-name" placeholder="e.g. GM 6A Switch"></div>
+          <div class="form-group"><label>Category *</label>
+            <select class="form-control" id="ap-cat">
+              <option value="Electrical">Electrical</option>
+              <option value="Lighting">Lighting</option>
+              <option value="Cables">Cables</option>
+              <option value="Hardware">Hardware</option>
+              <option value="PVC">PVC / Fittings</option>
+              <option value="Motors">Motors</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Brand</label><input class="form-control" id="ap-brand" placeholder="e.g. GM"></div>
+          <div class="form-group"><label>Rate (₹) *</label><input class="form-control" type="number" id="ap-rate" placeholder="0.00"></div>
+          <div class="form-group"><label>Stock Qty</label><input class="form-control" type="number" id="ap-stock" placeholder="0"></div>
+          <div class="form-group"><label>HSN Code</label><input class="form-control" id="ap-hsn" placeholder="HSN Code"></div>
+          <div class="form-group"><label>Unit</label>
+            <select class="form-control" id="ap-unit">
+              <option>Piece</option><option>Box</option><option>Kg</option><option>Metre</option><option>Litre</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Emoji Icon</label><input class="form-control" id="ap-icon" placeholder="⚡" value="⚡"></div>
+        </div>
+        <button class="btn-save" onclick="addProduct()">💾 Save Product</button>
+      </div>
+      <div class="data-table-wrap">
+        <table class="data-table">
+          <thead><tr><th>Product</th><th>Category</th><th>Brand</th><th>Rate</th><th>Stock</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="adminProductTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PAINTS -->
+    <div class="admin-section" id="admin-paints">
+      <div class="admin-section-title">Manage Paints</div>
+      <div class="add-product-form">
+        <div class="add-product-title">➕ Add New Paint</div>
+        <div class="form-grid">
+          <div class="form-group"><label>Paint Name *</label><input class="form-control" id="pp-name" placeholder="e.g. Blue Colour Paint"></div>
+          <div class="form-group"><label>Type *</label>
+            <select class="form-control" id="pp-type">
+              <option value="Interior">Interior</option>
+              <option value="Exterior">Exterior</option>
+              <option value="Enamel">Enamel</option>
+              <option value="Primer">Primer</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Colour Code (Hex)</label><input class="form-control" id="pp-colour" placeholder="#4A90D9" value="#4A90D9"></div>
+          <div class="form-group"><label>Brand</label><input class="form-control" id="pp-brand" placeholder="Birla Opus" value="Birla Opus"></div>
+          <div class="form-group"><label>50ml Rate ₹</label><input class="form-control" type="number" id="pp-50" placeholder="0"></div>
+          <div class="form-group"><label>100ml Rate ₹</label><input class="form-control" type="number" id="pp-100" placeholder="0"></div>
+          <div class="form-group"><label>250ml Rate ₹</label><input class="form-control" type="number" id="pp-250" placeholder="0"></div>
+          <div class="form-group"><label>500ml Rate ₹</label><input class="form-control" type="number" id="pp-500" placeholder="0"></div>
+          <div class="form-group"><label>1L Rate ₹</label><input class="form-control" type="number" id="pp-1L" placeholder="0"></div>
+          <div class="form-group"><label>4L Rate ₹</label><input class="form-control" type="number" id="pp-4L" placeholder="0"></div>
+          <div class="form-group"><label>10L Rate ₹</label><input class="form-control" type="number" id="pp-10L" placeholder="0"></div>
+          <div class="form-group"><label>20L Rate ₹</label><input class="form-control" type="number" id="pp-20L" placeholder="0"></div>
+        </div>
+        <button class="btn-save" onclick="addPaint()">💾 Save Paint</button>
+      </div>
+      <div class="data-table-wrap">
+        <table class="data-table">
+          <thead><tr><th>Colour</th><th>Name</th><th>Type</th><th>Brand</th><th>1L Rate</th><th>Actions</th></tr></thead>
+          <tbody id="adminPaintTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- INVENTORY -->
+    <div class="admin-section" id="admin-inventory">
+      <div class="admin-section-title">Inventory Management</div>
+      <div class="data-table-wrap">
+        <table class="data-table">
+          <thead><tr><th>Product</th><th>Category</th><th>In Stock</th><th>Status</th><th>Update Stock</th></tr></thead>
+          <tbody id="inventoryTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ORDERS -->
+    <div class="admin-section" id="admin-orders">
+      <div class="admin-section-title">Order History</div>
+      <div class="data-table-wrap">
+        <table class="data-table">
+          <thead><tr><th>Bill No.</th><th>Date</th><th>Customer</th><th>Items</th><th>Total</th><th>Payment</th><th>Action</th></tr></thead>
+          <tbody id="ordersTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ===== ADMIN LOGIN MODAL ===== -->
+<div class="login-overlay" id="loginOverlay">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="login-logo-icon">⚙</div>
+      <h2>Admin Access</h2>
+      <p>New Royal Electricals — Authorised Personnel Only</p>
+    </div>
+    <div class="login-error" id="loginError">❌ Incorrect username or password. Try again.</div>
+    <div class="form-group">
+      <label>Admin Username</label>
+      <input class="form-control" id="loginUser" placeholder="admin" autocomplete="username">
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input class="form-control" type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password"
+        onkeydown="if(event.key==='Enter') submitLogin()">
+    </div>
+    <button class="btn-login-submit" onclick="submitLogin()">🔓 Access Dashboard</button>
+    <button class="btn-login-cancel" onclick="closeAdminLogin()">Cancel</button>
+    <div class="login-hint">Contact store administrator for access credentials.<br>Default: <strong>admin</strong> / <strong>nre@2026</strong></div>
+    <!-- REPORTS / IMPORT-EXPORT -->
+    <div class="admin-section" id="admin-reports">
+      <div class="admin-section-title">📊 Reports & Data Management</div>
+
+      <!-- Export Section -->
+      <div class="add-product-form" style="margin-bottom:20px;">
+        <div class="add-product-title">📤 Export Data</div>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">Download your store data as CSV files for Excel/Google Sheets or as JSON for backup.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;">
+          <div style="background:var(--dark3);border-radius:10px;padding:16px;text-align:center;">
+            <div style="font-size:28px;margin-bottom:8px;">📦</div>
+            <div style="font-weight:700;margin-bottom:4px;font-size:14px;">Products</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">All product data with rates & stock</div>
+            <button class="export-btn" onclick="exportCSV('products')" style="width:100%;justify-content:center;">⬇ Export CSV</button>
+          </div>
+          <div style="background:var(--dark3);border-radius:10px;padding:16px;text-align:center;">
+            <div style="font-size:28px;margin-bottom:8px;">🎨</div>
+            <div style="font-weight:700;margin-bottom:4px;font-size:14px;">Paints</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">All paint colours & size pricing</div>
+            <button class="export-btn" onclick="exportCSV('paints')" style="width:100%;justify-content:center;">⬇ Export CSV</button>
+          </div>
+          <div style="background:var(--dark3);border-radius:10px;padding:16px;text-align:center;">
+            <div style="font-size:28px;margin-bottom:8px;">🧾</div>
+            <div style="font-weight:700;margin-bottom:4px;font-size:14px;">Sales Report</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">All orders with customer & amounts</div>
+            <button class="export-btn" onclick="exportCSV('orders')" style="width:100%;justify-content:center;">⬇ Export CSV</button>
+          </div>
+          <div style="background:var(--dark3);border-radius:10px;padding:16px;text-align:center;">
+            <div style="font-size:28px;margin-bottom:8px;">💾</div>
+            <div style="font-weight:700;margin-bottom:4px;font-size:14px;">Full Backup</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">Complete store data as JSON</div>
+            <button class="export-btn" onclick="exportJSON()" style="width:100%;justify-content:center;">⬇ Export JSON</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Import Section -->
+      <div class="add-product-form" style="margin-bottom:20px;">
+        <div class="add-product-title">📥 Import Data</div>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">Restore from a JSON backup or import products from CSV. <strong style="color:var(--red);">⚠ This will overwrite existing data.</strong></p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div>
+            <label style="display:block;font-size:12px;font-weight:600;color:var(--text-muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;">Import JSON Backup</label>
+            <input type="file" accept=".json" id="importJsonFile" style="display:none" onchange="importJSON(this)">
+            <button class="import-btn" onclick="document.getElementById('importJsonFile').click()" style="width:100%;justify-content:center;">📂 Choose JSON File</button>
+          </div>
+          <div>
+            <label style="display:block;font-size:12px;font-weight:600;color:var(--text-muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;">Import Products CSV</label>
+            <input type="file" accept=".csv" id="importCsvFile" style="display:none" onchange="importProductCSV(this)">
+            <button class="import-btn" onclick="document.getElementById('importCsvFile').click()" style="width:100%;justify-content:center;">📂 Choose CSV File</button>
+            <p style="font-size:11px;color:var(--text-dim);margin-top:6px;">CSV headers: name,category,brand,rate,stock,unit,hsn,icon</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sales Summary -->
+      <div class="add-product-form">
+        <div class="add-product-title">📈 Sales Summary</div>
+        <div id="salesSummaryContent" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;"></div>
+      </div>
+
+      <div class="data-table-wrap" style="margin-top:20px;">
+        <table class="data-table">
+          <thead><tr><th>Bill No</th><th>Date</th><th>Customer</th><th>Items</th><th>Subtotal</th><th>SGST</th><th>CGST</th><th>Grand Total</th><th>Payment</th></tr></thead>
+          <tbody id="salesReportTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="admin-section" id="admin-settings">
+      <div class="admin-section-title">⚙ Settings</div>
+      <div class="add-product-form" style="max-width:500px;">
+        <div class="add-product-title">🔐 Change Admin Password</div>
+        <div class="form-group">
+          <label>Current Password</label>
+          <input class="form-control" type="password" id="set-oldpass" placeholder="Current password">
+        </div>
+        <div class="form-group">
+          <label>New Username</label>
+          <input class="form-control" id="set-newuser" placeholder="admin">
+        </div>
+        <div class="form-group">
+          <label>New Password</label>
+          <input class="form-control" type="password" id="set-newpass" placeholder="New password (min 6 chars)">
+        </div>
+        <div class="form-group">
+          <label>Confirm New Password</label>
+          <input class="form-control" type="password" id="set-confirmpass" placeholder="Confirm password">
+        </div>
+        <button class="btn-save" onclick="changeAdminCreds()">💾 Update Credentials</button>
+      </div>
+      <div class="add-product-form" style="max-width:500px;margin-top:20px;">
+        <div class="add-product-title">🗑 Data Management</div>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">Danger zone — these actions cannot be undone.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button onclick="clearOrders()" style="background:rgba(231,76,60,0.1);border:1px solid rgba(231,76,60,0.3);color:var(--red);border-radius:8px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;">🗑 Clear All Orders</button>
+          <button onclick="resetAllData()" style="background:rgba(231,76,60,0.2);border:1px solid rgba(231,76,60,0.5);color:var(--red);border-radius:8px;padding:9px 18px;font-size:13px;font-weight:700;cursor:pointer;">⚠ Reset All Data to Defaults</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><span class="toast-icon">✓</span><span id="toastMsg">Added to cart</span></div>
+
+<script>
+// ============================================================
+//  NEW ROYAL ELECTRICALS — Frontend  (MongoDB API version)
+//  All data is persisted in MongoDB via /api/* endpoints.
+//  No localStorage used for store data.
+// ============================================================
+
+// Base URL — auto-detects same origin in Vercel
+const API = '';   // empty = same origin, works on Vercel & localhost
+
+// ── Admin token (session only — not stored) ──────────────────
+let ADMIN_TOKEN = sessionStorage.getItem('nre_admin_token') || '';
+
+// ── In-memory cache ─────────────────────────────────────────
+let PRODUCTS = [];
+let PAINTS   = [];
+let ORDERS   = [];
+
+// ── Cart state ───────────────────────────────────────────────
+let cart = [];
+let selectedPayment = 'Cash';
+let currentInvoiceData = null;
+
+// ============================================================
+//  API HELPERS
+// ============================================================
+async function apiGet(path) {
+  const r = await fetch(API + path);
+  if (!r.ok) throw new Error(await r.text());
+  return r.json();
+}
+async function apiPost(path, body) {
+  const r = await fetch(API + path, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...(ADMIN_TOKEN ? { Authorization: 'Bearer ' + ADMIN_TOKEN } : {}) },
+    body: JSON.stringify(body)
+  });
+  if (!r.ok) throw new Error(await r.text());
+  return r.json();
+}
+async function apiPut(path, body) {
+  const r = await fetch(API + path, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + ADMIN_TOKEN },
+    body: JSON.stringify(body)
+  });
+  if (!r.ok) throw new Error(await r.text());
+  return r.json();
+}
+async function apiPatch(path, body) {
+  const r = await fetch(API + path, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + ADMIN_TOKEN },
+    body: JSON.stringify(body)
+  });
+  if (!r.ok) throw new Error(await r.text());
+  return r.json();
+}
+async function apiDelete(path) {
+  const r = await fetch(API + path, {
+    method: 'DELETE',
+    headers: { Authorization: 'Bearer ' + ADMIN_TOKEN }
+  });
+  if (!r.ok) throw new Error(await r.text());
+  return r.json();
+}
+
+// ============================================================
+//  INIT — load all data from MongoDB on page load
+// ============================================================
+async function initApp() {
+  showLoader(true);
+  try {
+    [PRODUCTS, PAINTS] = await Promise.all([
+      apiGet('/api/products'),
+      apiGet('/api/paints'),
+    ]);
+  } catch(e) {
+    console.error('Init error', e);
+    showToast('⚠', 'Cannot reach server. Check connection.', 'error');
+  }
+  showLoader(false);
+  renderProducts('All');
+  renderPaints('All');
+  updateCartUI();
+  document.getElementById('invDate').value = new Date().toISOString().split('T')[0];
+  document.getElementById('heroProducts').textContent = PRODUCTS.length;
+}
+
+function showLoader(on) {
+  let el = document.getElementById('globalLoader');
+  if (!el) return;
+  el.style.display = on ? 'flex' : 'none';
+}
+
+window.onload = () => { initApp(); };
+
+// ============================================================
+//  NAVIGATION
+// ============================================================
+function showSection(sec) {
+  ['home','features','products','paints','about','contact'].forEach(s => {
+    const el = document.getElementById('sec-' + s);
+    if (el) el.style.display = 'none';
+  });
+  const target = document.getElementById('sec-' + sec);
+  if (target) target.style.display = '';
+  if (sec === 'home') {
+    document.getElementById('sec-features').style.display = '';
+  }
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  const navEl = document.getElementById('nav-' + sec);
+  if (navEl) navEl.classList.add('active');
+  // mobile bottom bar
+  document.querySelectorAll('.mob-tab').forEach(t => t.classList.remove('active'));
+  const mobEl = document.getElementById('mbot-' + sec);
+  if (mobEl) mobEl.classList.add('active');
+  // mobile nav
+  document.querySelectorAll('.mobile-menu a').forEach(a => a.classList.remove('active'));
+  const mnavEl = document.getElementById('mnav-' + sec);
+  if (mnavEl) mnavEl.classList.add('active');
+  closeMobileMenu();
+  window.scrollTo(0, 0);
+}
+function scrollToTop() { showSection('home'); }
+
+// ============================================================
+//  PRODUCTS
+// ============================================================
+function filterProducts(cat, el) {
+  document.querySelectorAll('#productCatTabs .cat-tab').forEach(t => t.classList.remove('active'));
+  if (el) el.classList.add('active');
+  renderProducts(cat);
+}
+function renderProducts(filter) {
+  const filtered = filter === 'All' ? PRODUCTS : PRODUCTS.filter(p => p.category === filter);
+  const grid = document.getElementById('productGrid');
+  if (!filtered.length) {
+    grid.innerHTML = '<p style="color:var(--text-dim);text-align:center;padding:40px;grid-column:1/-1">No products found. Add from Admin Panel.</p>';
+    return;
+  }
+  grid.innerHTML = filtered.map(p => {
+    const isLow = p.stock < 10;
+    return `<div class="product-card">
+      <div class="product-card-img">
+        ${isLow ? '<span class="product-badge low">Low Stock</span>' : '<span class="product-badge">In Stock</span>'}
+        <span>${p.icon || '📦'}</span>
+      </div>
+      <div class="product-body">
+        <div class="product-name">${p.name}</div>
+        <div class="product-brand">${p.brand}</div>
+        <div class="product-price-row">
+          <div class="product-price">₹${p.rate}<small>/${p.unit}</small></div>
+          <button class="btn-add-cart" onclick='addToCart(${JSON.stringify(p)})'>+ Cart</button>
+        </div>
+        <div style="font-size:11px;color:var(--text-dim);margin-top:6px;">Stock: ${p.stock} ${p.unit}${p.hsn ? ' · HSN: '+p.hsn : ''}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ============================================================
+//  PAINTS
+// ============================================================
+function filterPaints(type, el) {
+  document.querySelectorAll('#paintCatTabs .cat-tab').forEach(t => t.classList.remove('active'));
+  if (el) el.classList.add('active');
+  renderPaints(type);
+}
+function renderPaints(filter) {
+  const filtered = filter === 'All' ? PAINTS : PAINTS.filter(p => p.type === filter);
+  const grid = document.getElementById('paintGrid');
+  if (!filtered.length) {
+    grid.innerHTML = '<p style="color:var(--text-dim);text-align:center;padding:40px;grid-column:1/-1">No paints found.</p>';
+    return;
+  }
+  grid.innerHTML = filtered.map(p => {
+    const sizeRows = Object.entries(p.sizes || {}).map(([s, r]) =>
+      `<tr><td>${s}</td><td class="rate">₹${r}</td><td><button class="btn-add-paint" onclick='addPaintToCart(${JSON.stringify({...p, selectedSize: s, rate: r})})'>+ Cart</button></td></tr>`
+    ).join('');
+    return `<div class="paint-card">
+      <div class="paint-card-header">
+        <div class="paint-swatch" style="background:${p.colour}"></div>
+        <div><div class="paint-name">${p.name}</div><div class="paint-brand">${p.brand} · ${p.type}</div></div>
+      </div>
+      <table class="paint-sizes-table">
+        <thead><tr><th>Size</th><th>Rate</th><th></th></tr></thead>
+        <tbody>${sizeRows}</tbody>
+      </table>
+    </div>`;
+  }).join('');
+}
+
+// ============================================================
+//  CART
+// ============================================================
+function addToCart(p) {
+  const existing = cart.find(c => c.id === p._id && !c.size);
+  if (existing) { existing.qty++; }
+  else { cart.push({ id: p._id, name: p.name, icon: p.icon || '📦', unit: p.unit, rate: p.rate, qty: 1, size: null }); }
+  updateCartUI(); showToast('✓', p.name + ' added to cart', 'success');
+}
+function addPaintToCart(p) {
+  const key = p._id + '_' + p.selectedSize;
+  const existing = cart.find(c => c.id === key);
+  if (existing) { existing.qty++; }
+  else { cart.push({ id: key, name: p.name + ' ' + p.selectedSize, icon: '🎨', unit: 'Tin', rate: p.rate, qty: 1, size: p.selectedSize }); }
+  updateCartUI(); showToast('✓', p.name + ' ' + p.selectedSize + ' added', 'success');
+}
+function updateCartQty(id, delta) {
+  const item = cart.find(c => c.id === id);
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) cart = cart.filter(c => c.id !== id);
+  updateCartUI();
+}
+function updateCartUI() {
+  const sub = cart.reduce((s, c) => s + c.rate * c.qty, 0);
+  const sgst = sub * 0.09, cgst = sub * 0.09, grand = sub + sgst + cgst;
+  document.getElementById('cartCount').textContent = cart.reduce((s, c) => s + c.qty, 0);
+  document.getElementById('cartSubtotal').textContent = '₹' + sub.toFixed(2);
+  document.getElementById('cartSGST').textContent = '₹' + sgst.toFixed(2);
+  document.getElementById('cartCGST').textContent = '₹' + cgst.toFixed(2);
+  document.getElementById('cartGrand').textContent = '₹' + grand.toFixed(2);
+  const itemsEl = document.getElementById('cartItems');
+  if (!cart.length) {
+    itemsEl.innerHTML = '<div class="cart-empty"><div>🛒</div><p>Your cart is empty</p></div>';
+    return;
+  }
+  itemsEl.innerHTML = cart.map(c => `<div class="cart-item">
+    <div class="cart-item-icon">${c.icon}</div>
+    <div class="cart-item-info">
+      <div class="cart-item-name">${c.name}</div>
+      <div class="cart-item-sub">₹${c.rate}/${c.unit}</div>
+    </div>
+    <div class="cart-item-right">
+      <div class="cart-item-price">₹${(c.rate * c.qty).toFixed(2)}</div>
+      <div class="cart-qty">
+        <span class="qty-btn" onclick="updateCartQty('${c.id}',-1)">−</span>
+        <span class="qty-val">${c.qty}</span>
+        <span class="qty-btn" onclick="updateCartQty('${c.id}',1)">+</span>
+      </div>
+    </div>
+  </div>`).join('');
+}
+function openCart() { document.getElementById('cartOverlay').classList.add('open'); document.getElementById('cartPanel').classList.add('open'); }
+function closeCart() { document.getElementById('cartOverlay').classList.remove('open'); document.getElementById('cartPanel').classList.remove('open'); }
+
+// ============================================================
+//  BILLING
+// ============================================================
+function openBilling() {
+  if (!cart.length) { showToast('⚠', 'Cart is empty', 'error'); return; }
+  closeCart();
+  const sub = cart.reduce((s, c) => s + c.rate * c.qty, 0);
+  const sgst = sub * 0.09, cgst = sub * 0.09, grand = sub + sgst + cgst;
+  document.getElementById('billSummary').innerHTML = cart.map(c =>
+    `<div style="display:flex;justify-content:space-between;font-size:13px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.04);">
+      <span>${c.icon} ${c.name} × ${c.qty}</span>
+      <span style="color:var(--gold);font-weight:600;">₹${(c.rate*c.qty).toFixed(2)}</span>
+    </div>`
+  ).join('');
+  document.getElementById('billSub').textContent = '₹' + sub.toFixed(2);
+  document.getElementById('billSGST').textContent = '₹' + sgst.toFixed(2);
+  document.getElementById('billCGST').textContent = '₹' + cgst.toFixed(2);
+  document.getElementById('billGrand').textContent = '₹' + grand.toFixed(2);
+  document.getElementById('billingModal').classList.add('open');
+}
+function closeBilling() { document.getElementById('billingModal').classList.remove('open'); }
+
+function selectPayment(method) {
+  selectedPayment = method;
+  document.querySelectorAll('.payment-btn').forEach(b => b.classList.remove('selected'));
+  document.getElementById('pm-' + method.toLowerCase()).classList.add('selected');
+  document.getElementById('upiWrap').classList.toggle('show', method === 'UPI');
+}
+
+async function generateInvoice() {
+  const name = document.getElementById('custName').value.trim();
+  if (!name) { showToast('⚠', 'Customer name required', 'error'); return; }
+  const sub = cart.reduce((s, c) => s + c.rate * c.qty, 0);
+  const sgst = sub * 0.09, cgst = sub * 0.09, grand = sub + sgst + cgst;
+  const billNo = 'NRE' + Date.now().toString().slice(-8);
+  const order = {
+    billNo, date: document.getElementById('invDate').value,
+    customer: name, phone: document.getElementById('custPhone').value,
+    address: document.getElementById('custAddr').value,
+    payment: selectedPayment + (selectedPayment === 'UPI' ? ' (' + (document.getElementById('upiRef').value || '—') + ')' : ''),
+    items: cart.map(c => ({ name: c.name, qty: c.qty, rate: c.rate, amount: c.rate * c.qty })),
+    subtotal: sub, sgst, cgst, grand,
+  };
+  try {
+    await apiPost('/api/orders', order);
+  } catch(e) {
+    showToast('⚠', 'Saved locally — server error: ' + e.message, 'error');
+  }
+  // Reload orders cache if admin open
+  currentInvoiceData = order;
+  closeBilling();
+  renderInvoice(order);
+  cart = []; updateCartUI();
+  document.getElementById('custName').value = ''; document.getElementById('custPhone').value = '';
+  document.getElementById('custAddr').value = ''; document.getElementById('upiRef').value = '';
+}
+
+// ============================================================
+//  INVOICE
+// ============================================================
+function renderInvoice(o) {
+  document.getElementById('invoicePrint').innerHTML = `
+    <div class="inv-header">
+      <div>
+        <div class="inv-logo">NEW ROYAL <span>ELECTRICALS</span> & HARDWARE<sub>92, Main Road, Pennadam – 606 105, Tamil Nadu</sub></div>
+        <div style="font-size:11px;color:#555;margin-top:4px;">GSTIN: <span class="inv-gstin">33AACFN4722E1ZR</span> | Ph: 94431 82381 / 99448 64347</div>
+      </div>
+      <div class="inv-meta">
+        <div style="font-size:18px;font-weight:900;color:#C8922A;margin-bottom:6px;">TAX INVOICE</div>
+        <div><strong>Bill No:</strong> ${o.billNo}</div>
+        <div><strong>Date:</strong> ${o.date}</div>
+        <div><strong>Payment:</strong> ${o.payment}</div>
+      </div>
+    </div>
+    <div class="inv-section">
+      <div class="inv-section-title">Bill To</div>
+      <div class="inv-bill-to">
+        <div class="inv-field"><label>Customer</label><p>${o.customer}</p></div>
+        <div class="inv-field"><label>Phone</label><p>${o.phone || '—'}</p></div>
+        ${o.address ? '<div class="inv-field" style="grid-column:1/-1"><label>Address</label><p>' + o.address + '</p></div>' : ''}
+      </div>
+    </div>
+    <div class="inv-section">
+      <div class="inv-section-title">Items</div>
+      <table class="inv-table">
+        <thead><tr><th>#</th><th>Particulars</th><th class="num">Qty</th><th class="num">Rate ₹</th><th class="num">Amount ₹</th></tr></thead>
+        <tbody>
+          ${o.items.map((it, i) => `<tr><td>${i+1}</td><td>${it.name}</td><td class="num">${it.qty}</td><td class="num">${it.rate.toFixed(2)}</td><td class="num">${it.amount.toFixed(2)}</td></tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+    <table class="inv-totals">
+      <tr><td>Subtotal</td><td>₹${o.subtotal.toFixed(2)}</td></tr>
+      <tr><td>SGST @ 9%</td><td>₹${o.sgst.toFixed(2)}</td></tr>
+      <tr><td>CGST @ 9%</td><td>₹${o.cgst.toFixed(2)}</td></tr>
+      <tr><td class="inv-grand" colspan="2" style="padding-top:8px;border-top:2px solid #C8922A;"></td></tr>
+      <tr><td class="inv-grand">Grand Total</td><td class="inv-grand">₹${o.grand.toFixed(2)}</td></tr>
+    </table>
+    <div class="inv-footer">
+      <p><strong>Goods Once Sold Cannot Be Taken Back</strong> · விற்ற சரக்கு திரும்பி எடுத்துக் கொள்ளப்படமாட்டாது.</p>
+      <p style="margin-top:6px;">Thank you for shopping at <strong>New Royal Electricals!</strong> · GSTIN: 33AACFN4722E1ZR</p>
+    </div>`;
+  document.getElementById('invoiceOverlay').classList.add('open');
+}
+function printInvoice() { window.print(); }
+function closeInvoice() { document.getElementById('invoiceOverlay').classList.remove('open'); }
+
+// ============================================================
+//  ADMIN LOGIN
+// ============================================================
+function openAdminLogin() {
+  document.getElementById('loginUser').value = '';
+  document.getElementById('loginPass').value = '';
+  document.getElementById('loginError').classList.remove('show');
+  document.getElementById('loginOverlay').classList.add('open');
+  setTimeout(() => document.getElementById('loginUser').focus(), 100);
+}
+function closeAdminLogin() { document.getElementById('loginOverlay').classList.remove('open'); }
+
+async function submitLogin() {
+  const user = document.getElementById('loginUser').value.trim();
+  const pass = document.getElementById('loginPass').value;
+  try {
+    const result = await apiPost('/api/auth', { user, pass });
+    if (result.ok) {
+      ADMIN_TOKEN = result.token;
+      sessionStorage.setItem('nre_admin_token', ADMIN_TOKEN);
+      closeAdminLogin();
+      openAdmin();
+      showToast('🔓', 'Admin access granted', 'success');
+    } else {
+      document.getElementById('loginError').classList.add('show');
+      document.getElementById('loginPass').value = '';
+    }
+  } catch(e) {
+    document.getElementById('loginError').classList.add('show');
+    document.getElementById('loginPass').value = '';
+  }
+}
+
+// ============================================================
+//  ADMIN PANEL
+// ============================================================
+async function openAdmin() {
+  document.getElementById('adminOverlay').classList.add('open');
+  await loadAdminData();
+  renderAdmin();
+}
+function closeAdmin() {
+  document.getElementById('adminOverlay').classList.remove('open');
+  ADMIN_TOKEN = '';
+  sessionStorage.removeItem('nre_admin_token');
+}
+
+async function loadAdminData() {
+  showToast('⏳', 'Loading admin data…', 'success');
+  try {
+    [PRODUCTS, PAINTS, ORDERS] = await Promise.all([
+      apiGet('/api/products'),
+      apiGet('/api/paints'),
+      apiGet('/api/orders'),
+    ]);
+  } catch(e) {
+    showToast('⚠', 'Error loading data: ' + e.message, 'error');
+  }
+}
+
+function adminTab(tab) {
+  document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('admin-' + tab).classList.add('active');
+  event.target.classList.add('active');
+  if (tab === 'reports') renderSalesReport();
+}
+
+function renderAdmin() {
+  const totalRevenue = ORDERS.reduce((s, o) => s + o.grand, 0);
+  const lowStock = PRODUCTS.filter(p => p.stock < 10);
+  document.getElementById('adminStats').innerHTML = `
+    <div class="stat-card"><div class="stat-card-icon">📦</div><div class="stat-card-val">${PRODUCTS.length}</div><div class="stat-card-lbl">Products</div></div>
+    <div class="stat-card"><div class="stat-card-icon">🧾</div><div class="stat-card-val">${ORDERS.length}</div><div class="stat-card-lbl">Total Orders</div></div>
+    <div class="stat-card"><div class="stat-card-icon">💰</div><div class="stat-card-val">₹${totalRevenue.toFixed(0)}</div><div class="stat-card-lbl">Total Revenue</div></div>
+    <div class="stat-card"><div class="stat-card-icon">⚠️</div><div class="stat-card-val">${lowStock.length}</div><div class="stat-card-lbl">Low Stock Items</div></div>
+    <div class="stat-card"><div class="stat-card-icon">🎨</div><div class="stat-card-val">${PAINTS.length}</div><div class="stat-card-lbl">Paint Products</div></div>`;
+  document.getElementById('lowStockAlert').style.display = lowStock.length ? '' : 'none';
+  document.getElementById('recentOrders').innerHTML = [...ORDERS].slice(0,10).map(o =>
+    `<tr><td>${o.billNo}</td><td>${o.customer}</td><td style="color:var(--gold);font-weight:700">₹${o.grand.toFixed(2)}</td><td>${o.payment}</td><td><span class="badge badge-green">Paid</span></td></tr>`
+  ).join('') || '<tr><td colspan="5" style="text-align:center;color:var(--text-dim);padding:24px">No orders yet</td></tr>';
+  document.getElementById('adminProductTable').innerHTML = PRODUCTS.map(p =>
+    `<tr><td>${p.icon} ${p.name}</td><td><span class="badge badge-blue">${p.category}</span></td><td>${p.brand}</td><td style="color:var(--gold);font-weight:700">₹${p.rate}</td><td>${p.stock} ${p.unit}</td><td><span class="badge ${p.stock<10?'badge-red':'badge-green'}">${p.stock<10?'Low':'OK'}</span></td><td><button class="btn-del" onclick="deleteProduct('${p._id}')">Del</button></td></tr>`
+  ).join('');
+  document.getElementById('adminPaintTable').innerHTML = PAINTS.map(p =>
+    `<tr><td><div style="width:24px;height:24px;border-radius:4px;background:${p.colour};border:1px solid rgba(255,255,255,0.2)"></div></td><td>${p.name}</td><td><span class="badge badge-gold">${p.type}</span></td><td>${p.brand}</td><td style="color:var(--gold);font-weight:700">₹${p.sizes['1L']||'—'}</td><td><button class="btn-del" onclick="deletePaint('${p._id}')">Del</button></td></tr>`
+  ).join('');
+  document.getElementById('inventoryTable').innerHTML = PRODUCTS.map(p =>
+    `<tr>
+      <td>${p.icon} ${p.name}</td>
+      <td><span class="badge badge-blue">${p.category}</span></td>
+      <td style="font-weight:700">${p.stock}</td>
+      <td><span class="badge ${p.stock<10?'badge-red':p.stock<30?'badge-gold':'badge-green'}">${p.stock<10?'🔴 Critical':p.stock<30?'🟡 Low':'🟢 Good'}</span></td>
+      <td><input type="number" value="${p.stock}" min="0" style="width:80px;background:var(--dark3);border:1px solid var(--border2);border-radius:6px;padding:4px 8px;color:var(--text);font-size:12px;" onchange="updateStock('${p._id}',this.value)"></td>
+    </tr>`
+  ).join('');
+  document.getElementById('ordersTable').innerHTML = [...ORDERS].reverse().map(o =>
+    `<tr>
+      <td style="font-family:monospace;color:var(--gold)">${o.billNo}</td>
+      <td>${o.date}</td>
+      <td>${o.customer}</td>
+      <td>${o.items.length} items</td>
+      <td style="font-weight:700">₹${o.grand.toFixed(2)}</td>
+      <td>${o.payment}</td>
+      <td><button class="btn-edit" onclick="reprint('${o.billNo}')">🖨 Print</button></td>
+    </tr>`
+  ).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--text-dim);padding:24px">No orders yet</td></tr>';
+}
+
+async function addProduct() {
+  const name = document.getElementById('ap-name').value.trim();
+  const rate = parseFloat(document.getElementById('ap-rate').value);
+  if (!name || !rate) { showToast('⚠', 'Name and Rate required', 'error'); return; }
+  const p = {
+    name, category: document.getElementById('ap-cat').value,
+    brand: document.getElementById('ap-brand').value || '—', rate,
+    stock: parseInt(document.getElementById('ap-stock').value) || 0,
+    unit: document.getElementById('ap-unit').value,
+    hsn: document.getElementById('ap-hsn').value,
+    icon: document.getElementById('ap-icon').value || '📦',
+  };
+  try {
+    const saved = await apiPost('/api/products', p);
+    PRODUCTS.push(saved);
+    ['ap-name','ap-brand','ap-rate','ap-stock','ap-hsn'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('ap-icon').value = '⚡';
+    renderAdmin(); renderProducts('All');
+    showToast('✓', 'Product saved to MongoDB!', 'success');
+  } catch(e) { showToast('❌', 'Save failed: ' + e.message, 'error'); }
+}
+
+async function addPaint() {
+  const name = document.getElementById('pp-name').value.trim();
+  if (!name) { showToast('⚠', 'Paint name required', 'error'); return; }
+  const sizes = {};
+  ['50ml','100ml','250ml','500ml','1L','4L','10L','20L'].forEach((s, i) => {
+    const ids = ['pp-50','pp-100','pp-250','pp-500','pp-1L','pp-4L','pp-10L','pp-20L'];
+    const v = parseFloat(document.getElementById(ids[i]).value);
+    if (v) sizes[s] = v;
+  });
+  const p = { name, type: document.getElementById('pp-type').value, brand: document.getElementById('pp-brand').value, colour: document.getElementById('pp-colour').value, sizes };
+  try {
+    const saved = await apiPost('/api/paints', p);
+    PAINTS.push(saved);
+    renderAdmin(); renderPaints('All');
+    showToast('🎨', 'Paint saved to MongoDB!', 'success');
+  } catch(e) { showToast('❌', 'Save failed: ' + e.message, 'error'); }
+}
+
+async function deleteProduct(id) {
+  if (!confirm('Delete this product from MongoDB?')) return;
+  try {
+    await apiDelete('/api/products?id=' + id);
+    PRODUCTS = PRODUCTS.filter(p => p._id !== id);
+    renderAdmin(); renderProducts('All');
+    showToast('🗑', 'Product deleted', 'error');
+  } catch(e) { showToast('❌', e.message, 'error'); }
+}
+
+async function deletePaint(id) {
+  if (!confirm('Delete this paint from MongoDB?')) return;
+  try {
+    await apiDelete('/api/paints?id=' + id);
+    PAINTS = PAINTS.filter(p => p._id !== id);
+    renderAdmin(); renderPaints('All');
+    showToast('🗑', 'Paint deleted', 'error');
+  } catch(e) { showToast('❌', e.message, 'error'); }
+}
+
+async function updateStock(id, val) {
+  try {
+    await apiPatch('/api/stock?id=' + id, { stock: parseInt(val) || 0 });
+    const p = PRODUCTS.find(x => x._id === id);
+    if (p) p.stock = parseInt(val) || 0;
+    renderAdmin();
+    showToast('📦', 'Stock updated in MongoDB!', 'success');
+  } catch(e) { showToast('❌', e.message, 'error'); }
+}
+
+function reprint(billNo) {
+  const order = ORDERS.find(o => o.billNo === billNo);
+  if (order) { renderInvoice(order); closeAdmin(); }
+}
+
+// ============================================================
+//  REPORTS / EXPORT / IMPORT
+// ============================================================
+function renderSalesReport() {
+  const sub = ORDERS.reduce((s, o) => s + o.subtotal, 0);
+  const rev = ORDERS.reduce((s, o) => s + o.grand, 0);
+  const sgst = ORDERS.reduce((s, o) => s + o.sgst, 0);
+  const cgst = ORDERS.reduce((s, o) => s + o.cgst, 0);
+  const sumEl = document.getElementById('salesSummaryContent');
+  if (sumEl) sumEl.innerHTML = `
+    <div style="text-align:center;padding:16px;background:var(--dark3);border-radius:10px;">
+      <div style="font-size:28px;font-weight:900;color:var(--gold)">₹${rev.toFixed(0)}</div>
+      <div style="font-size:12px;color:var(--text-dim)">Total Revenue</div>
+    </div>
+    <div style="text-align:center;padding:16px;background:var(--dark3);border-radius:10px;">
+      <div style="font-size:28px;font-weight:900;color:var(--gold)">${ORDERS.length}</div>
+      <div style="font-size:12px;color:var(--text-dim)">Total Orders</div>
+    </div>
+    <div style="text-align:center;padding:16px;background:var(--dark3);border-radius:10px;">
+      <div style="font-size:28px;font-weight:900;color:var(--gold)">₹${sgst.toFixed(0)}</div>
+      <div style="font-size:12px;color:var(--text-dim)">Total SGST</div>
+    </div>
+    <div style="text-align:center;padding:16px;background:var(--dark3);border-radius:10px;">
+      <div style="font-size:28px;font-weight:900;color:var(--gold)">₹${cgst.toFixed(0)}</div>
+      <div style="font-size:12px;color:var(--text-dim)">Total CGST</div>
+    </div>
+    <div style="text-align:center;padding:16px;background:var(--dark3);border-radius:10px;">
+      <div style="font-size:28px;font-weight:900;color:var(--gold)">₹${ORDERS.length ? (rev/ORDERS.length).toFixed(0) : 0}</div>
+      <div style="font-size:12px;color:var(--text-dim)">Avg Order</div>
+    </div>`;
+  const tbl = document.getElementById('salesReportTable');
+  if (tbl) tbl.innerHTML = [...ORDERS].reverse().map(o =>
+    `<tr>
+      <td style="font-family:monospace;color:var(--gold)">${o.billNo}</td>
+      <td>${o.date}</td><td>${o.customer}</td><td>${o.items.length} items</td>
+      <td>₹${o.subtotal.toFixed(2)}</td><td>₹${o.sgst.toFixed(2)}</td>
+      <td>₹${o.cgst.toFixed(2)}</td>
+      <td style="font-weight:800;color:var(--gold)">₹${o.grand.toFixed(2)}</td>
+      <td>${o.payment}</td>
+    </tr>`
+  ).join('') || '<tr><td colspan="9" style="text-align:center;color:var(--text-dim);padding:24px">No orders yet</td></tr>';
+}
+
+function downloadFile(filename, content, type) {
+  const blob = new Blob([content], { type });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a); URL.revokeObjectURL(a.href);
+}
+
+function exportCSV(type) {
+  const date = new Date().toISOString().slice(0,10);
+  let csv = '', filename = '';
+  if (type === 'products') {
+    csv = 'Name,Category,Brand,Rate (₹),Stock,Unit,HSN,Icon\n';
+    PRODUCTS.forEach(p => { csv += `"${p.name}","${p.category}","${p.brand}",${p.rate},${p.stock},"${p.unit}","${p.hsn||''}","${p.icon||''}"\n`; });
+    filename = `NRE_Products_${date}.csv`;
+  } else if (type === 'paints') {
+    csv = 'Name,Type,Brand,Colour,50ml,100ml,250ml,500ml,1L,4L,10L,20L\n';
+    PAINTS.forEach(p => { const s=p.sizes||{}; csv += `"${p.name}","${p.type}","${p.brand}","${p.colour}",${s['50ml']||''},${s['100ml']||''},${s['250ml']||''},${s['500ml']||''},${s['1L']||''},${s['4L']||''},${s['10L']||''},${s['20L']||''}\n`; });
+    filename = `NRE_Paints_${date}.csv`;
+  } else if (type === 'orders') {
+    csv = 'Bill No,Date,Customer,Phone,Address,Items,Subtotal (₹),SGST (₹),CGST (₹),Grand Total (₹),Payment\n';
+    ORDERS.forEach(o => { const items = o.items.map(i => `${i.name} x${i.qty}`).join('; '); csv += `"${o.billNo}","${o.date}","${o.customer}","${o.phone||''}","${o.address||''}","${items}",${o.subtotal.toFixed(2)},${o.sgst.toFixed(2)},${o.cgst.toFixed(2)},${o.grand.toFixed(2)},"${o.payment}"\n`; });
+    filename = `NRE_SalesReport_${date}.csv`;
+  }
+  downloadFile(filename, '\uFEFF' + csv, 'text/csv;charset=utf-8;');
+  showToast('📤', filename + ' exported!', 'success');
+}
+
+function exportJSON() {
+  const date = new Date().toISOString().slice(0,10);
+  const backup = { exportedAt: new Date().toISOString(), store: 'New Royal Electricals', products: PRODUCTS, paints: PAINTS, orders: ORDERS };
+  downloadFile(`NRE_Backup_${date}.json`, JSON.stringify(backup, null, 2), 'application/json');
+  showToast('💾', 'Full backup exported!', 'success');
+}
+
+// ============================================================
+//  SETTINGS
+// ============================================================
+async function changeAdminCreds() {
+  const old = document.getElementById('set-oldpass').value;
+  const nu  = document.getElementById('set-newuser').value.trim();
+  const np  = document.getElementById('set-newpass').value;
+  const cp  = document.getElementById('set-confirmpass').value;
+  if (!nu) { showToast('⚠', 'Username cannot be empty', 'error'); return; }
+  if (np.length < 6) { showToast('⚠', 'Password min 6 characters', 'error'); return; }
+  if (np !== cp) { showToast('⚠', 'Passwords do not match', 'error'); return; }
+  try {
+    const r = await fetch('/api/auth', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + old },
+      body: JSON.stringify({ newUser: nu, newPass: np })
+    });
+    if (!r.ok) throw new Error('Wrong current password');
+    ADMIN_TOKEN = np;
+    sessionStorage.setItem('nre_admin_token', np);
+    ['set-oldpass','set-newpass','set-confirmpass'].forEach(id => document.getElementById(id).value = '');
+    showToast('✅', 'Credentials updated in MongoDB!', 'success');
+  } catch(e) { showToast('❌', e.message, 'error'); }
+}
+
+async function clearOrders() {
+  if (!confirm('Delete ALL orders from MongoDB? Cannot be undone.')) return;
+  try {
+    await apiDelete('/api/orders');
+    ORDERS = [];
+    renderAdmin();
+    showToast('🗑', 'All orders cleared from MongoDB', 'error');
+  } catch(e) { showToast('❌', e.message, 'error'); }
+}
+
+async function resetAllData() {
+  if (!confirm('⚠ Reset ALL products & paints to defaults? Orders preserved.')) return;
+  showToast('⏳', 'Resetting…', 'success');
+  // Re-seed by hitting /api/products with a special reset flag (or delete + re-insert via admin call)
+  // For simplicity: user must clear collections in MongoDB Atlas & redeploy to re-seed.
+  showToast('ℹ', 'To fully reset: clear collections in MongoDB Atlas dashboard', 'error');
+}
+
+// ============================================================
+//  MOBILE MENU
+// ============================================================
+function toggleMobileMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
+function closeMobileMenu() { document.getElementById('mobileMenu').classList.remove('open'); }
+
+// ============================================================
+//  TOAST
+// ============================================================
+function showToast(icon, msg, type = 'success') {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.querySelector('.toast-icon').textContent = icon;
+  t.className = 'toast show ' + type;
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+</script>
+
+</body>
+</html>

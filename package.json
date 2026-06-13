@@ -1,0 +1,10 @@
+{
+  "name": "nre-store",
+  "version": "1.0.0",
+  "description": "New Royal Electricals & Hardware — Pennadam",
+  "type": "module",
+  "engines": { "node": "20.x" },
+  "dependencies": {
+    "mongodb": "^6.3.0"
+  }
+}
