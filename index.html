@@ -686,7 +686,7 @@
   </div>
   <div class="hero-stats">
     <div class="hero-stat">
-      <div class="hero-stat-val" id="heroProducts">0</div>
+      <div class="hero-stat-val" id="heroProducts">—</div>
       <div class="hero-stat-lbl">Products</div>
     </div>
     <div class="hero-stat">
@@ -1178,7 +1178,7 @@
 const API = '';   // empty = same origin, works on Vercel & localhost
 
 // ── Admin token (session only — not stored) ──────────────────
-let ADMIN_TOKEN = sessionStorage.getItem('nre_admin_token') || '';
+let ADMIN_TOKEN = localStorage.getItem('nre_admin_token') || '';
 
 // ── In-memory cache ─────────────────────────────────────────
 let PRODUCTS = [];
@@ -1239,21 +1239,31 @@ async function apiDelete(path) {
 // ============================================================
 async function initApp() {
   showLoader(true);
-  try {
-    [PRODUCTS, PAINTS] = await Promise.all([
-      apiGet('/api/products'),
-      apiGet('/api/paints'),
-    ]);
-  } catch(e) {
-    console.error('Init error', e);
-    showToast('⚠', 'Cannot reach server. Check connection.', 'error');
+  let retries = 2;
+  while (retries >= 0) {
+    try {
+      [PRODUCTS, PAINTS] = await Promise.all([
+        apiGet('/api/products'),
+        apiGet('/api/paints'),
+      ]);
+      break; // success
+    } catch(e) {
+      retries--;
+      if (retries < 0) {
+        console.error('Init error', e);
+        showToast('⚠', 'Cannot reach server. Check your MongoDB connection in Vercel settings.', 'error');
+      } else {
+        await new Promise(r => setTimeout(r, 1000)); // wait 1s before retry
+      }
+    }
   }
   showLoader(false);
   renderProducts('All');
   renderPaints('All');
   updateCartUI();
   document.getElementById('invDate').value = new Date().toISOString().split('T')[0];
-  document.getElementById('heroProducts').textContent = PRODUCTS.length;
+  const heroEl = document.getElementById('heroProducts');
+  if (heroEl) heroEl.textContent = PRODUCTS.length > 0 ? PRODUCTS.length : '14+';
 }
 
 function showLoader(on) {
@@ -1541,7 +1551,7 @@ async function submitLogin() {
     const result = await apiPost('/api/auth', { user, pass });
     if (result.ok) {
       ADMIN_TOKEN = result.token;
-      sessionStorage.setItem('nre_admin_token', ADMIN_TOKEN);
+      localStorage.setItem('nre_admin_token', ADMIN_TOKEN);
       closeAdminLogin();
       openAdmin();
       showToast('🔓', 'Admin access granted', 'success');
@@ -1566,7 +1576,7 @@ async function openAdmin() {
 function closeAdmin() {
   document.getElementById('adminOverlay').classList.remove('open');
   ADMIN_TOKEN = '';
-  sessionStorage.removeItem('nre_admin_token');
+  localStorage.removeItem('nre_admin_token');
 }
 
 async function loadAdminData() {
@@ -1804,7 +1814,7 @@ async function changeAdminCreds() {
     });
     if (!r.ok) throw new Error('Wrong current password');
     ADMIN_TOKEN = np;
-    sessionStorage.setItem('nre_admin_token', np);
+    localStorage.setItem('nre_admin_token', np);
     ['set-oldpass','set-newpass','set-confirmpass'].forEach(id => document.getElementById(id).value = '');
     showToast('✅', 'Credentials updated in MongoDB!', 'success');
   } catch(e) { showToast('❌', e.message, 'error'); }
