@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>New Royal Electricals & Hardware — Pennadam</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
   :root {
     --gold: #C8922A;
@@ -1041,30 +1042,33 @@
       <!-- Export Section -->
       <div class="add-product-form" style="margin-bottom:20px;">
         <div class="add-product-title">📤 Export Data</div>
-        <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">Download your store data as CSV files for Excel/Google Sheets or as JSON for backup.</p>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;">
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">Download your store data as <strong style="color:var(--green);">Excel (.xlsx)</strong> with analysis, CSV, or JSON backup.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;">
           <div style="background:var(--dark3);border-radius:10px;padding:16px;text-align:center;">
             <div style="font-size:28px;margin-bottom:8px;">📦</div>
             <div style="font-weight:700;margin-bottom:4px;font-size:14px;">Products</div>
-            <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">All product data with rates &amp; stock</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">Product data with rates &amp; stock</div>
+            <button class="export-btn" onclick="exportExcel('products')" style="width:100%;justify-content:center;margin-bottom:6px;background:rgba(46,204,113,0.15);border-color:rgba(46,204,113,0.4);color:#2ecc71;">📊 Export Excel (.xlsx)</button>
             <button class="export-btn" onclick="exportCSV('products')" style="width:100%;justify-content:center;">⬇ Export CSV</button>
           </div>
           <div style="background:var(--dark3);border-radius:10px;padding:16px;text-align:center;">
             <div style="font-size:28px;margin-bottom:8px;">🎨</div>
             <div style="font-weight:700;margin-bottom:4px;font-size:14px;">Paints</div>
-            <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">All paint colours &amp; size pricing</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">Paint colours &amp; size pricing</div>
+            <button class="export-btn" onclick="exportExcel('paints')" style="width:100%;justify-content:center;margin-bottom:6px;background:rgba(46,204,113,0.15);border-color:rgba(46,204,113,0.4);color:#2ecc71;">📊 Export Excel (.xlsx)</button>
             <button class="export-btn" onclick="exportCSV('paints')" style="width:100%;justify-content:center;">⬇ Export CSV</button>
           </div>
           <div style="background:var(--dark3);border-radius:10px;padding:16px;text-align:center;">
             <div style="font-size:28px;margin-bottom:8px;">🧾</div>
             <div style="font-weight:700;margin-bottom:4px;font-size:14px;">Sales Report</div>
-            <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">All orders with customer &amp; amounts</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">All orders with totals &amp; GST</div>
+            <button class="export-btn" onclick="exportExcel('orders')" style="width:100%;justify-content:center;margin-bottom:6px;background:rgba(46,204,113,0.15);border-color:rgba(46,204,113,0.4);color:#2ecc71;">📊 Export Excel (.xlsx)</button>
             <button class="export-btn" onclick="exportCSV('orders')" style="width:100%;justify-content:center;">⬇ Export CSV</button>
           </div>
           <div style="background:var(--dark3);border-radius:10px;padding:16px;text-align:center;">
             <div style="font-size:28px;margin-bottom:8px;">💾</div>
             <div style="font-weight:700;margin-bottom:4px;font-size:14px;">Full Backup</div>
-            <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">Complete store data as JSON</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">Complete store data for restore</div>
             <button class="export-btn" onclick="exportJSON()" style="width:100%;justify-content:center;">⬇ Export JSON</button>
           </div>
         </div>
@@ -1847,6 +1851,99 @@ function downloadFile(filename, content, type) {
   document.body.appendChild(a); a.click();
   document.body.removeChild(a); URL.revokeObjectURL(a.href);
 }
+
+// ============================================================
+//  EXPORT TO EXCEL (.xlsx) — using SheetJS
+// ============================================================
+function exportExcel(type) {
+  const date = new Date().toISOString().slice(0,10);
+  const wb = XLSX.utils.book_new();
+
+  function addSheet(name, headers, rows, colWidths) {
+    const aoa = [headers, ...rows];
+    const ws = XLSX.utils.aoa_to_sheet(aoa);
+    ws['!cols'] = colWidths.map(w => ({ wch: w }));
+    ws['!freeze'] = { xSplit: 0, ySplit: 1 };
+    XLSX.utils.book_append_sheet(wb, ws, name);
+  }
+
+  if (type === 'products') {
+    const headers = ["#","Product Name","Category","Brand","Rate (Rs.)","Stock","Unit","HSN Code","Stock Value (Rs.)","Status"];
+    const rows = PRODUCTS.map((p,i) => [
+      i+1, p.name, p.category, p.brand, p.rate, p.stock, p.unit, p.hsn||'',
+      p.rate * p.stock,
+      p.stock < 15 ? "LOW STOCK" : "In Stock"
+    ]);
+    const totalStock = PRODUCTS.reduce((s,p)=>s+p.stock,0);
+    const totalVal   = PRODUCTS.reduce((s,p)=>s+p.rate*p.stock,0);
+    rows.push(["","TOTAL","","","",totalStock,"","",totalVal,"—"]);
+    addSheet("Products", headers, rows, [5,30,14,12,12,8,8,10,16,14]);
+
+    // Analysis sheet
+    const catMap = {};
+    PRODUCTS.forEach(p => {
+      if (!catMap[p.category]) catMap[p.category] = {skus:0,stock:0,val:0};
+      catMap[p.category].skus++;
+      catMap[p.category].stock += p.stock;
+      catMap[p.category].val   += p.rate*p.stock;
+    });
+    const aHeaders2 = ["Category","No. of SKUs","Total Stock","Stock Value (Rs.)","% of Total"];
+    const grandVal = PRODUCTS.reduce((s,p)=>s+p.rate*p.stock,0);
+    const aRows2 = Object.entries(catMap).map(([cat,d]) => [
+      cat, d.skus, d.stock, d.val, ((d.val/grandVal)*100).toFixed(1)+'%'
+    ]);
+    aRows2.push(["GRAND TOTAL",
+      Object.values(catMap).reduce((s,d)=>s+d.skus,0),
+      Object.values(catMap).reduce((s,d)=>s+d.stock,0),
+      grandVal, "100.0%"]);
+    addSheet("Category Analysis", aHeaders2, aRows2, [16,12,14,16,12]);
+    showToast('📊','Products exported to Excel (.xlsx)!','success');
+  }
+
+  else if (type === 'paints') {
+    const headers = ["#","Paint Name","Type","Brand","Colour","50ml","100ml","250ml","500ml","1L","4L","10L","20L"];
+    const rows = PAINTS.map((p,i) => {
+      const s = p.sizes||{};
+      return [i+1, p.name, p.type||'', p.brand, p.colour,
+              s['50ml']||'', s['100ml']||'', s['250ml']||'', s['500ml']||'',
+              s['1L']||'', s['4L']||'', s['10L']||'', s['20L']||''];
+    });
+    addSheet("Paints", headers, rows, [4,28,12,12,16,9,9,9,9,9,9,9,9]);
+    showToast('📊','Paints exported to Excel (.xlsx)!','success');
+  }
+
+  else if (type === 'orders') {
+    const headers = ["Bill No","Date","Customer","Phone","Address","Items","Subtotal","SGST","CGST","Grand Total","Payment"];
+    const rows = ORDERS.map(o => {
+      const items = o.items.map(i=>`${i.name} x${i.qty}`).join('; ');
+      return [o.billNo, o.date, o.customer, o.phone||'', o.address||'',
+              items, o.subtotal, o.sgst, o.cgst, o.grand, o.payment];
+    });
+    const totSub  = ORDERS.reduce((s,o)=>s+o.subtotal,0);
+    const totGST  = ORDERS.reduce((s,o)=>s+o.sgst+o.cgst,0);
+    const totGrand= ORDERS.reduce((s,o)=>s+o.grand,0);
+    rows.push(["","","TOTALS","","","",totSub,(totGST/2),(totGST/2),totGrand,""]);
+
+    // Monthly summary
+    const monthMap = {};
+    ORDERS.forEach(o => {
+      const m = o.date ? o.date.slice(0,7) : 'Unknown';
+      if (!monthMap[m]) monthMap[m] = {count:0,revenue:0};
+      monthMap[m].count++;
+      monthMap[m].revenue += o.grand;
+    });
+    const mHeaders = ["Month","No. of Orders","Revenue (Rs.)","Avg Order Value (Rs.)"];
+    const mRows = Object.entries(monthMap).sort().map(([m,d]) => [
+      m, d.count, parseFloat(d.revenue.toFixed(2)), parseFloat((d.revenue/d.count).toFixed(2))
+    ]);
+    addSheet("Sales Report", headers, rows, [10,12,18,12,20,30,12,10,10,14,12]);
+    addSheet("Monthly Summary", mHeaders, mRows, [14,14,18,20]);
+    showToast('📊','Sales Report exported to Excel (.xlsx)!','success');
+  }
+
+  XLSX.writeFile(wb, `NRE_${type.charAt(0).toUpperCase()+type.slice(1)}_${date}.xlsx`);
+}
+
 
 function exportCSV(type) {
   const date = new Date().toISOString().slice(0,10);
