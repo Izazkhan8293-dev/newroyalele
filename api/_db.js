@@ -5,7 +5,7 @@ const MONGODB_URI = process.env.MONGODB_URI;
 const DB_NAME     = process.env.MONGODB_DB || 'nre_store';
 
 if (!MONGODB_URI) {
-  throw new Error('Missing env var: MONGODB_URI  — add it in Vercel project settings.');
+  throw new Error('Missing env var: MONGODB_URI — add it in Vercel Project Settings → Environment Variables, then Redeploy.');
 }
 
 let cachedClient = null;
@@ -16,7 +16,9 @@ export async function getDb() {
 
   const client = await MongoClient.connect(MONGODB_URI, {
     maxPoolSize: 5,
-    serverSelectionTimeoutMS: 5000,
+    serverSelectionTimeoutMS: 8000,
+    connectTimeoutMS: 8000,
+    socketTimeoutMS: 10000,
   });
   cachedClient = client;
   cachedDb     = client.db(DB_NAME);
@@ -26,7 +28,7 @@ export async function getDb() {
 /** Tiny CORS helper — call at top of every handler */
 export function cors(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,PATCH,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   if (req.method === 'OPTIONS') { res.status(204).end(); return true; }
   return false;

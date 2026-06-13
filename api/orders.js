@@ -6,6 +6,9 @@ export default async function handler(req, res) {
   const db = await getDb();
   const col = db.collection('orders');
 
+  // Ensure unique index on billNo (safe to call repeatedly — no-op if exists)
+  await col.createIndex({ billNo: 1 }, { unique: true, sparse: true }).catch(() => {});
+
   // GET — public read (for invoice reprint)
   if (req.method === 'GET') {
     const { billNo } = req.query;
@@ -25,8 +28,15 @@ export default async function handler(req, res) {
       ...req.body,
       createdAt: new Date().toISOString(),
     };
-    await col.insertOne(order);
-    return res.status(201).json({ ok: true, billNo: order.billNo });
+    try {
+      await col.insertOne(order);
+      return res.status(201).json({ ok: true, billNo: order.billNo });
+    } catch (e) {
+      if (e.code === 11000) {
+        return res.status(409).json({ error: 'Duplicate bill number. Please try again.' });
+      }
+      throw e;
+    }
   }
 
   // DELETE — admin only
