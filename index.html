@@ -1034,32 +1034,7 @@
       </div>
     </div>
 
-  </div>
-</div>
-
-
-<!-- ===== ADMIN LOGIN MODAL ===== -->
-<div class="login-overlay" id="loginOverlay">
-  <div class="login-box">
-    <div class="login-logo">
-      <div class="login-logo-icon">⚙</div>
-      <h2>Admin Access</h2>
-      <p>New Royal Electricals — Authorised Personnel Only</p>
-    </div>
-    <div class="login-error" id="loginError">❌ Incorrect username or password. Try again.</div>
-    <div class="form-group">
-      <label>Admin Username</label>
-      <input class="form-control" id="loginUser" placeholder="admin" autocomplete="username">
-    </div>
-    <div class="form-group">
-      <label>Password</label>
-      <input class="form-control" type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password"
-        onkeydown="if(event.key==='Enter') submitLogin()">
-    </div>
-    <button class="btn-login-submit" onclick="submitLogin()">🔓 Access Dashboard</button>
-    <button class="btn-login-cancel" onclick="closeAdminLogin()">Cancel</button>
-    <div class="login-hint">Contact store administrator for access credentials.<br>Default: <strong>admin</strong> / <strong>nre@2026</strong></div>
-    <!-- REPORTS / IMPORT-EXPORT -->
+    <!-- REPORTS -->
     <div class="admin-section" id="admin-reports">
       <div class="admin-section-title">📊 Reports & Data Management</div>
 
@@ -1071,19 +1046,19 @@
           <div style="background:var(--dark3);border-radius:10px;padding:16px;text-align:center;">
             <div style="font-size:28px;margin-bottom:8px;">📦</div>
             <div style="font-weight:700;margin-bottom:4px;font-size:14px;">Products</div>
-            <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">All product data with rates & stock</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">All product data with rates &amp; stock</div>
             <button class="export-btn" onclick="exportCSV('products')" style="width:100%;justify-content:center;">⬇ Export CSV</button>
           </div>
           <div style="background:var(--dark3);border-radius:10px;padding:16px;text-align:center;">
             <div style="font-size:28px;margin-bottom:8px;">🎨</div>
             <div style="font-weight:700;margin-bottom:4px;font-size:14px;">Paints</div>
-            <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">All paint colours & size pricing</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">All paint colours &amp; size pricing</div>
             <button class="export-btn" onclick="exportCSV('paints')" style="width:100%;justify-content:center;">⬇ Export CSV</button>
           </div>
           <div style="background:var(--dark3);border-radius:10px;padding:16px;text-align:center;">
             <div style="font-size:28px;margin-bottom:8px;">🧾</div>
             <div style="font-weight:700;margin-bottom:4px;font-size:14px;">Sales Report</div>
-            <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">All orders with customer & amounts</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">All orders with customer &amp; amounts</div>
             <button class="export-btn" onclick="exportCSV('orders')" style="width:100%;justify-content:center;">⬇ Export CSV</button>
           </div>
           <div style="background:var(--dark3);border-radius:10px;padding:16px;text-align:center;">
@@ -1164,6 +1139,31 @@
   </div>
 </div>
 
+
+<!-- ===== ADMIN LOGIN MODAL ===== -->
+<div class="login-overlay" id="loginOverlay">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="login-logo-icon">⚙</div>
+      <h2>Admin Access</h2>
+      <p>New Royal Electricals — Authorised Personnel Only</p>
+    </div>
+    <div class="login-error" id="loginError">❌ Incorrect username or password. Try again.</div>
+    <div class="form-group">
+      <label>Admin Username</label>
+      <input class="form-control" id="loginUser" placeholder="admin" autocomplete="username">
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input class="form-control" type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password"
+        onkeydown="if(event.key==='Enter') submitLogin()">
+    </div>
+    <button class="btn-login-submit" onclick="submitLogin()">🔓 Access Dashboard</button>
+    <button class="btn-login-cancel" onclick="closeAdminLogin()">Cancel</button>
+    <div class="login-hint">Contact store administrator for access credentials.<br>Default: <strong>admin</strong> / <strong>nre@2026</strong></div>
+  </div>
+</div>
+
 <!-- TOAST -->
 <div class="toast" id="toast"><span class="toast-icon">✓</span><span id="toastMsg">Added to cart</span></div>
 
@@ -1193,8 +1193,10 @@ let currentInvoiceData = null;
 // ============================================================
 //  API HELPERS
 // ============================================================
-async function apiGet(path) {
-  const r = await fetch(API + path);
+async function apiGet(path, auth = false) {
+  const headers = {};
+  if (auth && ADMIN_TOKEN) headers['Authorization'] = 'Bearer ' + ADMIN_TOKEN;
+  const r = await fetch(API + path, { headers });
   if (!r.ok) throw new Error(await r.text());
   return r.json();
 }
@@ -1470,8 +1472,10 @@ async function generateInvoice() {
   };
   try {
     await apiPost('/api/orders', order);
+    ORDERS.push(order);   // update local cache immediately
   } catch(e) {
     showToast('⚠', 'Saved locally — server error: ' + e.message, 'error');
+    ORDERS.push(order);   // still push locally so orders tab shows it
   }
   // Reload orders cache if admin open
   currentInvoiceData = order;
@@ -1585,7 +1589,7 @@ async function loadAdminData() {
     [PRODUCTS, PAINTS, ORDERS] = await Promise.all([
       apiGet('/api/products'),
       apiGet('/api/paints'),
-      apiGet('/api/orders'),
+      apiGet('/api/orders', true),   // orders requires admin auth
     ]);
   } catch(e) {
     showToast('⚠', 'Error loading data: ' + e.message, 'error');
@@ -1717,7 +1721,83 @@ function reprint(billNo) {
 }
 
 // ============================================================
-//  REPORTS / EXPORT / IMPORT
+//  IMPORT — JSON backup & CSV products
+// ============================================================
+async function importJSON(input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (!confirm('⚠ This will REPLACE all products & paints with backup data. Orders will be preserved. Continue?')) {
+    input.value = ''; return;
+  }
+  const text = await file.text();
+  let backup;
+  try { backup = JSON.parse(text); }
+  catch(e) { showToast('❌', 'Invalid JSON file', 'error'); return; }
+
+  showToast('⏳', 'Importing backup…', 'success');
+  let imported = 0;
+  try {
+    if (backup.products && Array.isArray(backup.products)) {
+      for (const p of backup.products) {
+        const { _id, ...data } = p;
+        try { await apiPost('/api/products', data); imported++; } catch(e) {}
+      }
+    }
+    if (backup.paints && Array.isArray(backup.paints)) {
+      for (const p of backup.paints) {
+        const { _id, ...data } = p;
+        try { await apiPost('/api/paints', data); imported++; } catch(e) {}
+      }
+    }
+    await loadAdminData();
+    renderAdmin(); renderProducts('All'); renderPaints('All');
+    showToast('✅', imported + ' items imported from backup!', 'success');
+  } catch(e) { showToast('❌', 'Import error: ' + e.message, 'error'); }
+  input.value = '';
+}
+
+async function importProductCSV(input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (!confirm('⚠ Import products from CSV? Existing products are kept; this adds new ones.')) {
+    input.value = ''; return;
+  }
+  const text = await file.text();
+  const lines = text.trim().split('\n');
+  if (lines.length < 2) { showToast('⚠', 'CSV file is empty', 'error'); return; }
+
+  // Remove BOM if present
+  const header = lines[0].replace(/^\uFEFF/, '').split(',').map(h => h.trim().replace(/"/g, '').toLowerCase());
+  showToast('⏳', 'Importing CSV…', 'success');
+  let imported = 0, errors = 0;
+
+  for (let i = 1; i < lines.length; i++) {
+    const cols = lines[i].split(',').map(c => c.trim().replace(/^"|"$/g, ''));
+    if (cols.length < 2) continue;
+    const row = {};
+    header.forEach((h, idx) => row[h] = cols[idx] || '');
+    const name = row['name'] || row['product name'];
+    const rate = parseFloat(row['rate (₹)'] || row['rate'] || row['price'] || 0);
+    if (!name || !rate) { errors++; continue; }
+    const product = {
+      name,
+      category: row['category'] || 'Electrical',
+      brand: row['brand'] || '—',
+      rate,
+      stock: parseInt(row['stock'] || row['stock qty'] || 0) || 0,
+      unit: row['unit'] || 'Piece',
+      hsn: row['hsn'] || row['hsn code'] || '',
+      icon: row['icon'] || row['emoji icon'] || '📦',
+    };
+    try { await apiPost('/api/products', product); imported++; }
+    catch(e) { errors++; }
+  }
+  await loadAdminData();
+  renderAdmin(); renderProducts('All');
+  showToast('✅', imported + ' products imported' + (errors ? ', ' + errors + ' skipped' : ''), 'success');
+  input.value = '';
+}
+
 // ============================================================
 function renderSalesReport() {
   const sub = ORDERS.reduce((s, o) => s + o.subtotal, 0);
