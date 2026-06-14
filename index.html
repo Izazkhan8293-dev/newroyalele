@@ -1614,17 +1614,26 @@ async function generateInvoice() {
     ORDERS.push(order);
   }
 
-  // ── AUTO DEDUCT STOCK FROM INVENTORY ────────────────────────
-  for (const cartItem of cart) {
-    // Find the matching product in PRODUCTS array
-    const prod = PRODUCTS.find(p => p._id === cartItem.id || p._id + '_' === cartItem.id.slice(0, p._id.length + 1));
-    if (!prod) continue; // paint or non-tracked item
-    const newStock = Math.max(0, (prod.stock || 0) - cartItem.qty);
+  // ── AUTO DEDUCT STOCK FROM INVENTORY (POST /api/stock — no auth needed) ──
+  const deductItems = cart
+    .filter(c => !c.id.includes('_'))
+    .map(c => ({ id: c.id, qty: c.qty }));
+  if (deductItems.length > 0) {
     try {
-      await apiPatch('/api/stock?id=' + prod._id, { stock: newStock });
-      prod.stock = newStock;
+      const deductRes = await fetch(API + '/api/stock', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items: deductItems })
+      });
+      const deductData = await deductRes.json();
+      if (deductData.results) {
+        deductData.results.forEach(r => {
+          const prod = PRODUCTS.find(p => p._id === r.id);
+          if (prod && r.newStock !== undefined) prod.stock = r.newStock;
+        });
+      }
     } catch(e) {
-      console.warn('Stock deduct failed for', prod.name, e.message);
+      console.warn('Stock deduction silently failed:', e.message);
     }
   }
   // ────────────────────────────────────────────────────────────
