@@ -436,6 +436,68 @@
   .brands-strip-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); white-space: nowrap; margin-right: 8px; }
   .brand-tag { white-space: nowrap; padding: 5px 14px; background: var(--surface); border: 1px solid var(--border2); border-radius: 20px; font-size: 12px; font-weight: 600; color: var(--text-muted); }
 
+  /* ===== BRAND LOGOS SECTION ===== */
+  .brand-logos-section { padding: 48px 40px; background: var(--dark); }
+  .brand-logos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 16px; margin-top: 32px; }
+  .brand-logo-card {
+    background: var(--surface); border: 1px solid var(--border2); border-radius: 14px;
+    padding: 20px 16px; display: flex; flex-direction: column; align-items: center; gap: 10px;
+    cursor: pointer; transition: all 0.25s; text-align: center; position: relative; overflow: hidden;
+  }
+  .brand-logo-card::before {
+    content: ''; position: absolute; inset: 0; opacity: 0; transition: opacity 0.25s;
+    background: linear-gradient(135deg, rgba(200,146,42,0.12), transparent);
+  }
+  .brand-logo-card:hover { border-color: var(--gold); transform: translateY(-3px); box-shadow: 0 8px 32px rgba(200,146,42,0.18); }
+  .brand-logo-card:hover::before { opacity: 1; }
+  .brand-logo-icon {
+    width: 60px; height: 60px; border-radius: 12px; display: flex; align-items: center;
+    justify-content: center; font-size: 26px; font-weight: 900; letter-spacing: -1px;
+    position: relative; z-index: 1;
+  }
+  .brand-logo-name { font-size: 13px; font-weight: 700; color: var(--text); position: relative; z-index: 1; line-height: 1.2; }
+  .brand-logo-cat { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; position: relative; z-index: 1; }
+  .brand-logo-arrow { font-size: 12px; color: var(--gold); opacity: 0; transition: opacity 0.2s; position: relative; z-index: 1; }
+  .brand-logo-card:hover .brand-logo-arrow { opacity: 1; }
+
+  /* ===== CATALOGUE SECTION ===== */
+  .catalogue-section { padding: 48px 40px; background: var(--dark2); }
+  .catalogue-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-top: 32px; }
+  .catalogue-card {
+    background: var(--surface); border: 1px solid var(--border2); border-radius: 16px;
+    overflow: hidden; transition: all 0.25s; cursor: pointer;
+  }
+  .catalogue-card:hover { border-color: var(--border); transform: translateY(-2px); box-shadow: var(--shadow); }
+  .catalogue-card-header {
+    padding: 20px 20px 16px; display: flex; align-items: center; gap: 14px;
+    border-bottom: 1px solid var(--border2);
+  }
+  .catalogue-icon {
+    width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center;
+    justify-content: center; font-size: 22px; flex-shrink: 0;
+  }
+  .catalogue-title { font-weight: 700; font-size: 15px; }
+  .catalogue-brand { font-size: 10px; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
+  .catalogue-items { padding: 14px 20px 18px; }
+  .catalogue-item-list { display: flex; flex-wrap: wrap; gap: 6px; }
+  .catalogue-chip {
+    padding: 4px 10px; background: var(--dark4); border: 1px solid var(--border2);
+    border-radius: 20px; font-size: 11px; font-weight: 500; color: var(--text-muted);
+  }
+  .catalogue-shop-btn {
+    display: block; margin: 0 20px 16px; padding: 9px; background: rgba(200,146,42,0.1);
+    border: 1px solid rgba(200,146,42,0.25); border-radius: 8px; text-align: center;
+    font-size: 12px; font-weight: 700; color: var(--gold); cursor: pointer; transition: all 0.2s;
+  }
+  .catalogue-shop-btn:hover { background: rgba(200,146,42,0.2); }
+
+  @media (max-width: 600px) {
+    .brand-logos-section { padding: 32px 20px; }
+    .brand-logos-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .catalogue-section { padding: 32px 20px; }
+    .catalogue-grid { grid-template-columns: 1fr; }
+  }
+
   /* ===== FEATURES ===== */
   .features-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
   .feature-card { background: var(--surface); border: 1px solid var(--border2); border-radius: 14px; padding: 24px; }
@@ -701,22 +763,253 @@
   </div>
 </section>
 
-<!-- BRANDS STRIP -->
-<div class="brands-strip">
-  <span class="brands-strip-label">Brands We Carry</span>
-  <span class="brand-tag">GM</span>
-  <span class="brand-tag">Kundan</span>
-  <span class="brand-tag">Hi-Fi</span>
-  <span class="brand-tag">Fybros</span>
-  <span class="brand-tag">Crompton</span>
-  <span class="brand-tag">Philips</span>
-  <span class="brand-tag">Norwood LED</span>
-  <span class="brand-tag">CRI</span>
-  <span class="brand-tag">Laxmi Motors</span>
-  <span class="brand-tag">Birla Opus</span>
-  <span class="brand-tag">PVC / UPVC / CPVC</span>
-  <span class="brand-tag">GI Fittings</span>
-</div>
+<!-- BRANDS LOGO SECTION -->
+<section class="brand-logos-section" id="sec-brand-logos">
+  <div class="section-header">
+    <span class="section-eyebrow">Authorised Dealers</span>
+    <h2 class="section-title">Brands We <span>Carry</span></h2>
+    <p class="section-desc">Tap any brand to browse its products</p>
+  </div>
+  <div class="brand-logos-grid">
+
+    <div class="brand-logo-card" onclick="goBrandProducts('GM')" title="GM Modular — Switches & Electrical">
+      <div class="brand-logo-icon" style="background:linear-gradient(135deg,#1a237e,#283593);color:#fff;">GM</div>
+      <div class="brand-logo-name">GM Modular</div>
+      <div class="brand-logo-cat">Switches & Electrical</div>
+      <div class="brand-logo-arrow">→ View Products</div>
+    </div>
+
+    <div class="brand-logo-card" onclick="goBrandProducts('Kundan')" title="Kundan — Switches & Cables">
+      <div class="brand-logo-icon" style="background:linear-gradient(135deg,#b71c1c,#c62828);color:#fff;">KU</div>
+      <div class="brand-logo-name">Kundan</div>
+      <div class="brand-logo-cat">Switches & Cables</div>
+      <div class="brand-logo-arrow">→ View Products</div>
+    </div>
+
+    <div class="brand-logo-card" onclick="goBrandProducts('Fybros')" title="Fybros — Wires & Switches">
+      <div class="brand-logo-icon" style="background:linear-gradient(135deg,#1b5e20,#2e7d32);color:#fff;">FY</div>
+      <div class="brand-logo-name">Fybros</div>
+      <div class="brand-logo-cat">Wires & Switches</div>
+      <div class="brand-logo-arrow">→ View Products</div>
+    </div>
+
+    <div class="brand-logo-card" onclick="goBrandProducts('Hi-Fi')" title="Hi-Fi — Electrical Accessories">
+      <div class="brand-logo-icon" style="background:linear-gradient(135deg,#4a148c,#6a1b9a);color:#fff;">HF</div>
+      <div class="brand-logo-name">Hi-Fi</div>
+      <div class="brand-logo-cat">Electrical Accessories</div>
+      <div class="brand-logo-arrow">→ View Products</div>
+    </div>
+
+    <div class="brand-logo-card" onclick="goBrandProducts('Crompton')" title="Crompton — Fans, Lighting & Pumps">
+      <div class="brand-logo-icon" style="background:linear-gradient(135deg,#e65100,#ef6c00);color:#fff;">CR</div>
+      <div class="brand-logo-name">Crompton</div>
+      <div class="brand-logo-cat">Fans & Lighting</div>
+      <div class="brand-logo-arrow">→ View Products</div>
+    </div>
+
+    <div class="brand-logo-card" onclick="goBrandProducts('Philips')" title="Philips — LED Lighting">
+      <div class="brand-logo-icon" style="background:linear-gradient(135deg,#0d47a1,#1565c0);color:#fff;">Ph</div>
+      <div class="brand-logo-name">Philips</div>
+      <div class="brand-logo-cat">LED Lighting</div>
+      <div class="brand-logo-arrow">→ View Products</div>
+    </div>
+
+    <div class="brand-logo-card" onclick="goBrandProducts('Norwood LED')" title="Norwood LED — LED Solutions">
+      <div class="brand-logo-icon" style="background:linear-gradient(135deg,#006064,#00838f);color:#fff;">NW</div>
+      <div class="brand-logo-name">Norwood LED</div>
+      <div class="brand-logo-cat">LED Solutions</div>
+      <div class="brand-logo-arrow">→ View Products</div>
+    </div>
+
+    <div class="brand-logo-card" onclick="goBrandProducts('CRI')" title="CRI — Water Pumps">
+      <div class="brand-logo-icon" style="background:linear-gradient(135deg,#01579b,#0277bd);color:#fff;">CRI</div>
+      <div class="brand-logo-name">CRI</div>
+      <div class="brand-logo-cat">Water Pumps</div>
+      <div class="brand-logo-arrow">→ View Products</div>
+    </div>
+
+    <div class="brand-logo-card" onclick="goBrandProducts('Laxmi Motors')" title="Laxmi Motors — Pumps & Motors">
+      <div class="brand-logo-icon" style="background:linear-gradient(135deg,#880e4f,#ad1457);color:#fff;">LM</div>
+      <div class="brand-logo-name">Laxmi Motors</div>
+      <div class="brand-logo-cat">Pumps & Motors</div>
+      <div class="brand-logo-arrow">→ View Products</div>
+    </div>
+
+    <div class="brand-logo-card" onclick="showSection('paints')" title="Birla Opus — Paints & Coatings">
+      <div class="brand-logo-icon" style="background:linear-gradient(135deg,#C8922A,#8A6520);color:#fff;">BO</div>
+      <div class="brand-logo-name">Birla Opus</div>
+      <div class="brand-logo-cat">Paints & Coatings</div>
+      <div class="brand-logo-arrow">→ View Products</div>
+    </div>
+
+    <div class="brand-logo-card" onclick="goBrandProducts('PVC')" title="PVC / UPVC / CPVC — Pipes & Fittings">
+      <div class="brand-logo-icon" style="background:linear-gradient(135deg,#263238,#37474f);color:#90a4ae;font-size:14px;">PVC</div>
+      <div class="brand-logo-name">PVC / UPVC</div>
+      <div class="brand-logo-cat">Pipes & Fittings</div>
+      <div class="brand-logo-arrow">→ View Products</div>
+    </div>
+
+    <div class="brand-logo-card" onclick="goBrandProducts('GI')" title="GI Fittings — Hardware">
+      <div class="brand-logo-icon" style="background:linear-gradient(135deg,#546e7a,#607d8b);color:#fff;font-size:14px;">GI</div>
+      <div class="brand-logo-name">GI Fittings</div>
+      <div class="brand-logo-cat">Hardware</div>
+      <div class="brand-logo-arrow">→ View Products</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CATALOGUE SECTION (Amazon-style) -->
+<section class="catalogue-section" id="sec-catalogue">
+  <div class="section-header">
+    <span class="section-eyebrow">Product Catalogue</span>
+    <h2 class="section-title">Browse by <span>Category</span></h2>
+    <p class="section-desc">Click any category to shop — full product listings below</p>
+  </div>
+  <div class="catalogue-grid">
+
+    <!-- Electrical Switches -->
+    <div class="catalogue-card" onclick="goCategory('Electrical')">
+      <div class="catalogue-card-header">
+        <div class="catalogue-icon" style="background:rgba(200,146,42,0.15);">⚡</div>
+        <div><div class="catalogue-title">Electrical Switches & Accessories</div><div class="catalogue-brand">GM · Kundan · Fybros · Hi-Fi</div></div>
+      </div>
+      <div class="catalogue-items">
+        <div class="catalogue-item-list">
+          <span class="catalogue-chip">Modular Switches</span><span class="catalogue-chip">Sockets</span><span class="catalogue-chip">Fan Regulators</span><span class="catalogue-chip">Bell Push</span><span class="catalogue-chip">USB Charging Sockets</span><span class="catalogue-chip">Switch Plates</span><span class="catalogue-chip">Distribution Boards</span><span class="catalogue-chip">MCBs</span><span class="catalogue-chip">RCCBs</span><span class="catalogue-chip">Isolators</span><span class="catalogue-chip">Extension Boards</span>
+        </div>
+      </div>
+      <div class="catalogue-shop-btn">⚡ Shop Electrical →</div>
+    </div>
+
+    <!-- LED Lighting -->
+    <div class="catalogue-card" onclick="goCategory('Lighting')">
+      <div class="catalogue-card-header">
+        <div class="catalogue-icon" style="background:rgba(255,235,59,0.15);">💡</div>
+        <div><div class="catalogue-title">LED Lighting Solutions</div><div class="catalogue-brand">Philips · Crompton · Norwood LED</div></div>
+      </div>
+      <div class="catalogue-items">
+        <div class="catalogue-item-list">
+          <span class="catalogue-chip">LED Bulbs</span><span class="catalogue-chip">Tube Lights</span><span class="catalogue-chip">Panel Lights</span><span class="catalogue-chip">Downlights</span><span class="catalogue-chip">Flood Lights</span><span class="catalogue-chip">Street Lights</span><span class="catalogue-chip">High Bay</span><span class="catalogue-chip">Decorative</span><span class="catalogue-chip">Emergency</span><span class="catalogue-chip">Garden Lights</span>
+        </div>
+      </div>
+      <div class="catalogue-shop-btn">💡 Shop Lighting →</div>
+    </div>
+
+    <!-- Fans & Appliances -->
+    <div class="catalogue-card" onclick="goCategory('Fans')">
+      <div class="catalogue-card-header">
+        <div class="catalogue-icon" style="background:rgba(100,181,246,0.15);">🌀</div>
+        <div><div class="catalogue-title">Fans & Appliances</div><div class="catalogue-brand">Crompton</div></div>
+      </div>
+      <div class="catalogue-items">
+        <div class="catalogue-item-list">
+          <span class="catalogue-chip">Ceiling Fans</span><span class="catalogue-chip">Exhaust Fans</span><span class="catalogue-chip">Wall Fans</span><span class="catalogue-chip">Pedestal Fans</span><span class="catalogue-chip">Domestic Pumps</span><span class="catalogue-chip">Water Heaters</span>
+        </div>
+      </div>
+      <div class="catalogue-shop-btn">🌀 Shop Fans →</div>
+    </div>
+
+    <!-- Cables & Wiring -->
+    <div class="catalogue-card" onclick="goCategory('Cables')">
+      <div class="catalogue-card-header">
+        <div class="catalogue-icon" style="background:rgba(239,83,80,0.15);">🔌</div>
+        <div><div class="catalogue-title">Cables & Wiring Accessories</div><div class="catalogue-brand">GM · Fybros · Kundan</div></div>
+      </div>
+      <div class="catalogue-items">
+        <div class="catalogue-item-list">
+          <span class="catalogue-chip">House Wiring</span><span class="catalogue-chip">Flexible Cables</span><span class="catalogue-chip">Industrial Cables</span><span class="catalogue-chip">Cable Ties</span><span class="catalogue-chip">Insulation Tapes</span><span class="catalogue-chip">Cable Glands</span><span class="catalogue-chip">Junction Boxes</span><span class="catalogue-chip">Conduits</span>
+        </div>
+      </div>
+      <div class="catalogue-shop-btn">🔌 Shop Cables →</div>
+    </div>
+
+    <!-- Water Pumps & Motors -->
+    <div class="catalogue-card" onclick="goCategory('Motors')">
+      <div class="catalogue-card-header">
+        <div class="catalogue-icon" style="background:rgba(38,198,218,0.15);">⚙️</div>
+        <div><div class="catalogue-title">Water Pumps & Motors</div><div class="catalogue-brand">CRI · Laxmi Motors</div></div>
+      </div>
+      <div class="catalogue-items">
+        <div class="catalogue-item-list">
+          <span class="catalogue-chip">Submersible Pumps</span><span class="catalogue-chip">Openwell Pumps</span><span class="catalogue-chip">Monoblock</span><span class="catalogue-chip">Centrifugal</span><span class="catalogue-chip">Borewell</span><span class="catalogue-chip">Domestic Pumps</span><span class="catalogue-chip">Agricultural</span><span class="catalogue-chip">Electric Motors</span><span class="catalogue-chip">Control Panels</span>
+        </div>
+      </div>
+      <div class="catalogue-shop-btn">⚙️ Shop Pumps →</div>
+    </div>
+
+    <!-- Paints & Coatings -->
+    <div class="catalogue-card" onclick="showSection('paints')">
+      <div class="catalogue-card-header">
+        <div class="catalogue-icon" style="background:rgba(200,146,42,0.15);">🎨</div>
+        <div><div class="catalogue-title">Paints & Coatings</div><div class="catalogue-brand">Birla Opus — Authorised Dealer</div></div>
+      </div>
+      <div class="catalogue-items">
+        <div class="catalogue-item-list">
+          <span class="catalogue-chip">Interior Emulsion</span><span class="catalogue-chip">Exterior Emulsion</span><span class="catalogue-chip">Primers</span><span class="catalogue-chip">Putty</span><span class="catalogue-chip">Enamel Paints</span><span class="catalogue-chip">Waterproofing</span><span class="catalogue-chip">Wood Coatings</span><span class="catalogue-chip">Metal Coatings</span>
+        </div>
+      </div>
+      <div class="catalogue-shop-btn">🎨 Shop Paints →</div>
+    </div>
+
+    <!-- Plumbing Pipes -->
+    <div class="catalogue-card" onclick="goCategory('PVC')">
+      <div class="catalogue-card-header">
+        <div class="catalogue-icon" style="background:rgba(129,199,132,0.15);">🪠</div>
+        <div><div class="catalogue-title">Plumbing Pipes & Fittings</div><div class="catalogue-brand">PVC · UPVC · CPVC</div></div>
+      </div>
+      <div class="catalogue-items">
+        <div class="catalogue-item-list">
+          <span class="catalogue-chip">PVC Pipes</span><span class="catalogue-chip">UPVC Pipes</span><span class="catalogue-chip">CPVC Pipes</span><span class="catalogue-chip">SWR Pipes</span><span class="catalogue-chip">Agricultural Pipes</span><span class="catalogue-chip">Elbows</span><span class="catalogue-chip">Tees</span><span class="catalogue-chip">Couplers</span><span class="catalogue-chip">Ball Valves</span>
+        </div>
+      </div>
+      <div class="catalogue-shop-btn">🪠 Shop Plumbing →</div>
+    </div>
+
+    <!-- GI Fittings -->
+    <div class="catalogue-card" onclick="goCategory('Hardware')">
+      <div class="catalogue-card-header">
+        <div class="catalogue-icon" style="background:rgba(189,189,189,0.15);">🔩</div>
+        <div><div class="catalogue-title">GI Fittings & Hardware</div><div class="catalogue-brand">Galvanised Iron Fittings</div></div>
+      </div>
+      <div class="catalogue-items">
+        <div class="catalogue-item-list">
+          <span class="catalogue-chip">GI Elbows</span><span class="catalogue-chip">GI Tees</span><span class="catalogue-chip">GI Nipples</span><span class="catalogue-chip">GI Unions</span><span class="catalogue-chip">GI Sockets</span><span class="catalogue-chip">GI Bushes</span><span class="catalogue-chip">GI Flanges</span><span class="catalogue-chip">GI Valves</span>
+        </div>
+      </div>
+      <div class="catalogue-shop-btn">🔩 Shop GI Fittings →</div>
+    </div>
+
+    <!-- Hardware & Tools -->
+    <div class="catalogue-card" onclick="goCategory('Hardware')">
+      <div class="catalogue-card-header">
+        <div class="catalogue-icon" style="background:rgba(255,167,38,0.15);">🔧</div>
+        <div><div class="catalogue-title">Hardware & Tools</div><div class="catalogue-brand">Hand Tools & Fasteners</div></div>
+      </div>
+      <div class="catalogue-items">
+        <div class="catalogue-item-list">
+          <span class="catalogue-chip">Hand Tools</span><span class="catalogue-chip">Screwdrivers</span><span class="catalogue-chip">Pliers</span><span class="catalogue-chip">Hammers</span><span class="catalogue-chip">Spanners</span><span class="catalogue-chip">Measuring Tapes</span><span class="catalogue-chip">Nuts & Bolts</span><span class="catalogue-chip">Drill Bits</span><span class="catalogue-chip">Safety Equipment</span>
+        </div>
+      </div>
+      <div class="catalogue-shop-btn">🔧 Shop Hardware →</div>
+    </div>
+
+    <!-- Safety Products -->
+    <div class="catalogue-card" onclick="goCategory('Safety')">
+      <div class="catalogue-card-header">
+        <div class="catalogue-icon" style="background:rgba(239,83,80,0.15);">🦺</div>
+        <div><div class="catalogue-title">Safety Products</div><div class="catalogue-brand">Personal Protective Equipment</div></div>
+      </div>
+      <div class="catalogue-items">
+        <div class="catalogue-item-list">
+          <span class="catalogue-chip">Safety Helmets</span><span class="catalogue-chip">Safety Gloves</span><span class="catalogue-chip">Safety Shoes</span><span class="catalogue-chip">Reflective Jackets</span><span class="catalogue-chip">Face Shields</span><span class="catalogue-chip">Safety Goggles</span><span class="catalogue-chip">Ear Protection</span>
+        </div>
+      </div>
+      <div class="catalogue-shop-btn">🦺 Shop Safety →</div>
+    </div>
+
+  </div>
+</section>
 
 <!-- FEATURES -->
 <section class="section" style="background:var(--dark2);" id="sec-features">
@@ -745,10 +1038,12 @@
     <button class="cat-tab active" onclick="filterProducts('All', this)">All</button>
     <button class="cat-tab" onclick="filterProducts('Electrical', this)">⚡ Electrical</button>
     <button class="cat-tab" onclick="filterProducts('Lighting', this)">💡 Lighting</button>
+    <button class="cat-tab" onclick="filterProducts('Fans', this)">🌀 Fans</button>
     <button class="cat-tab" onclick="filterProducts('Cables', this)">🔌 Cables</button>
+    <button class="cat-tab" onclick="filterProducts('Motors', this)">⚙ Pumps</button>
+    <button class="cat-tab" onclick="filterProducts('PVC', this)">🪠 Plumbing</button>
     <button class="cat-tab" onclick="filterProducts('Hardware', this)">🔧 Hardware</button>
-    <button class="cat-tab" onclick="filterProducts('PVC', this)">🪠 PVC / Fittings</button>
-    <button class="cat-tab" onclick="filterProducts('Motors', this)">⚙ Motors</button>
+    <button class="cat-tab" onclick="filterProducts('Safety', this)">🦺 Safety</button>
   </div>
   <div class="product-grid" id="productGrid"></div>
 </section>
