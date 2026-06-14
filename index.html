@@ -814,24 +814,8 @@
   </div>
   <div class="footer-bottom">
     © 2026 New Royal Electricals & Hardware. Established 1970. All rights reserved.
-    <br><span style="font-size:11px;margin-top:6px;display:inline-block;">
-      <a onclick="openLegalModal('copyright')" style="color:var(--gold-dim);cursor:pointer;text-decoration:none;margin:0 8px;">Copyright Notice</a> ·
-      <a onclick="openLegalModal('terms')" style="color:var(--gold-dim);cursor:pointer;text-decoration:none;margin:0 8px;">Terms & Conditions</a> ·
-      <a onclick="openLegalModal('privacy')" style="color:var(--gold-dim);cursor:pointer;text-decoration:none;margin:0 8px;">Privacy Policy</a>
-    </span>
   </div>
 </footer>
-
-<!-- ===== LEGAL MODALS ===== -->
-<div class="modal-overlay" id="legalModal" style="z-index:500;">
-  <div class="modal" style="max-width:700px;">
-    <div class="modal-header">
-      <h3 id="legalModalTitle">Legal</h3>
-      <button class="cart-close" onclick="document.getElementById('legalModal').classList.remove('open')">✕</button>
-    </div>
-    <div class="modal-body" id="legalModalBody" style="font-size:13px;line-height:1.8;color:var(--text-muted);max-height:70vh;overflow-y:auto;"></div>
-  </div>
-</div>
 
 <!-- ===== CART PANEL ===== -->
 <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
@@ -846,11 +830,12 @@
   <div class="cart-footer">
     <div class="cart-totals">
       <div class="cart-total-row"><span>Subtotal</span><span id="cartSubtotal">₹0.00</span></div>
-      <div class="cart-total-row"><span>SGST (9%)</span><span id="cartSGST">₹0.00</span></div>
-      <div class="cart-total-row"><span>CGST (9%)</span><span id="cartCGST">₹0.00</span></div>
+      <div class="cart-total-row"><span>SGST</span><span id="cartSGST">₹0.00</span></div>
+      <div class="cart-total-row"><span>CGST</span><span id="cartCGST">₹0.00</span></div>
       <div class="cart-total-row grand"><span>Grand Total</span><span id="cartGrand">₹0.00</span></div>
     </div>
-    <button class="btn-checkout" onclick="openBilling()">🧾 Generate GST Invoice</button>
+    <button class="btn-checkout" onclick="openBilling('invoice')">🧾 Generate GST Invoice</button>
+    <button class="btn-checkout" style="margin-top:8px;background:transparent;border:1px solid var(--gold);color:var(--gold);" onclick="openBilling('quotation')">📄 Generate Quotation</button>
   </div>
 </div>
 
@@ -858,7 +843,7 @@
 <div class="modal-overlay" id="billingModal">
   <div class="modal">
     <div class="modal-header">
-      <h3>📋 Generate GST Invoice</h3>
+      <h3 id="billingModalTitle">📋 Generate GST Invoice</h3>
       <button class="cart-close" onclick="closeBilling()">✕</button>
     </div>
     <div class="modal-body">
@@ -899,15 +884,16 @@
         <div id="billSummary"></div>
         <div style="margin-top:10px;border-top:1px solid var(--border2);padding-top:10px;">
           <div class="cart-total-row"><span>Subtotal</span><span id="billSub">₹0</span></div>
-          <div class="cart-total-row"><span>SGST 9%</span><span id="billSGST">₹0</span></div>
-          <div class="cart-total-row"><span>CGST 9%</span><span id="billCGST">₹0</span></div>
+          <div id="billGSTBreakdown" style="display:none;"></div>
+          <div class="cart-total-row"><span>SGST</span><span id="billSGST">₹0</span></div>
+          <div class="cart-total-row"><span>CGST</span><span id="billCGST">₹0</span></div>
           <div class="cart-total-row grand"><span>Grand Total</span><span id="billGrand">₹0</span></div>
         </div>
       </div>
     </div>
     <div class="modal-footer">
       <button class="btn-cancel" onclick="closeBilling()">Cancel</button>
-      <button class="btn-gen-invoice" onclick="generateInvoice()">🖨 Generate & Print Invoice</button>
+      <button class="btn-gen-invoice" id="btnGenInvoice" onclick="generateInvoice()">🖨 Generate & Print Invoice</button>
     </div>
   </div>
 </div>
@@ -976,43 +962,28 @@
           <div class="form-group"><label>Rate (₹) *</label><input class="form-control" type="number" id="ap-rate" placeholder="0.00"></div>
           <div class="form-group"><label>Stock Qty</label><input class="form-control" type="number" id="ap-stock" placeholder="0"></div>
           <div class="form-group"><label>HSN Code</label><input class="form-control" id="ap-hsn" placeholder="HSN Code"></div>
+          <div class="form-group"><label>GST Rate %</label>
+            <select class="form-control" id="ap-gst">
+              <option value="">Auto (18%, Birla White=28%)</option>
+              <option value="0">0%</option>
+              <option value="5">5%</option>
+              <option value="12">12%</option>
+              <option value="18">18%</option>
+              <option value="28">28%</option>
+            </select>
+          </div>
           <div class="form-group"><label>Unit</label>
             <select class="form-control" id="ap-unit">
               <option>Piece</option><option>Box</option><option>Kg</option><option>Metre</option><option>Litre</option>
             </select>
           </div>
-          <div class="form-group" style="grid-column:1/-1;">
-            <label>Product Image</label>
-            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-              <input class="form-control" id="ap-imgurl" placeholder="Paste image URL or search below" style="flex:1;min-width:200px;" oninput="previewProductImg(this.value)">
-              <button type="button" onclick="searchProductImage()" style="background:rgba(200,146,42,0.15);border:1px solid rgba(200,146,42,0.3);color:var(--gold);border-radius:8px;padding:9px 14px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;">🔍 Search Web Image</button>
-            </div>
-            <div id="ap-img-preview" style="margin-top:8px;display:none;">
-              <img id="ap-img-thumb" src="" style="height:80px;width:80px;object-fit:cover;border-radius:8px;border:1px solid var(--border);background:var(--dark3);" onerror="this.src='';this.parentElement.style.display='none'">
-              <span style="font-size:11px;color:var(--green);margin-left:8px;">✓ Image ready</span>
-            </div>
-            <div id="ap-img-results" style="display:none;margin-top:10px;display:none;flex-wrap:wrap;gap:8px;max-height:160px;overflow-y:auto;"></div>
-            <input type="hidden" id="ap-icon" value="📦">
-          </div>
+          <div class="form-group"><label>Emoji Icon</label><input class="form-control" id="ap-icon" placeholder="⚡" value="⚡"></div>
         </div>
         <button class="btn-save" onclick="addProduct()">💾 Save Product</button>
       </div>
-
-      <!-- XLSX Import for ALL items -->
-      <div class="add-product-form" style="margin-bottom:20px;">
-        <div class="add-product-title">📥 Bulk Import via XLSX / CSV</div>
-        <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">Upload an Excel (.xlsx) or CSV file to add multiple products at once. Required columns: <strong style="color:var(--gold)">name, category, brand, rate, stock, unit</strong>. Optional: hsn, imageUrl.</p>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
-          <input type="file" accept=".xlsx,.xls,.csv" id="xlsxImportFile" style="display:none" onchange="importProductsXLSX(this)">
-          <button class="import-btn" onclick="document.getElementById('xlsxImportFile').click()">📂 Choose XLSX / CSV File</button>
-          <button class="export-btn" onclick="downloadXLSXTemplate()">⬇ Download Template</button>
-        </div>
-        <div id="xlsxImportPreview" style="margin-top:12px;display:none;"></div>
-      </div>
-
       <div class="data-table-wrap">
         <table class="data-table">
-          <thead><tr><th>Product</th><th>Category</th><th>Brand</th><th>Rate</th><th>Stock</th><th>Status</th><th>Actions</th></tr></thead>
+          <thead><tr><th>Product</th><th>Category</th><th>Brand</th><th>Rate</th><th>Stock</th><th>GST</th><th>Status</th><th>Actions</th></tr></thead>
           <tbody id="adminProductTable"></tbody>
         </table>
       </div>
@@ -1129,7 +1100,13 @@
             <label style="display:block;font-size:12px;font-weight:600;color:var(--text-muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;">Import Products CSV</label>
             <input type="file" accept=".csv" id="importCsvFile" style="display:none" onchange="importProductCSV(this)">
             <button class="import-btn" onclick="document.getElementById('importCsvFile').click()" style="width:100%;justify-content:center;">📂 Choose CSV File</button>
-            <p style="font-size:11px;color:var(--text-dim);margin-top:6px;">CSV headers: name,category,brand,rate,stock,unit,hsn,icon</p>
+            <p style="font-size:11px;color:var(--text-dim);margin-top:6px;">CSV headers: name,category,brand,rate,stock,unit,hsn,gst,icon</p>
+          </div>
+          <div style="grid-column:1/-1;">
+            <label style="display:block;font-size:12px;font-weight:600;color:var(--text-muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;">Import PVC / Plumbing Products (Excel .xlsx)</label>
+            <input type="file" accept=".xlsx,.xls" id="importPvcXlsx" style="display:none" onchange="importPVCExcel(this)">
+            <button class="import-btn" onclick="document.getElementById('importPvcXlsx').click()" style="width:100%;justify-content:center;background:rgba(52,152,219,0.15);border-color:rgba(52,152,219,0.4);color:#3498DB;">📥 Choose Excel (.xlsx) File</button>
+            <p style="font-size:11px;color:var(--text-dim);margin-top:6px;">Excel columns: Name, Category, Brand, Rate, Stock, Unit, HSN, GST. Category defaults to "PVC" if not provided. Re-importing the same product names updates stock &amp; rate.</p>
           </div>
         </div>
       </div>
@@ -1234,6 +1211,40 @@ let ORDERS   = [];
 let cart = [];
 let selectedPayment = 'Cash';
 let currentInvoiceData = null;
+let billingMode = 'invoice'; // 'invoice' or 'quotation'
+
+// ============================================================
+//  GST HELPERS
+// ============================================================
+// Determine GST% for an item. Custom rule: any product/brand
+// containing "Birla White" = 28%. Everything else defaults to
+// 18%, unless an explicit gstRate is set on the item/product.
+function getGSTRate(item) {
+  if (item.gstRate !== undefined && item.gstRate !== null && item.gstRate !== '') {
+    return parseFloat(item.gstRate);
+  }
+  const hay = ((item.name || '') + ' ' + (item.brand || '')).toLowerCase();
+  if (hay.includes('birla white')) return 28;
+  return 18;
+}
+// Compute totals for cart items, grouping by GST rate (for multi-rate invoices).
+function computeCartTotals(items) {
+  let subtotal = 0, totalGST = 0;
+  const byRate = {}; // { 18: {taxable, gst}, 28: {...} }
+  items.forEach(c => {
+    const amt = c.rate * c.qty;
+    const rate = getGSTRate(c);
+    const gst = amt * rate / 100;
+    subtotal += amt;
+    totalGST += gst;
+    if (!byRate[rate]) byRate[rate] = { taxable: 0, gst: 0 };
+    byRate[rate].taxable += amt;
+    byRate[rate].gst += gst;
+  });
+  const sgst = totalGST / 2, cgst = totalGST / 2;
+  const grand = subtotal + totalGST;
+  return { subtotal, totalGST, sgst, cgst, grand, byRate };
+}
 
 // ============================================================
 //  API HELPERS
@@ -1367,14 +1378,10 @@ function renderProducts(filter) {
   }
   grid.innerHTML = filtered.map(p => {
     const isLow = p.stock < 10;
-    const imgContent = p.imageUrl
-      ? `<img src="${p.imageUrl}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
-        + `<span style="display:none;align-items:center;justify-content:center;position:absolute;inset:0;font-size:48px;">${p.icon||'📦'}</span>`
-      : `<span style="font-size:48px;">${p.icon||'📦'}</span>`;
     return `<div class="product-card">
-      <div class="product-card-img" style="position:relative;">
+      <div class="product-card-img">
         ${isLow ? '<span class="product-badge low">Low Stock</span>' : '<span class="product-badge">In Stock</span>'}
-        ${imgContent}
+        <span>${p.icon || '📦'}</span>
       </div>
       <div class="product-body">
         <div class="product-name">${p.name}</div>
@@ -1427,14 +1434,14 @@ function renderPaints(filter) {
 function addToCart(p) {
   const existing = cart.find(c => c.id === p._id && !c.size);
   if (existing) { existing.qty++; }
-  else { cart.push({ id: p._id, name: p.name, icon: p.icon || '📦', unit: p.unit, rate: p.rate, qty: 1, size: null }); }
+  else { cart.push({ id: p._id, name: p.name, icon: p.icon || '📦', unit: p.unit, rate: p.rate, qty: 1, size: null, brand: p.brand, gstRate: p.gstRate }); }
   updateCartUI(); showToast('✓', p.name + ' added to cart', 'success');
 }
 function addPaintToCart(p) {
   const key = p._id + '_' + p.selectedSize;
   const existing = cart.find(c => c.id === key);
   if (existing) { existing.qty++; }
-  else { cart.push({ id: key, name: p.name + ' ' + p.selectedSize, icon: '🎨', unit: 'Tin', rate: p.rate, qty: 1, size: p.selectedSize }); }
+  else { cart.push({ id: key, name: p.name + ' ' + p.selectedSize, icon: '🎨', unit: 'Tin', rate: p.rate, qty: 1, size: p.selectedSize, brand: p.brand, gstRate: p.gstRate }); }
   updateCartUI(); showToast('✓', p.name + ' ' + p.selectedSize + ' added', 'success');
 }
 function updateCartQty(id, delta) {
@@ -1445,8 +1452,7 @@ function updateCartQty(id, delta) {
   updateCartUI();
 }
 function updateCartUI() {
-  const sub = cart.reduce((s, c) => s + c.rate * c.qty, 0);
-  const sgst = sub * 0.09, cgst = sub * 0.09, grand = sub + sgst + cgst;
+  const { subtotal: sub, sgst, cgst, grand } = computeCartTotals(cart);
   document.getElementById('cartCount').textContent = cart.reduce((s, c) => s + c.qty, 0);
   document.getElementById('cartSubtotal').textContent = '₹' + sub.toFixed(2);
   document.getElementById('cartSGST').textContent = '₹' + sgst.toFixed(2);
@@ -1479,14 +1485,14 @@ function closeCart() { document.getElementById('cartOverlay').classList.remove('
 // ============================================================
 //  BILLING
 // ============================================================
-function openBilling() {
+function openBilling(mode) {
   if (!cart.length) { showToast('⚠', 'Cart is empty', 'error'); return; }
+  billingMode = mode || 'invoice';
   closeCart();
-  const sub = cart.reduce((s, c) => s + c.rate * c.qty, 0);
-  const sgst = sub * 0.09, cgst = sub * 0.09, grand = sub + sgst + cgst;
+  const { subtotal: sub, sgst, cgst, grand, byRate } = computeCartTotals(cart);
   document.getElementById('billSummary').innerHTML = cart.map(c =>
     `<div style="display:flex;justify-content:space-between;font-size:13px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.04);">
-      <span>${c.icon} ${c.name} × ${c.qty}</span>
+      <span>${c.icon} ${c.name} × ${c.qty} <small style="color:var(--text-dim)">(GST ${getGSTRate(c)}%)</small></span>
       <span style="color:var(--gold);font-weight:600;">₹${(c.rate*c.qty).toFixed(2)}</span>
     </div>`
   ).join('');
@@ -1494,6 +1500,31 @@ function openBilling() {
   document.getElementById('billSGST').textContent = '₹' + sgst.toFixed(2);
   document.getElementById('billCGST').textContent = '₹' + cgst.toFixed(2);
   document.getElementById('billGrand').textContent = '₹' + grand.toFixed(2);
+
+  // GST rate breakdown (e.g. 18% + 28% shown separately)
+  const rates = Object.keys(byRate);
+  const breakdownEl = document.getElementById('billGSTBreakdown');
+  if (rates.length > 1) {
+    breakdownEl.style.display = '';
+    breakdownEl.innerHTML = rates.map(r =>
+      `<div class="cart-total-row" style="font-size:11px;color:var(--text-dim);">
+        <span>@ ${r}% GST (taxable ₹${byRate[r].taxable.toFixed(2)})</span>
+        <span>₹${byRate[r].gst.toFixed(2)}</span>
+      </div>`).join('');
+  } else {
+    breakdownEl.style.display = 'none';
+    breakdownEl.innerHTML = '';
+  }
+
+  const title = document.getElementById('billingModalTitle');
+  const btn = document.getElementById('btnGenInvoice');
+  if (billingMode === 'quotation') {
+    title.textContent = '📄 Generate Quotation';
+    btn.textContent = '🖨 Generate & Print Quotation';
+  } else {
+    title.textContent = '📋 Generate GST Invoice';
+    btn.textContent = '🖨 Generate & Print Invoice';
+  }
   document.getElementById('billingModal').classList.add('open');
 }
 function closeBilling() { document.getElementById('billingModal').classList.remove('open'); }
@@ -1508,16 +1539,36 @@ function selectPayment(method) {
 async function generateInvoice() {
   const name = document.getElementById('custName').value.trim();
   if (!name) { showToast('⚠', 'Customer name required', 'error'); return; }
-  const sub = cart.reduce((s, c) => s + c.rate * c.qty, 0);
-  const sgst = sub * 0.09, cgst = sub * 0.09, grand = sub + sgst + cgst;
+  const { subtotal: sub, sgst, cgst, grand, byRate } = computeCartTotals(cart);
+  const items = cart.map(c => ({
+    name: c.name, qty: c.qty, rate: c.rate, amount: c.rate * c.qty, gstRate: getGSTRate(c)
+  }));
+
+  if (billingMode === 'quotation') {
+    const quoteNo = 'QTN' + Date.now().toString().slice(-8);
+    const today = document.getElementById('invDate').value;
+    const validTill = new Date(new Date(today).getTime() + 7*24*60*60*1000).toISOString().split('T')[0];
+    const quote = {
+      quoteNo, date: today, validTill,
+      customer: name, phone: document.getElementById('custPhone').value,
+      address: document.getElementById('custAddr').value,
+      items, subtotal: sub, sgst, cgst, grand, byRate
+    };
+    currentInvoiceData = quote;
+    closeBilling();
+    renderQuotation(quote);
+    document.getElementById('custName').value = ''; document.getElementById('custPhone').value = '';
+    document.getElementById('custAddr').value = ''; document.getElementById('upiRef').value = '';
+    return;
+  }
+
   const billNo = 'NRE' + Date.now().toString().slice(-8);
   const order = {
     billNo, date: document.getElementById('invDate').value,
     customer: name, phone: document.getElementById('custPhone').value,
     address: document.getElementById('custAddr').value,
     payment: selectedPayment + (selectedPayment === 'UPI' ? ' (' + (document.getElementById('upiRef').value || '—') + ')' : ''),
-    items: cart.map(c => ({ name: c.name, qty: c.qty, rate: c.rate, amount: c.rate * c.qty })),
-    subtotal: sub, sgst, cgst, grand,
+    items, subtotal: sub, sgst, cgst, grand, byRate
   };
   try {
     await apiPost('/api/orders', order);
@@ -1526,23 +1577,6 @@ async function generateInvoice() {
     showToast('⚠', 'Saved locally — server error: ' + e.message, 'error');
     ORDERS.push(order);   // still push locally so orders tab shows it
   }
-
-  // ── AUTO STOCK DEDUCTION: reduce stock for each billed product ──
-  for (const item of cart) {
-    if (!item.id) continue;
-    const prod = PRODUCTS.find(p => p._id === item.id);
-    if (prod) {
-      const newStock = Math.max(0, prod.stock - item.qty);
-      prod.stock = newStock; // update local cache
-      try {
-        await apiPatch('/api/stock?id=' + item.id, { stock: newStock });
-      } catch(e) {
-        console.warn('Stock update failed for', item.name, e.message);
-      }
-    }
-  }
-  renderProducts('All'); // refresh product grid with updated stock
-
   // Reload orders cache if admin open
   currentInvoiceData = order;
   closeBilling();
@@ -1556,6 +1590,10 @@ async function generateInvoice() {
 //  INVOICE
 // ============================================================
 function renderInvoice(o) {
+  const rates = Object.keys(o.byRate || {});
+  const gstRows = rates.length
+    ? rates.map(r => `<tr><td>SGST @ ${(r/2)}%</td><td>₹${(o.byRate[r].gst/2).toFixed(2)}</td></tr><tr><td>CGST @ ${(r/2)}%</td><td>₹${(o.byRate[r].gst/2).toFixed(2)}</td></tr>`).join('')
+    : `<tr><td>SGST</td><td>₹${o.sgst.toFixed(2)}</td></tr><tr><td>CGST</td><td>₹${o.cgst.toFixed(2)}</td></tr>`;
   document.getElementById('invoicePrint').innerHTML = `
     <div class="inv-header">
       <div>
@@ -1580,22 +1618,72 @@ function renderInvoice(o) {
     <div class="inv-section">
       <div class="inv-section-title">Items</div>
       <table class="inv-table">
-        <thead><tr><th>#</th><th>Particulars</th><th class="num">Qty</th><th class="num">Rate ₹</th><th class="num">Amount ₹</th></tr></thead>
+        <thead><tr><th>#</th><th>Particulars</th><th class="num">Qty</th><th class="num">Rate ₹</th><th class="num">GST%</th><th class="num">Amount ₹</th></tr></thead>
         <tbody>
-          ${o.items.map((it, i) => `<tr><td>${i+1}</td><td>${it.name}</td><td class="num">${it.qty}</td><td class="num">${it.rate.toFixed(2)}</td><td class="num">${it.amount.toFixed(2)}</td></tr>`).join('')}
+          ${o.items.map((it, i) => `<tr><td>${i+1}</td><td>${it.name}</td><td class="num">${it.qty}</td><td class="num">${it.rate.toFixed(2)}</td><td class="num">${it.gstRate !== undefined ? it.gstRate : 18}%</td><td class="num">${it.amount.toFixed(2)}</td></tr>`).join('')}
         </tbody>
       </table>
     </div>
     <table class="inv-totals">
       <tr><td>Subtotal</td><td>₹${o.subtotal.toFixed(2)}</td></tr>
-      <tr><td>SGST @ 9%</td><td>₹${o.sgst.toFixed(2)}</td></tr>
-      <tr><td>CGST @ 9%</td><td>₹${o.cgst.toFixed(2)}</td></tr>
+      ${gstRows}
       <tr><td class="inv-grand" colspan="2" style="padding-top:8px;border-top:2px solid #C8922A;"></td></tr>
       <tr><td class="inv-grand">Grand Total</td><td class="inv-grand">₹${o.grand.toFixed(2)}</td></tr>
     </table>
     <div class="inv-footer">
       <p><strong>Goods Once Sold Cannot Be Taken Back</strong> · விற்ற சரக்கு திரும்பி எடுத்துக் கொள்ளப்படமாட்டாது.</p>
       <p style="margin-top:6px;">Thank you for shopping at <strong>New Royal Electricals!</strong> · GSTIN: 33AACFN4722E1ZR</p>
+    </div>`;
+  document.getElementById('invoiceOverlay').classList.add('open');
+}
+
+// ============================================================
+//  QUOTATION
+// ============================================================
+function renderQuotation(o) {
+  const rates = Object.keys(o.byRate || {});
+  const gstRows = rates.length
+    ? rates.map(r => `<tr><td>SGST @ ${(r/2)}%</td><td>₹${(o.byRate[r].gst/2).toFixed(2)}</td></tr><tr><td>CGST @ ${(r/2)}%</td><td>₹${(o.byRate[r].gst/2).toFixed(2)}</td></tr>`).join('')
+    : `<tr><td>SGST</td><td>₹${o.sgst.toFixed(2)}</td></tr><tr><td>CGST</td><td>₹${o.cgst.toFixed(2)}</td></tr>`;
+  document.getElementById('invoicePrint').innerHTML = `
+    <div class="inv-header">
+      <div>
+        <div class="inv-logo">NEW ROYAL <span>ELECTRICALS</span> & HARDWARE<sub>92, Main Road, Pennadam – 606 105, Tamil Nadu</sub></div>
+        <div style="font-size:11px;color:#555;margin-top:4px;">GSTIN: <span class="inv-gstin">33AACFN4722E1ZR</span> | Ph: 94431 82381 / 99448 64347</div>
+      </div>
+      <div class="inv-meta">
+        <div style="font-size:18px;font-weight:900;color:#C8922A;margin-bottom:6px;">QUOTATION</div>
+        <div><strong>Quote No:</strong> ${o.quoteNo}</div>
+        <div><strong>Date:</strong> ${o.date}</div>
+        <div><strong>Valid Till:</strong> ${o.validTill}</div>
+      </div>
+    </div>
+    <div class="inv-section">
+      <div class="inv-section-title">Quotation To</div>
+      <div class="inv-bill-to">
+        <div class="inv-field"><label>Customer</label><p>${o.customer}</p></div>
+        <div class="inv-field"><label>Phone</label><p>${o.phone || '—'}</p></div>
+        ${o.address ? '<div class="inv-field" style="grid-column:1/-1"><label>Address</label><p>' + o.address + '</p></div>' : ''}
+      </div>
+    </div>
+    <div class="inv-section">
+      <div class="inv-section-title">Quoted Items</div>
+      <table class="inv-table">
+        <thead><tr><th>#</th><th>Particulars</th><th class="num">Qty</th><th class="num">Rate ₹</th><th class="num">GST%</th><th class="num">Amount ₹</th></tr></thead>
+        <tbody>
+          ${o.items.map((it, i) => `<tr><td>${i+1}</td><td>${it.name}</td><td class="num">${it.qty}</td><td class="num">${it.rate.toFixed(2)}</td><td class="num">${it.gstRate !== undefined ? it.gstRate : 18}%</td><td class="num">${it.amount.toFixed(2)}</td></tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+    <table class="inv-totals">
+      <tr><td>Subtotal</td><td>₹${o.subtotal.toFixed(2)}</td></tr>
+      ${gstRows}
+      <tr><td class="inv-grand" colspan="2" style="padding-top:8px;border-top:2px solid #C8922A;"></td></tr>
+      <tr><td class="inv-grand">Estimated Total</td><td class="inv-grand">₹${o.grand.toFixed(2)}</td></tr>
+    </table>
+    <div class="inv-footer">
+      <p><strong>This is a price quotation, not a tax invoice.</strong> Prices and availability are subject to change. Valid until ${o.validTill}.</p>
+      <p style="margin-top:6px;">Thank you for considering <strong>New Royal Electricals!</strong> · GSTIN: 33AACFN4722E1ZR</p>
     </div>`;
   document.getElementById('invoiceOverlay').classList.add('open');
 }
@@ -1684,7 +1772,7 @@ function renderAdmin() {
     `<tr><td>${o.billNo}</td><td>${o.customer}</td><td style="color:var(--gold);font-weight:700">₹${o.grand.toFixed(2)}</td><td>${o.payment}</td><td><span class="badge badge-green">Paid</span></td></tr>`
   ).join('') || '<tr><td colspan="5" style="text-align:center;color:var(--text-dim);padding:24px">No orders yet</td></tr>';
   document.getElementById('adminProductTable').innerHTML = PRODUCTS.map(p =>
-    `<tr><td>${p.icon} ${p.name}</td><td><span class="badge badge-blue">${p.category}</span></td><td>${p.brand}</td><td style="color:var(--gold);font-weight:700">₹${p.rate}</td><td>${p.stock} ${p.unit}</td><td><span class="badge ${p.stock<10?'badge-red':'badge-green'}">${p.stock<10?'Low':'OK'}</span></td><td><button class="btn-del" onclick="deleteProduct('${p._id}')">Del</button></td></tr>`
+    `<tr><td>${p.icon} ${p.name}</td><td><span class="badge badge-blue">${p.category}</span></td><td>${p.brand}</td><td style="color:var(--gold);font-weight:700">₹${p.rate}</td><td>${p.stock} ${p.unit}</td><td><span class="badge badge-gold">${getGSTRate(p)}%</span></td><td><span class="badge ${p.stock<10?'badge-red':'badge-green'}">${p.stock<10?'Low':'OK'}</span></td><td><button class="btn-del" onclick="deleteProduct('${p._id}')">Del</button></td></tr>`
   ).join('');
   document.getElementById('adminPaintTable').innerHTML = PAINTS.map(p =>
     `<tr><td><div style="width:24px;height:24px;border-radius:4px;background:${p.colour};border:1px solid rgba(255,255,255,0.2)"></div></td><td>${p.name}</td><td><span class="badge badge-gold">${p.type}</span></td><td>${p.brand}</td><td style="color:var(--gold);font-weight:700">₹${p.sizes['1L']||'—'}</td><td><button class="btn-del" onclick="deletePaint('${p._id}')">Del</button></td></tr>`
@@ -1721,58 +1809,18 @@ async function addProduct() {
     stock: parseInt(document.getElementById('ap-stock').value) || 0,
     unit: document.getElementById('ap-unit').value,
     hsn: document.getElementById('ap-hsn').value,
+    gstRate: document.getElementById('ap-gst').value === '' ? null : parseFloat(document.getElementById('ap-gst').value),
     icon: document.getElementById('ap-icon').value || '📦',
-    imageUrl: document.getElementById('ap-imgurl').value.trim() || '',
   };
   try {
     const saved = await apiPost('/api/products', p);
     PRODUCTS.push(saved);
-    ['ap-name','ap-brand','ap-rate','ap-stock','ap-hsn','ap-imgurl'].forEach(id => document.getElementById(id).value = '');
-    document.getElementById('ap-icon').value = '📦';
-    document.getElementById('ap-img-preview').style.display = 'none';
-    document.getElementById('ap-img-results').style.display = 'none';
+    ['ap-name','ap-brand','ap-rate','ap-stock','ap-hsn'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('ap-gst').value = '';
+    document.getElementById('ap-icon').value = '⚡';
     renderAdmin(); renderProducts('All');
     showToast('✓', 'Product saved to MongoDB!', 'success');
   } catch(e) { showToast('❌', 'Save failed: ' + e.message, 'error'); }
-}
-
-// ── Image preview & web search helpers ───────────────────────
-function previewProductImg(url) {
-  const preview = document.getElementById('ap-img-preview');
-  const thumb = document.getElementById('ap-img-thumb');
-  if (url && url.startsWith('http')) {
-    thumb.src = url;
-    preview.style.display = 'block';
-  } else {
-    preview.style.display = 'none';
-  }
-}
-
-async function searchProductImage() {
-  const name = document.getElementById('ap-name').value.trim() || document.getElementById('ap-brand').value.trim();
-  if (!name) { showToast('⚠', 'Enter product name first', 'error'); return; }
-  const resultsDiv = document.getElementById('ap-img-results');
-  resultsDiv.style.display = 'flex';
-  resultsDiv.innerHTML = '<div style="font-size:12px;color:var(--text-muted);padding:8px;">🔍 Searching… Open a search tab to find images.</div>';
-  // Open Google Images search in new tab for user to copy URL
-  const query = encodeURIComponent(name + ' product transparent');
-  window.open('https://www.google.com/search?tbm=isch&q=' + query, '_blank');
-  resultsDiv.innerHTML = `<div style="font-size:12px;color:var(--text-muted);padding:8px;line-height:1.6;">
-    🔍 Google Images opened in a new tab for <strong style="color:var(--gold)">${name}</strong>.<br>
-    Right-click any image → <em>Copy image address</em>, then paste the URL in the Image field above.
-  </div>`;
-}
-
-// ── Image URL preview & web search for add product ──────────
-function previewProductImg(url) {
-  const preview = document.getElementById('ap-img-preview');
-  const thumb = document.getElementById('ap-img-thumb');
-  if (url && (url.startsWith('http') || url.startsWith('//'))) {
-    thumb.src = url;
-    preview.style.display = 'block';
-  } else {
-    preview.style.display = 'none';
-  }
 }
 
 async function addPaint() {
@@ -1895,6 +1943,7 @@ async function importProductCSV(input) {
       stock: parseInt(row['stock'] || row['stock qty'] || 0) || 0,
       unit: row['unit'] || 'Piece',
       hsn: row['hsn'] || row['hsn code'] || '',
+      gstRate: (row['gst'] || row['gst rate'] || row['gst%'] || '') !== '' ? parseFloat(row['gst'] || row['gst rate'] || row['gst%']) : null,
       icon: row['icon'] || row['emoji icon'] || '📦',
     };
     try { await apiPost('/api/products', product); imported++; }
@@ -1903,6 +1952,79 @@ async function importProductCSV(input) {
   await loadAdminData();
   renderAdmin(); renderProducts('All');
   showToast('✅', imported + ' products imported' + (errors ? ', ' + errors + ' skipped' : ''), 'success');
+  input.value = '';
+}
+
+// ============================================================
+//  PVC / PLUMBING — IMPORT FROM EXCEL (.xlsx)
+// ============================================================
+async function importPVCExcel(input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (!confirm('Import PVC/Plumbing products from this Excel file? New products will be added; products with a matching name will be updated (rate & stock).')) {
+    input.value = ''; return;
+  }
+  showToast('⏳', 'Reading Excel file…', 'success');
+
+  let rows;
+  try {
+    const data = await file.arrayBuffer();
+    const wb = XLSX.read(data, { type: 'array' });
+    const ws = wb.Sheets[wb.SheetNames[0]];
+    rows = XLSX.utils.sheet_to_json(ws, { defval: '' });
+  } catch (e) {
+    showToast('❌', 'Could not read Excel file: ' + e.message, 'error');
+    input.value = ''; return;
+  }
+  if (!rows.length) { showToast('⚠', 'Excel file has no data rows', 'error'); return; }
+
+  // Normalize header keys (case-insensitive, trimmed)
+  const norm = row => {
+    const out = {};
+    Object.keys(row).forEach(k => out[k.trim().toLowerCase()] = row[k]);
+    return out;
+  };
+
+  let imported = 0, updated = 0, errors = 0;
+  for (const raw of rows) {
+    const row = norm(raw);
+    const name = String(row['name'] || row['product name'] || row['product'] || '').trim();
+    const rate = parseFloat(row['rate'] || row['rate (₹)'] || row['price'] || 0);
+    if (!name || !rate) { errors++; continue; }
+
+    const product = {
+      name,
+      category: String(row['category'] || 'PVC').trim() || 'PVC',
+      brand: String(row['brand'] || '—').trim() || '—',
+      rate,
+      stock: parseInt(row['stock'] || row['stock qty'] || row['quantity'] || 0) || 0,
+      unit: String(row['unit'] || 'Piece').trim() || 'Piece',
+      hsn: String(row['hsn'] || row['hsn code'] || '').trim(),
+      gstRate: (row['gst'] !== undefined && row['gst'] !== '') ? parseFloat(row['gst'])
+             : (row['gst rate'] !== undefined && row['gst rate'] !== '') ? parseFloat(row['gst rate'])
+             : (row['gst%'] !== undefined && row['gst%'] !== '') ? parseFloat(row['gst%'])
+             : null,
+      icon: String(row['icon'] || row['emoji icon'] || '🔧').trim() || '🔧',
+    };
+
+    // Update existing product with same name (case-insensitive), else create new
+    const existing = PRODUCTS.find(p => p.name.trim().toLowerCase() === name.toLowerCase());
+    try {
+      if (existing) {
+        const merged = { ...existing, ...product };
+        await apiPut('/api/products?id=' + existing._id, merged);
+        Object.assign(existing, merged);
+        updated++;
+      } else {
+        const saved = await apiPost('/api/products', product);
+        PRODUCTS.push(saved);
+        imported++;
+      }
+    } catch (e) { errors++; }
+  }
+
+  renderAdmin(); renderProducts('All');
+  showToast('✅', `${imported} added, ${updated} updated` + (errors ? `, ${errors} skipped` : ''), 'success');
   input.value = '';
 }
 
