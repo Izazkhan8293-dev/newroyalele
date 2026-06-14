@@ -812,10 +812,27 @@
     GSTIN: 33AACFN4722E1ZR | Ph: 94431 82381 / 99448 64347<br>
     Mon–Sat: 8:00 AM – 8:00 PM
   </div>
+  <div style="display:flex;justify-content:center;gap:20px;margin-bottom:12px;flex-wrap:wrap;">
+    <a onclick="openLegal('privacy')" style="font-size:12px;color:var(--gold);cursor:pointer;text-decoration:none;">Privacy Policy</a>
+    <a onclick="openLegal('terms')" style="font-size:12px;color:var(--gold);cursor:pointer;text-decoration:none;">Terms & Conditions</a>
+    <a onclick="openLegal('copyright')" style="font-size:12px;color:var(--gold);cursor:pointer;text-decoration:none;">Copyright Notice</a>
+  </div>
   <div class="footer-bottom">
-    © 2026 New Royal Electricals & Hardware. Established 1970. All rights reserved.
+    © 2026 New Royal Electricals & Hardware. Established 1970. All rights reserved.<br>
+    <span style="font-size:10px;">92, Main Road, Pennadam – 606 105 | Built for internal use only.</span>
   </div>
 </footer>
+
+<!-- ===== LEGAL MODAL ===== -->
+<div class="modal-overlay" id="legalModal" style="z-index:600;">
+  <div class="modal" style="max-width:700px;">
+    <div class="modal-header">
+      <h3 id="legalModalTitle">Legal</h3>
+      <button class="cart-close" onclick="closeLegal()">✕</button>
+    </div>
+    <div class="modal-body" id="legalModalBody" style="line-height:1.8;font-size:13px;color:var(--text-muted);max-height:70vh;overflow-y:auto;"></div>
+  </div>
+</div>
 
 <!-- ===== CART PANEL ===== -->
 <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
@@ -977,7 +994,20 @@
               <option>Piece</option><option>Box</option><option>Kg</option><option>Metre</option><option>Litre</option>
             </select>
           </div>
-          <div class="form-group"><label>Emoji Icon</label><input class="form-control" id="ap-icon" placeholder="⚡" value="⚡"></div>
+          <div class="form-group" style="grid-column:1/-1;">
+            <label>Product Image</label>
+            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+              <input class="form-control" id="ap-imageUrl" placeholder="Image URL (paste or search below)" style="flex:1;min-width:200px;">
+              <button type="button" onclick="searchProductImage()" style="background:rgba(52,152,219,0.15);border:1px solid rgba(52,152,219,0.4);color:var(--blue);border-radius:8px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;">🔍 Search Web Image</button>
+            </div>
+            <div id="ap-imageSearch" style="margin-top:10px;display:none;">
+              <div style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">Click an image to select:</div>
+              <div id="ap-imageResults" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;"></div>
+            </div>
+            <div id="ap-imagePreview" style="margin-top:10px;display:none;">
+              <img id="ap-previewImg" style="height:100px;border-radius:8px;border:2px solid var(--gold);object-fit:cover;" alt="preview">
+            </div>
+          </div>
         </div>
         <button class="btn-save" onclick="addProduct()">💾 Save Product</button>
       </div>
@@ -1103,10 +1133,13 @@
             <p style="font-size:11px;color:var(--text-dim);margin-top:6px;">CSV headers: name,category,brand,rate,stock,unit,hsn,gst,icon</p>
           </div>
           <div style="grid-column:1/-1;">
-            <label style="display:block;font-size:12px;font-weight:600;color:var(--text-muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;">Import PVC / Plumbing Products (Excel .xlsx)</label>
+            <label style="display:block;font-size:12px;font-weight:600;color:var(--text-muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;">Import Any Products (Excel .xlsx / .xls)</label>
             <input type="file" accept=".xlsx,.xls" id="importPvcXlsx" style="display:none" onchange="importPVCExcel(this)">
             <button class="import-btn" onclick="document.getElementById('importPvcXlsx').click()" style="width:100%;justify-content:center;background:rgba(52,152,219,0.15);border-color:rgba(52,152,219,0.4);color:#3498DB;">📥 Choose Excel (.xlsx) File</button>
-            <p style="font-size:11px;color:var(--text-dim);margin-top:6px;">Excel columns: Name, Category, Brand, Rate, Stock, Unit, HSN, GST. Category defaults to "PVC" if not provided. Re-importing the same product names updates stock &amp; rate.</p>
+            <p style="font-size:11px;color:var(--text-dim);margin-top:6px;">Excel columns: Name, Category (Electrical/Lighting/Cables/Hardware/PVC/Motors), Brand, Rate, Stock, Unit, HSN, GST, ImageURL. Matching product names are updated (rate & stock).</p>
+            <div style="margin-top:10px;">
+              <button onclick="downloadImportTemplate()" style="background:rgba(200,146,42,0.1);border:1px solid rgba(200,146,42,0.3);color:var(--gold);border-radius:8px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer;">⬇ Download Excel Template</button>
+            </div>
           </div>
         </div>
       </div>
@@ -1378,10 +1411,13 @@ function renderProducts(filter) {
   }
   grid.innerHTML = filtered.map(p => {
     const isLow = p.stock < 10;
+    const imgHtml = p.imageUrl
+      ? `<img src="${p.imageUrl}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.nextSibling.style.display='flex'"><div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:44px;">${p.icon||'📦'}</div>`
+      : `<span style="font-size:44px;">${p.icon||'📦'}</span>`;
     return `<div class="product-card">
-      <div class="product-card-img">
+      <div class="product-card-img" style="overflow:hidden;">
         ${isLow ? '<span class="product-badge low">Low Stock</span>' : '<span class="product-badge">In Stock</span>'}
-        <span>${p.icon || '📦'}</span>
+        ${imgHtml}
       </div>
       <div class="product-body">
         <div class="product-name">${p.name}</div>
@@ -1572,18 +1608,35 @@ async function generateInvoice() {
   };
   try {
     await apiPost('/api/orders', order);
-    ORDERS.push(order);   // update local cache immediately
+    ORDERS.push(order);
   } catch(e) {
     showToast('⚠', 'Saved locally — server error: ' + e.message, 'error');
-    ORDERS.push(order);   // still push locally so orders tab shows it
+    ORDERS.push(order);
   }
-  // Reload orders cache if admin open
+
+  // ── AUTO DEDUCT STOCK FROM INVENTORY ────────────────────────
+  for (const cartItem of cart) {
+    // Find the matching product in PRODUCTS array
+    const prod = PRODUCTS.find(p => p._id === cartItem.id || p._id + '_' === cartItem.id.slice(0, p._id.length + 1));
+    if (!prod) continue; // paint or non-tracked item
+    const newStock = Math.max(0, (prod.stock || 0) - cartItem.qty);
+    try {
+      await apiPatch('/api/stock?id=' + prod._id, { stock: newStock });
+      prod.stock = newStock;
+    } catch(e) {
+      console.warn('Stock deduct failed for', prod.name, e.message);
+    }
+  }
+  // ────────────────────────────────────────────────────────────
+
   currentInvoiceData = order;
   closeBilling();
   renderInvoice(order);
   cart = []; updateCartUI();
   document.getElementById('custName').value = ''; document.getElementById('custPhone').value = '';
   document.getElementById('custAddr').value = ''; document.getElementById('upiRef').value = '';
+  // Refresh product display to show updated stock
+  renderProducts('All');
 }
 
 // ============================================================
@@ -1772,7 +1825,7 @@ function renderAdmin() {
     `<tr><td>${o.billNo}</td><td>${o.customer}</td><td style="color:var(--gold);font-weight:700">₹${o.grand.toFixed(2)}</td><td>${o.payment}</td><td><span class="badge badge-green">Paid</span></td></tr>`
   ).join('') || '<tr><td colspan="5" style="text-align:center;color:var(--text-dim);padding:24px">No orders yet</td></tr>';
   document.getElementById('adminProductTable').innerHTML = PRODUCTS.map(p =>
-    `<tr><td>${p.icon} ${p.name}</td><td><span class="badge badge-blue">${p.category}</span></td><td>${p.brand}</td><td style="color:var(--gold);font-weight:700">₹${p.rate}</td><td>${p.stock} ${p.unit}</td><td><span class="badge badge-gold">${getGSTRate(p)}%</span></td><td><span class="badge ${p.stock<10?'badge-red':'badge-green'}">${p.stock<10?'Low':'OK'}</span></td><td><button class="btn-del" onclick="deleteProduct('${p._id}')">Del</button></td></tr>`
+    `<tr><td style="display:flex;align-items:center;gap:8px;">${p.imageUrl ? `<img src="${p.imageUrl}" style="width:32px;height:32px;border-radius:4px;object-fit:cover;" onerror="this.style.display='none'">` : `<span style="font-size:22px;">${p.icon||'📦'}</span>`} ${p.name}</td><td><span class="badge badge-blue">${p.category}</span></td><td>${p.brand}</td><td style="color:var(--gold);font-weight:700">₹${p.rate}</td><td>${p.stock} ${p.unit}</td><td><span class="badge badge-gold">${getGSTRate(p)}%</span></td><td><span class="badge ${p.stock<10?'badge-red':'badge-green'}">${p.stock<10?'Low':'OK'}</span></td><td><button class="btn-del" onclick="deleteProduct('${p._id}')">Del</button></td></tr>`
   ).join('');
   document.getElementById('adminPaintTable').innerHTML = PAINTS.map(p =>
     `<tr><td><div style="width:24px;height:24px;border-radius:4px;background:${p.colour};border:1px solid rgba(255,255,255,0.2)"></div></td><td>${p.name}</td><td><span class="badge badge-gold">${p.type}</span></td><td>${p.brand}</td><td style="color:var(--gold);font-weight:700">₹${p.sizes['1L']||'—'}</td><td><button class="btn-del" onclick="deletePaint('${p._id}')">Del</button></td></tr>`
@@ -1810,14 +1863,16 @@ async function addProduct() {
     unit: document.getElementById('ap-unit').value,
     hsn: document.getElementById('ap-hsn').value,
     gstRate: document.getElementById('ap-gst').value === '' ? null : parseFloat(document.getElementById('ap-gst').value),
-    icon: document.getElementById('ap-icon').value || '📦',
+    icon: '📦',
+    imageUrl: document.getElementById('ap-imageUrl').value.trim() || null,
   };
   try {
     const saved = await apiPost('/api/products', p);
     PRODUCTS.push(saved);
-    ['ap-name','ap-brand','ap-rate','ap-stock','ap-hsn'].forEach(id => document.getElementById(id).value = '');
+    ['ap-name','ap-brand','ap-rate','ap-stock','ap-hsn','ap-imageUrl'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('ap-gst').value = '';
-    document.getElementById('ap-icon').value = '⚡';
+    document.getElementById('ap-imageSearch').style.display = 'none';
+    document.getElementById('ap-imagePreview').style.display = 'none';
     renderAdmin(); renderProducts('All');
     showToast('✓', 'Product saved to MongoDB!', 'success');
   } catch(e) { showToast('❌', 'Save failed: ' + e.message, 'error'); }
@@ -1956,12 +2011,12 @@ async function importProductCSV(input) {
 }
 
 // ============================================================
-//  PVC / PLUMBING — IMPORT FROM EXCEL (.xlsx)
+//  UNIVERSAL EXCEL IMPORT — all product categories
 // ============================================================
 async function importPVCExcel(input) {
   const file = input.files[0];
   if (!file) return;
-  if (!confirm('Import PVC/Plumbing products from this Excel file? New products will be added; products with a matching name will be updated (rate & stock).')) {
+  if (!confirm('Import products from this Excel file? New products will be added; products with a matching name will be updated (rate, stock & image).')) {
     input.value = ''; return;
   }
   showToast('⏳', 'Reading Excel file…', 'success');
@@ -1978,7 +2033,7 @@ async function importPVCExcel(input) {
   }
   if (!rows.length) { showToast('⚠', 'Excel file has no data rows', 'error'); return; }
 
-  // Normalize header keys (case-insensitive, trimmed)
+  const validCats = ['Electrical','Lighting','Cables','Hardware','PVC','Motors'];
   const norm = row => {
     const out = {};
     Object.keys(row).forEach(k => out[k.trim().toLowerCase()] = row[k]);
@@ -1992,9 +2047,12 @@ async function importPVCExcel(input) {
     const rate = parseFloat(row['rate'] || row['rate (₹)'] || row['price'] || 0);
     if (!name || !rate) { errors++; continue; }
 
+    let cat = String(row['category'] || '').trim();
+    if (!validCats.includes(cat)) cat = 'Electrical'; // default to Electrical for generic imports
+
     const product = {
       name,
-      category: String(row['category'] || 'PVC').trim() || 'PVC',
+      category: cat,
       brand: String(row['brand'] || '—').trim() || '—',
       rate,
       stock: parseInt(row['stock'] || row['stock qty'] || row['quantity'] || 0) || 0,
@@ -2004,10 +2062,10 @@ async function importPVCExcel(input) {
              : (row['gst rate'] !== undefined && row['gst rate'] !== '') ? parseFloat(row['gst rate'])
              : (row['gst%'] !== undefined && row['gst%'] !== '') ? parseFloat(row['gst%'])
              : null,
-      icon: String(row['icon'] || row['emoji icon'] || '🔧').trim() || '🔧',
+      icon: '📦',
+      imageUrl: String(row['imageurl'] || row['image url'] || row['image'] || '').trim() || null,
     };
 
-    // Update existing product with same name (case-insensitive), else create new
     const existing = PRODUCTS.find(p => p.name.trim().toLowerCase() === name.toLowerCase());
     try {
       if (existing) {
@@ -2242,8 +2300,130 @@ async function resetAllData() {
 }
 
 // ============================================================
-//  MOBILE MENU
+//  LEGAL MODALS — Copyright, T&C, Privacy Policy
 // ============================================================
+const LEGAL_CONTENT = {
+  copyright: {
+    title: '© Copyright Notice',
+    body: `<h4 style="color:var(--gold);margin-bottom:12px;">Copyright © 2026 New Royal Electricals & Hardware</h4>
+      <p>All content on this website and billing system — including but not limited to text, graphics, logos, product names, pricing data, and software — is the exclusive property of <strong>New Royal Electricals & Hardware</strong>, 92 Main Road, Pennadam – 606 105, Tamil Nadu, India.</p>
+      <br><p><strong>Reproduction or Distribution:</strong> No part of this website, billing system, or its content may be reproduced, duplicated, copied, sold, resold, or otherwise exploited for any commercial purpose without express written consent of the proprietors.</p>
+      <br><p><strong>Trademarks:</strong> Brand names displayed (GM, Philips, Crompton, Birla Opus, Fybros, Hi-Fi, etc.) are trademarks of their respective owners. New Royal Electricals is an authorised dealer and does not claim ownership of these marks.</p>
+      <br><p><strong>Software:</strong> The billing and inventory management software is proprietary to New Royal Electricals & Hardware. Unauthorised use, copying, or reverse engineering is strictly prohibited.</p>
+      <br><p><strong>Contact:</strong> For licensing enquiries, contact 94431 82381 or visit the store at 92, Main Road, Pennadam – 606 105.</p>`
+  },
+  terms: {
+    title: '📋 Terms & Conditions',
+    body: `<h4 style="color:var(--gold);margin-bottom:12px;">Terms & Conditions of Sale</h4>
+      <p><em>Last updated: June 2026. By placing an order or generating an invoice, you agree to the following terms.</em></p>
+      <br><strong style="color:var(--text);">1. General</strong>
+      <p>These terms govern all transactions at New Royal Electricals & Hardware, 92, Main Road, Pennadam – 606 105 (GSTIN: 33AACFN4722E1ZR). All sales are subject to availability and confirmation by the proprietor.</p>
+      <br><strong style="color:var(--text);">2. Pricing</strong>
+      <p>All prices are in Indian Rupees (₹) and are inclusive of applicable GST unless stated otherwise. Prices are subject to change without prior notice. The price at the time of billing is final.</p>
+      <br><strong style="color:var(--text);">3. Return & Exchange Policy</strong>
+      <p><strong>Goods once sold cannot be taken back.</strong> (விற்ற சரக்கு திரும்பி எடுத்துக் கொள்ளப்படமாட்டாது.) Exchanges may be considered within 7 days of purchase only for manufacturing defects, with original bill and packaging intact. Electrical items once installed are non-returnable.</p>
+      <br><strong style="color:var(--text);">4. Payment</strong>
+      <p>We accept Cash, UPI (GPay/PhonePe/Paytm), Debit/Credit Card, and Credit (for approved customers). Credit terms are at the sole discretion of the proprietor. Outstanding credit must be cleared within 30 days.</p>
+      <br><strong style="color:var(--text);">5. Warranty</strong>
+      <p>Warranty on electrical and electronic goods is provided by the respective manufacturer. New Royal Electricals acts only as a dealer and is not responsible for manufacturer defects beyond the dealer's control.</p>
+      <br><strong style="color:var(--text);">6. Quotations</strong>
+      <p>Quotations issued are valid for 7 days from the date of issue. Prices in quotations are indicative and subject to stock availability and prevailing rates at the time of actual purchase.</p>
+      <br><strong style="color:var(--text);">7. Dispute Resolution</strong>
+      <p>All disputes are subject to the jurisdiction of courts in Cuddalore District, Tamil Nadu, India.</p>
+      <br><strong style="color:var(--text);">8. GST Compliance</strong>
+      <p>Tax invoices are issued in compliance with GST Act 2017. GSTIN: 33AACFN4722E1ZR. Input tax credit is the sole responsibility of the purchasing party.</p>`
+  },
+  privacy: {
+    title: '🔒 Privacy Policy',
+    body: `<h4 style="color:var(--gold);margin-bottom:12px;">Privacy Policy</h4>
+      <p><em>Effective Date: June 2026</em></p>
+      <br><strong style="color:var(--text);">1. Information We Collect</strong>
+      <p>When generating an invoice or quotation, we collect: your name, phone number, and delivery/billing address. This information is used solely for billing purposes and is stored securely in our database.</p>
+      <br><strong style="color:var(--text);">2. How We Use Your Information</strong>
+      <p>Customer data collected is used exclusively to: generate GST-compliant tax invoices, maintain sales records for accounting purposes, and contact you regarding your purchase if needed. We do not use your data for marketing purposes.</p>
+      <br><strong style="color:var(--text);">3. Data Storage</strong>
+      <p>Customer and transaction data is stored on secured servers (MongoDB Atlas). Access is restricted to authorised personnel of New Royal Electricals & Hardware only. We do not sell, trade, or rent your personal information to third parties.</p>
+      <br><strong style="color:var(--text);">4. Data Retention</strong>
+      <p>Invoice and order records are retained for a minimum of 7 years as required by Indian GST and accounting regulations. Personal customer data may be deleted on request, subject to legal obligations.</p>
+      <br><strong style="color:var(--text);">5. Cookies</strong>
+      <p>This website uses minimal browser storage (localStorage) only to maintain your admin session. No tracking cookies, analytics, or third-party cookies are used.</p>
+      <br><strong style="color:var(--text);">6. Your Rights</strong>
+      <p>You may request access to, correction of, or deletion of your personal data by visiting the store or calling 94431 82381.</p>
+      <br><strong style="color:var(--text);">7. Security</strong>
+      <p>We implement reasonable technical and organisational measures to protect your data. However, no internet transmission is 100% secure. Please contact us immediately if you suspect any unauthorised access.</p>
+      <br><strong style="color:var(--text);">8. Contact</strong>
+      <p>For privacy concerns: New Royal Electricals & Hardware, 92 Main Road, Pennadam – 606 105 | Ph: 94431 82381</p>`
+  }
+};
+
+function openLegal(type) {
+  const content = LEGAL_CONTENT[type];
+  if (!content) return;
+  document.getElementById('legalModalTitle').textContent = content.title;
+  document.getElementById('legalModalBody').innerHTML = content.body;
+  document.getElementById('legalModal').classList.add('open');
+}
+function closeLegal() { document.getElementById('legalModal').classList.remove('open'); }
+
+// ============================================================
+//  WEB IMAGE SEARCH for products
+// ============================================================
+async function searchProductImage() {
+  const name = document.getElementById('ap-name').value.trim();
+  const brand = document.getElementById('ap-brand').value.trim();
+  const query = (brand ? brand + ' ' : '') + (name || 'electrical product');
+  const searchBox = document.getElementById('ap-imageSearch');
+  const resultsEl = document.getElementById('ap-imageResults');
+  searchBox.style.display = 'block';
+  resultsEl.innerHTML = '<div style="color:var(--text-muted);font-size:12px;padding:10px;">🔍 Searching for images…</div>';
+
+  // Use Unsplash Source API for product-like images (free, no key needed)
+  // For hardware/electrical store context, we use DuckDuckGo image search proxy
+  const UNSPLASH_QUERIES = [
+    `https://source.unsplash.com/120x120/?${encodeURIComponent(query)}&sig=1`,
+    `https://source.unsplash.com/120x120/?${encodeURIComponent(query)}&sig=2`,
+    `https://source.unsplash.com/120x120/?${encodeURIComponent(query)}&sig=3`,
+    `https://source.unsplash.com/120x120/?${encodeURIComponent(query)}&sig=4`,
+    `https://source.unsplash.com/120x120/?${encodeURIComponent(query)}&sig=5`,
+    `https://source.unsplash.com/120x120/?${encodeURIComponent(name||'hardware')}&sig=6`,
+  ];
+
+  resultsEl.innerHTML = UNSPLASH_QUERIES.map((url, i) =>
+    `<div onclick="selectProductImage('${url}')" style="cursor:pointer;border-radius:8px;overflow:hidden;border:2px solid var(--border2);transition:all 0.2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--border2)'">
+      <img src="${url}" style="width:100%;height:80px;object-fit:cover;display:block;" loading="lazy"
+        onerror="this.parentNode.style.display='none'" alt="Image ${i+1}">
+    </div>`
+  ).join('');
+}
+
+function selectProductImage(url) {
+  document.getElementById('ap-imageUrl').value = url;
+  document.getElementById('ap-imageSearch').style.display = 'none';
+  const preview = document.getElementById('ap-imagePreview');
+  const img = document.getElementById('ap-previewImg');
+  img.src = url;
+  preview.style.display = 'block';
+}
+
+// ============================================================
+//  DOWNLOAD EXCEL IMPORT TEMPLATE
+// ============================================================
+function downloadImportTemplate() {
+  const headers = ['Name','Category','Brand','Rate','Stock','Unit','HSN','GST','ImageURL'];
+  const example = [
+    ['GM 6A Switch','Electrical','GM','45','200','Piece','8536','18',''],
+    ['Philips 9W LED','Lighting','Philips','120','300','Piece','8539','12',''],
+    ['1/2" PVC Pipe','PVC','Supreme','120','100','Piece','3917','18',''],
+    ['Hex Bolt Set','Hardware','Generic','180','50','Box','7318','18',''],
+  ];
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.aoa_to_sheet([headers, ...example]);
+  ws['!cols'] = [30,14,12,8,8,8,10,6,40].map(w => ({ wch: w }));
+  XLSX.utils.book_append_sheet(wb, ws, 'Products');
+  XLSX.writeFile(wb, 'NRE_Product_Import_Template.xlsx');
+  showToast('⬇', 'Template downloaded!', 'success');
+}
+
 function toggleMobileMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
 function closeMobileMenu() { document.getElementById('mobileMenu').classList.remove('open'); }
 
