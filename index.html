@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>New Royal Electricals & Hardware — Pennadam</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#C8922A">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="NRE Store">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
   :root {
@@ -557,6 +563,62 @@
     .inv-actions { display: none !important; }
   }
 
+  /* ===== PRODUCT SEARCH BAR ===== */
+  .product-search-wrap {
+    display: flex; align-items: center; gap: 10px;
+    max-width: 480px; margin: 0 auto 28px;
+    position: relative;
+  }
+  .product-search-input {
+    flex: 1; background: var(--dark3); border: 1.5px solid var(--border2);
+    border-radius: 10px; padding: 11px 44px 11px 16px;
+    font-size: 14px; color: var(--text); font-family: 'Inter', sans-serif;
+    outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+    width: 100%;
+  }
+  .product-search-input::placeholder { color: var(--text-dim); }
+  .product-search-input:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(200,146,42,0.12);
+  }
+  .product-search-icon {
+    position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+    font-size: 16px; color: var(--text-dim); pointer-events: none;
+  }
+  .product-search-clear {
+    position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+    font-size: 15px; color: var(--text-dim); background: none; border: none;
+    cursor: pointer; padding: 2px 4px; display: none; line-height: 1;
+  }
+  .product-search-clear:hover { color: var(--text); }
+  .search-result-count {
+    text-align: center; font-size: 12px; color: var(--text-dim);
+    margin-bottom: 16px; display: none;
+  }
+  .search-result-count span { color: var(--gold); font-weight: 700; }
+
+  /* ===== PWA INSTALL BUTTON ===== */
+  #pwaInstallBtn {
+    position: fixed; top: 14px; right: 260px; z-index: 150;
+    background: linear-gradient(135deg, var(--gold), var(--gold-dim));
+    color: #000; border: none; border-radius: 8px;
+    padding: 8px 16px; font-size: 13px; font-weight: 700;
+    cursor: pointer; display: none; align-items: center; gap: 6px;
+    box-shadow: var(--shadow-gold); animation: pulse-install 2s infinite;
+    white-space: nowrap;
+  }
+  @keyframes pulse-install {
+    0%,100% { box-shadow: 0 4px 15px rgba(200,146,42,0.4); }
+    50%      { box-shadow: 0 4px 28px rgba(200,146,42,0.9); }
+  }
+  @media (max-width: 768px) {
+    #pwaInstallBtn {
+      top: auto; bottom: 80px; right: 12px;
+      font-size: 12px; padding: 9px 14px;
+      border-radius: 24px;
+    }
+  }
+
   /* ===== ADMIN LOGIN MODAL ===== */
   .login-overlay {
     position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 600;
@@ -711,6 +773,9 @@
     </button>
   </div>
 </nav>
+
+<!-- PWA INSTALL BUTTON -->
+<button id="pwaInstallBtn">📲 Install App</button>
 
 <!-- MOBILE MENU -->
 <div class="mobile-menu" id="mobileMenu">
@@ -1045,6 +1110,22 @@
     <button class="cat-tab" onclick="filterProducts('Hardware', this)">🔧 Hardware</button>
     <button class="cat-tab" onclick="filterProducts('Safety', this)">🦺 Safety</button>
   </div>
+
+  <!-- SEARCH BAR -->
+  <div class="product-search-wrap">
+    <input
+      class="product-search-input"
+      id="productSearchInput"
+      type="text"
+      placeholder="🔍  Search products, brands, categories…"
+      oninput="handleProductSearch(this.value)"
+      autocomplete="off"
+      spellcheck="false"
+    >
+    <button class="product-search-clear" id="productSearchClear" onclick="clearProductSearch()" title="Clear search">✕</button>
+  </div>
+  <div class="search-result-count" id="searchResultCount"></div>
+
   <div class="product-grid" id="productGrid"></div>
 </section>
 
@@ -1540,6 +1621,8 @@ let cart = [];
 let selectedPayment = 'Cash';
 let currentInvoiceData = null;
 let billingMode = 'invoice'; // 'invoice' or 'quotation'
+let currentProductFilter = 'All'; // track active category tab
+let currentProductSearch = '';    // track live search query
 
 // ============================================================
 //  GST HELPERS
@@ -1652,6 +1735,17 @@ function showSection(sec) {
     const el = document.getElementById('sec-' + s);
     if (el) el.style.display = 'none';
   });
+  // Clear product search when leaving products section
+  if (sec !== 'products') {
+    currentProductSearch = '';
+    currentProductFilter = 'All';
+    const input = document.getElementById('productSearchInput');
+    if (input) input.value = '';
+    const clearBtn = document.getElementById('productSearchClear');
+    if (clearBtn) clearBtn.style.display = 'none';
+    const countEl = document.getElementById('searchResultCount');
+    if (countEl) countEl.style.display = 'none';
+  }
   const target = document.getElementById('sec-' + sec);
   if (target) target.style.display = '';
   // Brands logo section & catalogue only visible on Home page
@@ -1684,8 +1778,27 @@ function scrollToTop() { showSection('home'); }
 function filterProducts(cat, el) {
   document.querySelectorAll('#productCatTabs .cat-tab').forEach(t => t.classList.remove('active'));
   if (el) el.classList.add('active');
+  currentProductFilter = cat;
   // Clear any active brand filter when using category tabs
   renderProducts(cat, null);
+}
+
+// ── Product Search ────────────────────────────────────────────
+function handleProductSearch(query) {
+  currentProductSearch = query.trim();
+  const clearBtn = document.getElementById('productSearchClear');
+  if (clearBtn) clearBtn.style.display = currentProductSearch ? 'block' : 'none';
+  renderProducts(currentProductFilter, null);
+}
+
+function clearProductSearch() {
+  const input = document.getElementById('productSearchInput');
+  if (input) input.value = '';
+  currentProductSearch = '';
+  const clearBtn = document.getElementById('productSearchClear');
+  if (clearBtn) clearBtn.style.display = 'none';
+  renderProducts(currentProductFilter, null);
+  if (input) input.focus();
 }
 
 // Navigate from brand card → Products page filtered by brand name
@@ -1741,10 +1854,35 @@ function renderProducts(filter, brandFilter) {
     });
   }
 
+  // Apply search query filter
+  const q = currentProductSearch.toLowerCase();
+  if (q) {
+    filtered = filtered.filter(p =>
+      (p.name     || '').toLowerCase().includes(q) ||
+      (p.brand    || '').toLowerCase().includes(q) ||
+      (p.category || '').toLowerCase().includes(q) ||
+      (p.hsn      || '').toLowerCase().includes(q) ||
+      (p.unit     || '').toLowerCase().includes(q)
+    );
+  }
+
+  // Show/hide result count
+  const countEl = document.getElementById('searchResultCount');
+  if (countEl) {
+    if (q) {
+      countEl.style.display = 'block';
+      countEl.innerHTML = `Found <span>${filtered.length}</span> result${filtered.length !== 1 ? 's' : ''} for "<span>${currentProductSearch}</span>"`;
+    } else {
+      countEl.style.display = 'none';
+    }
+  }
+
   const grid = document.getElementById('productGrid');
   if (!filtered.length) {
     grid.innerHTML = `<p style="color:var(--text-dim);text-align:center;padding:40px;grid-column:1/-1">
-      ${brandFilter ? 'No products listed for <strong style="color:var(--gold)">' + brandFilter + '</strong> yet. Ask admin to add them.' : 'No products found. Add from Admin Panel.'}
+      ${q ? '🔍 No products match "<strong style=\'color:var(--gold)\'>' + currentProductSearch + '</strong>". Try a different keyword.' :
+        brandFilter ? 'No products listed for <strong style="color:var(--gold)">' + brandFilter + '</strong> yet. Ask admin to add them.' :
+        'No products found. Add from Admin Panel.'}
     </p>`;
     return;
   }
@@ -2795,6 +2933,44 @@ function showToast(icon, msg, type = 'success') {
   t.className = 'toast show ' + type;
   setTimeout(() => t.classList.remove('show'), 3500);
 }
+
+// ============================================================
+//  PWA INSTALL BUTTON
+// ============================================================
+(function() {
+  let _pwaPrompt = null;
+  const _btn = document.getElementById('pwaInstallBtn');
+  if (!_btn) return;
+
+  window.addEventListener('beforeinstallprompt', function(e) {
+    e.preventDefault();
+    _pwaPrompt = e;
+    _btn.style.display = 'flex';
+  });
+
+  _btn.addEventListener('click', async function() {
+    if (!_pwaPrompt) return;
+    _pwaPrompt.prompt();
+    const choice = await _pwaPrompt.userChoice;
+    if (choice.outcome === 'accepted') {
+      _btn.style.display = 'none';
+    }
+    _pwaPrompt = null;
+  });
+
+  window.addEventListener('appinstalled', function() {
+    _btn.style.display = 'none';
+    _pwaPrompt = null;
+  });
+
+  if (window.matchMedia('(display-mode: standalone)').matches) {
+    _btn.style.display = 'none';
+  }
+})();
+
+</script>
+
+<!-- APP DOWNLOAD BANNER -->
 <div id="app-banner" style="display:flex;position:fixed;bottom:0;left:0;right:0;background:#1a1a1a;color:#fff;padding:14px 16px;align-items:center;justify-content:space-between;z-index:9999;border-top:2px solid #f5a623;box-shadow:0 -4px 16px rgba(0,0,0,0.5);gap:12px;">
   <div style="display:flex;align-items:center;gap:12px;">
     <div>
