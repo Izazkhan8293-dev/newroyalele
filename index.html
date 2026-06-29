@@ -1706,8 +1706,8 @@ async function apiDelete(path) {
 // ============================================================
 //  INIT — load all data from MongoDB on page load
 // ============================================================
-function initApp() {
-  // Load instantly from localStorage — no API/network wait
+async function initApp() {
+  // Step 1: Show cached data instantly from localStorage (no flash of empty)
   try { PRODUCTS = JSON.parse(localStorage.getItem('nre_products') || '[]'); } catch(e) { PRODUCTS = []; }
   try { PAINTS   = JSON.parse(localStorage.getItem('nre_paints')   || '[]'); } catch(e) { PAINTS   = []; }
 
@@ -1718,6 +1718,30 @@ function initApp() {
   document.getElementById('invDate').value = new Date().toISOString().split('T')[0];
   const heroEl = document.getElementById('heroProducts');
   if (heroEl) heroEl.textContent = PRODUCTS.length > 0 ? PRODUCTS.length : '14+';
+
+  // Step 2: Fetch fresh data from MongoDB in background & update UI
+  try {
+    const [freshProducts, freshPaints] = await Promise.all([
+      apiGet('/api/products'),
+      apiGet('/api/paints'),
+    ]);
+    // Only update if data actually came back
+    if (Array.isArray(freshProducts) && freshProducts.length >= 0) {
+      PRODUCTS = freshProducts;
+      localStorage.setItem('nre_products', JSON.stringify(PRODUCTS));
+    }
+    if (Array.isArray(freshPaints) && freshPaints.length >= 0) {
+      PAINTS = freshPaints;
+      localStorage.setItem('nre_paints', JSON.stringify(PAINTS));
+    }
+    // Re-render with fresh data
+    renderProducts('All');
+    renderPaints('All');
+    if (heroEl) heroEl.textContent = PRODUCTS.length > 0 ? PRODUCTS.length : '14+';
+  } catch(e) {
+    // Silently fall back to cached localStorage data — no error shown to customers
+    console.warn('Could not sync from MongoDB, using cached data:', e.message);
+  }
 }
 function showLoader(on) {
   let el = document.getElementById('globalLoader');
@@ -2971,27 +2995,92 @@ function showToast(icon, msg, type = 'success') {
 </script>
 
 <!-- APP DOWNLOAD BANNER -->
-<div id="app-banner" style="display:flex;position:fixed;bottom:0;left:0;right:0;background:#1a1a1a;color:#fff;padding:14px 16px;align-items:center;justify-content:space-between;z-index:9999;border-top:2px solid #f5a623;box-shadow:0 -4px 16px rgba(0,0,0,0.5);gap:12px;">
-  <div style="display:flex;align-items:center;gap:12px;">
+<style>
+  #app-banner {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 9999;
+    background: linear-gradient(135deg, #111318, #1a1d26);
+    border-top: 2px solid #C8922A;
+    box-shadow: 0 -4px 24px rgba(0,0,0,0.6);
+    padding: 12px 20px;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    flex-wrap: wrap;
+  }
+  #app-banner .banner-left {
+    display: flex; align-items: center; gap: 12px;
+  }
+  #app-banner .banner-icon {
+    width: 40px; height: 40px; background: linear-gradient(135deg, #C8922A, #8A6520);
+    border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    font-size: 20px; flex-shrink: 0;
+  }
+  #app-banner .banner-title { font-weight: 800; font-size: 14px; color: #fff; }
+  #app-banner .banner-sub   { font-size: 11px; color: #888; margin-top: 2px; }
+  #app-banner .banner-btns  { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  #app-banner .dl-btn {
+    display: flex; align-items: center; gap: 8px;
+    padding: 9px 16px; border-radius: 8px;
+    font-size: 13px; font-weight: 700; text-decoration: none;
+    transition: all 0.2s; white-space: nowrap; border: none; cursor: pointer;
+  }
+  #app-banner .dl-btn-android {
+    background: linear-gradient(135deg, #2ECC71, #1a9950);
+    color: #000;
+  }
+  #app-banner .dl-btn-android:hover { opacity: 0.88; transform: translateY(-1px); }
+  #app-banner .dl-btn-windows {
+    background: linear-gradient(135deg, #3498DB, #1a6fa8);
+    color: #fff;
+  }
+  #app-banner .dl-btn-windows:hover { opacity: 0.88; transform: translateY(-1px); }
+  #app-banner .dl-btn-icon { font-size: 16px; }
+  #app-banner .dl-btn-text { line-height: 1.1; }
+  #app-banner .dl-btn-text small { display: block; font-size: 9px; font-weight: 500; opacity: 0.75; }
+  #app-banner .banner-close {
+    background: transparent; border: 1px solid #333; color: #666;
+    width: 30px; height: 30px; border-radius: 6px; cursor: pointer;
+    font-size: 14px; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: all 0.2s;
+  }
+  #app-banner .banner-close:hover { border-color: #666; color: #aaa; }
+  @media (max-width: 600px) {
+    #app-banner { padding: 10px 14px; }
+    #app-banner .banner-title { font-size: 13px; }
+    #app-banner .dl-btn { padding: 8px 12px; font-size: 12px; }
+  }
+</style>
+
+<div id="app-banner">
+  <div class="banner-left">
+    <div class="banner-icon">⚡</div>
     <div>
-      <div style="font-weight:bold;font-size:15px;">📱 New Royal Electricals App</div>
-      <div style="font-size:12px;color:#aaa;">Download our app for the best experience</div>
+      <div class="banner-title">New Royal Electricals App</div>
+      <div class="banner-sub">Available for Android &amp; Windows</div>
     </div>
   </div>
-  <div style="display:flex;gap:8px;flex-shrink:0;">
+  <div class="banner-btns">
+    <!-- Android APK -->
     <a href="https://github.com/Izazkhan8293-dev/NewRoyalApp/releases/download/v1.0.0/New.Royal.apk"
        download="NewRoyal.apk"
-       style="background:#f5a623;color:#000;padding:8px 16px;border-radius:6px;font-weight:bold;font-size:13px;text-decoration:none;white-space:nowrap;">
-      ⬇ Download App
+       class="dl-btn dl-btn-android">
+      <span class="dl-btn-icon">🤖</span>
+      <span class="dl-btn-text">Download APK<small>Android Phone</small></span>
     </a>
-    <button onclick="document.getElementById('app-banner').style.display='none';localStorage.setItem('nrBanner','1')"
-       style="background:transparent;border:1px solid #555;color:#aaa;padding:8px 10px;border-radius:6px;cursor:pointer;font-size:13px;">✕</button>
+    <!-- Windows EXE — update href when you have a Windows build -->
+    <a href="https://github.com/Izazkhan8293-dev/NewRoyalApp/releases/download/v1.0.0/New.Royal.Setup.exe"
+       download="NewRoyalSetup.exe"
+       class="dl-btn dl-btn-windows">
+      <span class="dl-btn-icon">🪟</span>
+      <span class="dl-btn-text">Download EXE<small>Windows PC</small></span>
+    </a>
+    <button class="banner-close"
+      onclick="document.getElementById('app-banner').style.display='none';localStorage.setItem('nrBanner','1')"
+      title="Close">✕</button>
   </div>
 </div>
 <script>
   if(localStorage.getItem('nrBanner')){
     document.getElementById('app-banner').style.display='none';
-  } 
+  }
 </script>
 
 </body>
