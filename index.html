@@ -683,10 +683,10 @@
 <body>
 
 <!-- GLOBAL LOADER -->
-<div id="globalLoader" style="position:fixed;inset:0;background:var(--dark);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;">
+<div id="globalLoader" style="position:fixed;inset:0;background:var(--dark);z-index:9999;display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;">
   <div style="font-size:48px;animation:spin 1s linear infinite;">⚡</div>
   <div style="font-size:14px;color:var(--gold);font-weight:600;letter-spacing:2px;">LOADING STORE DATA…</div>
-  <div style="font-size:12px;color:var(--text-dim);">Connecting to MongoDB</div>
+  <div style="font-size:12px;color:var(--text-dim);">Loading store data…</div>
 </div>
 <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
 
@@ -1623,19 +1623,11 @@ async function apiDelete(path) {
 // ============================================================
 //  INIT — load all data from MongoDB on page load
 // ============================================================
-async function initApp() {
-  showLoader(true);
-  try {
-    const controller = new AbortController();
-    setTimeout(() => controller.abort(), 2000);
-    [PRODUCTS, PAINTS] = await Promise.all([
-      fetch('/api/products', { signal: controller.signal }).then(r => r.ok ? r.json() : Promise.reject()),
-      fetch('/api/paints',   { signal: controller.signal }).then(r => r.ok ? r.json() : Promise.reject()),
-    ]);
-  } catch(e) {
-    try { PRODUCTS = JSON.parse(localStorage.getItem('nre_products') || '[]'); } catch(e2) { PRODUCTS = []; }
-    try { PAINTS   = JSON.parse(localStorage.getItem('nre_paints')   || '[]'); } catch(e2) { PAINTS   = []; }
-  }
+function initApp() {
+  // Load instantly from localStorage — no API/network wait
+  try { PRODUCTS = JSON.parse(localStorage.getItem('nre_products') || '[]'); } catch(e) { PRODUCTS = []; }
+  try { PAINTS   = JSON.parse(localStorage.getItem('nre_paints')   || '[]'); } catch(e) { PAINTS   = []; }
+
   showLoader(false);
   renderProducts('All');
   renderPaints('All');
@@ -2223,7 +2215,12 @@ async function addProduct() {
     imageUrl: document.getElementById('ap-imageUrl').value.trim() || null,
   };
   try {
-    const saved = await apiPost('/api/products', p);
+    // Save to localStorage
+    p.id = p.id || Date.now();
+    const idx2 = PRODUCTS.findIndex(x => x.id === p.id);
+    if (idx2 >= 0) PRODUCTS[idx2] = p; else PRODUCTS.push(p);
+    localStorage.setItem('nre_products', JSON.stringify(PRODUCTS));
+    const saved = p;
     PRODUCTS.push(saved);
     ['ap-name','ap-brand','ap-rate','ap-stock','ap-hsn','ap-imageUrl'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('ap-gst').value = '';
@@ -2245,7 +2242,12 @@ async function addPaint() {
   });
   const p = { name, type: document.getElementById('pp-type').value, brand: document.getElementById('pp-brand').value, colour: document.getElementById('pp-colour').value, sizes };
   try {
-    const saved = await apiPost('/api/paints', p);
+    // Save to localStorage
+    p.id = p.id || Date.now();
+    const idx3 = PAINTS.findIndex(x => x.id === p.id);
+    if (idx3 >= 0) PAINTS[idx3] = p; else PAINTS.push(p);
+    localStorage.setItem('nre_paints', JSON.stringify(PAINTS));
+    const saved = p;
     PAINTS.push(saved);
     renderAdmin(); renderPaints('All');
     showToast('🎨', 'Paint saved to MongoDB!', 'success');
