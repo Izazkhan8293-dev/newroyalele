@@ -1625,24 +1625,22 @@ async function apiDelete(path) {
 // ============================================================
 async function initApp() {
   showLoader(true);
-  let retries = 2;
-  while (retries >= 0) {
-    try {
-      [PRODUCTS, PAINTS] = await Promise.all([
-        apiGet('/api/products'),
-        apiGet('/api/paints'),
-      ]);
-      break; // success
-    } catch(e) {
-      retries--;
-      if (retries < 0) {
-        console.error('Init error', e);
-        showToast('⚠', 'Cannot reach server. Check your MongoDB connection in Vercel settings.', 'error');
-      } else {
-        await new Promise(r => setTimeout(r, 1000)); // wait 1s before retry
-      }
-    }
+
+  // Try API first, fall back to localStorage immediately on failure
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 3000); // 3s max wait
+    [PRODUCTS, PAINTS] = await Promise.all([
+      fetch('/api/products', { signal: controller.signal }).then(r => r.ok ? r.json() : Promise.reject()),
+      fetch('/api/paints',   { signal: controller.signal }).then(r => r.ok ? r.json() : Promise.reject()),
+    ]);
+    clearTimeout(timeout);
+  } catch(e) {
+    // API unavailable — load from localStorage instantly
+    try { PRODUCTS = JSON.parse(localStorage.getItem('nre_products') || '[]'); } catch(e2) { PRODUCTS = []; }
+    try { PAINTS   = JSON.parse(localStorage.getItem('nre_paints')   || '[]'); } catch(e2) { PAINTS = []; }
   }
+
   showLoader(false);
   renderProducts('All');
   renderPaints('All');
@@ -1651,7 +1649,6 @@ async function initApp() {
   const heroEl = document.getElementById('heroProducts');
   if (heroEl) heroEl.textContent = PRODUCTS.length > 0 ? PRODUCTS.length : '14+';
 }
-
 function showLoader(on) {
   let el = document.getElementById('globalLoader');
   if (!el) return;
