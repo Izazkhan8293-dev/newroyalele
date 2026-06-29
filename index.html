@@ -1625,22 +1625,17 @@ async function apiDelete(path) {
 // ============================================================
 async function initApp() {
   showLoader(true);
-
-  // Try API first, fall back to localStorage immediately on failure
   try {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 3000); // 3s max wait
+    setTimeout(() => controller.abort(), 2000);
     [PRODUCTS, PAINTS] = await Promise.all([
       fetch('/api/products', { signal: controller.signal }).then(r => r.ok ? r.json() : Promise.reject()),
       fetch('/api/paints',   { signal: controller.signal }).then(r => r.ok ? r.json() : Promise.reject()),
     ]);
-    clearTimeout(timeout);
   } catch(e) {
-    // API unavailable — load from localStorage instantly
     try { PRODUCTS = JSON.parse(localStorage.getItem('nre_products') || '[]'); } catch(e2) { PRODUCTS = []; }
-    try { PAINTS   = JSON.parse(localStorage.getItem('nre_paints')   || '[]'); } catch(e2) { PAINTS = []; }
+    try { PAINTS   = JSON.parse(localStorage.getItem('nre_paints')   || '[]'); } catch(e2) { PAINTS   = []; }
   }
-
   showLoader(false);
   renderProducts('All');
   renderPaints('All');
