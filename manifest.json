@@ -1,0 +1,34 @@
+{
+  "name": "New Royal Electricals & Hardware",
+  "short_name": "NRE Store",
+  "description": "Pennadam's trusted electrical & hardware store since 1970 — browse products, paints, and generate GST invoices on the go.",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0D0F14",
+  "theme_color": "#C8922A",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "categories": ["shopping", "business"],
+  "lang": "en-IN",
+  "dir": "ltr"
+}
