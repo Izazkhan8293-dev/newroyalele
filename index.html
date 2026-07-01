@@ -6,9 +6,6 @@
 <title>New Royal Electricals & Hardware — Pennadam</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 <link rel="manifest" href="/manifest.json">
-<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16.png">
-<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <meta name="theme-color" content="#C8922A">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -136,7 +133,6 @@
     display: flex; align-items: center; gap: 8px;
   }
   .btn-primary:hover { transform: translateY(-1px); box-shadow: var(--shadow-gold); }
-  .btn-primary:active { transform: translateY(0) scale(0.97); }
   .btn-secondary {
     background: transparent; color: var(--text); border: 1px solid var(--border2);
     border-radius: 10px; padding: 13px 28px; font-size: 14px; font-weight: 600;
@@ -181,13 +177,9 @@
   .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
   .product-card {
     background: var(--surface); border: 1px solid var(--border2); border-radius: 14px;
-    overflow: hidden; transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s; cursor: pointer;
-    animation: card-fade-in 0.35s ease backwards;
+    overflow: hidden; transition: all 0.25s; cursor: pointer;
   }
   .product-card:hover { border-color: var(--border); transform: translateY(-2px); box-shadow: var(--shadow); }
-  .product-card:active { transform: translateY(0) scale(0.98); }
-  @keyframes card-fade-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-  @media (prefers-reduced-motion: reduce) { .product-card { animation: none; } }
   .product-card-img {
     height: 150px; background: var(--dark3); display: flex; align-items: center;
     justify-content: center; font-size: 48px; position: relative; overflow: hidden;
@@ -221,17 +213,6 @@
     font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s;
   }
   .btn-add-cart:hover { opacity: 0.85; }
-  .btn-add-cart:active { transform: scale(0.94); }
-
-  /* ===== SKELETON LOADERS ===== */
-  .skeleton-card { pointer-events: none; }
-  .skeleton-block, .skeleton-line {
-    background: linear-gradient(100deg, var(--dark3) 30%, var(--dark4) 50%, var(--dark3) 70%);
-    background-size: 200% 100%; animation: skeleton-shimmer 1.4s ease-in-out infinite;
-    border-radius: 6px;
-  }
-  .skeleton-line { border-radius: 4px; }
-  @keyframes skeleton-shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
   /* ===== PAINT SECTION ===== */
   .paint-section { background: var(--dark2); }
@@ -278,7 +259,7 @@
     position: fixed; right: 0; top: 0; bottom: 0; width: 420px; max-width: 100%;
     background: var(--dark2); border-left: 1px solid var(--border); z-index: 201;
     display: flex; flex-direction: column; transform: translateX(100%);
-    transition: transform 0.32s cubic-bezier(0.2,0.8,0.2,1);
+    transition: transform 0.3s ease;
   }
   .cart-panel.open { transform: translateX(0); }
   .cart-header {
@@ -293,8 +274,7 @@
     background: var(--surface); border: 1px solid var(--border2); border-radius: 10px;
     padding: 12px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px;
   }
-  .cart-item-icon { font-size: 28px; width: 44px; height: 44px; text-align: center; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
-  .cart-item-thumb { width: 44px; height: 44px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
+  .cart-item-icon { font-size: 28px; width: 44px; text-align: center; flex-shrink: 0; }
   .cart-item-info { flex: 1; min-width: 0; }
   .cart-item-name { font-weight: 600; font-size: 13px; }
   .cart-item-sub { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
@@ -318,23 +298,19 @@
     align-items: center; justify-content: center; gap: 8px; transition: all 0.2s;
   }
   .btn-checkout:hover { opacity: 0.9; }
-  .btn-checkout:active { transform: scale(0.98); }
 
   /* ===== BILLING MODAL ===== */
   .modal-overlay {
     position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 300;
     display: none; align-items: center; justify-content: center;
     padding: 20px; backdrop-filter: blur(6px);
-    opacity: 0; transition: opacity 0.2s ease;
   }
-  .modal-overlay.open { display: flex; opacity: 1; }
+  .modal-overlay.open { display: flex; }
   .modal {
     background: var(--dark2); border: 1px solid var(--border); border-radius: 16px;
     width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto;
     box-shadow: 0 24px 80px rgba(0,0,0,0.6);
-    transform: scale(0.96) translateY(8px); transition: transform 0.25s cubic-bezier(0.2,0.8,0.2,1);
   }
-  .modal-overlay.open .modal { transform: scale(1) translateY(0); }
   .modal-header {
     padding: 20px 24px; border-bottom: 1px solid var(--border);
     display: flex; align-items: center; justify-content: space-between;
@@ -374,18 +350,15 @@
   .invoice-overlay {
     position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 400;
     display: none; align-items: center; justify-content: center; padding: 20px;
-    opacity: 0; transition: opacity 0.2s ease;
   }
-  .invoice-overlay.open { display: flex; opacity: 1; }
+  .invoice-overlay.open { display: flex; }
   .invoice-wrap {
     background: #fff; color: #000; width: 100%; max-width: 700px;
     max-height: 90vh; overflow-y: auto; border-radius: 4px;
     font-family: 'Inter', sans-serif;
-    transform: scale(0.96) translateY(8px); transition: transform 0.25s cubic-bezier(0.2,0.8,0.2,1);
   }
-  .invoice-overlay.open .invoice-wrap { transform: scale(1) translateY(0); }
   .invoice-inner { padding: 32px; }
-  .inv-header { border-bottom: 2px solid #C8922A; padding-bottom: 16px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+  .inv-header { border-bottom: 2px solid #C8922A; padding-bottom: 16px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: flex-start; }
   .inv-logo { font-size: 20px; font-weight: 900; }
   .inv-logo span { color: #C8922A; }
   .inv-logo sub { display: block; font-size: 10px; font-weight: 500; color: #666; letter-spacing: 2px; }
@@ -395,24 +368,18 @@
   .inv-section-title { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: #888; margin-bottom: 8px; border-bottom: 1px solid #eee; padding-bottom: 4px; }
   .inv-bill-to { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
   .inv-field label { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: #999; }
-  .inv-field p { font-size: 13px; font-weight: 600; word-break: break-word; }
-  .inv-table-scroll { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  table.inv-table { width: 100%; min-width: 460px; border-collapse: collapse; font-size: 12px; }
-  table.inv-table th { background: #f5f5f5; padding: 8px 10px; text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }
+  .inv-field p { font-size: 13px; font-weight: 600; }
+  table.inv-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  table.inv-table th { background: #f5f5f5; padding: 8px 10px; text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; }
   table.inv-table td { padding: 8px 10px; border-bottom: 1px solid #f0f0f0; }
-  table.inv-table .num { text-align: right; white-space: nowrap; }
-  .inv-totals-wrap { display: flex; justify-content: flex-end; margin-top: 12px; }
-  .inv-totals { width: 100%; max-width: 260px; border-collapse: collapse; }
+  table.inv-table .num { text-align: right; }
+  .inv-totals { float: right; width: 240px; margin-top: 12px; }
   .inv-totals tr td { padding: 4px 8px; font-size: 12px; }
   .inv-totals tr td:last-child { text-align: right; font-weight: 600; }
   .inv-grand { font-size: 14px !important; font-weight: 900 !important; color: #C8922A; border-top: 2px solid #C8922A; }
-  .inv-footer { margin-top: 24px; border-top: 1px solid #eee; padding-top: 14px; text-align: center; }
+  .inv-footer { clear: both; margin-top: 24px; border-top: 1px solid #eee; padding-top: 14px; text-align: center; }
   .inv-footer p { font-size: 11px; color: #888; }
   .inv-footer strong { color: #C8922A; }
-  .inv-qr-block { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 16px; padding-top: 16px; border-top: 1px dashed #ddd; flex-wrap: wrap; }
-  .inv-qr-block img { width: 96px; height: 96px; border-radius: 8px; border: 1px solid #eee; }
-  .inv-qr-text { font-size: 11px; color: #666; text-align: left; max-width: 220px; }
-  .inv-qr-text strong { display: block; color: #C8922A; font-size: 12px; margin-bottom: 2px; }
   .inv-actions { display: flex; gap: 10px; padding: 16px 32px; background: #f9f9f9; border-top: 1px solid #eee; }
   .btn-print { flex: 1; background: #C8922A; color: #fff; border: none; border-radius: 8px; padding: 12px; font-size: 14px; font-weight: 700; cursor: pointer; }
   .btn-close-inv { background: #eee; border: none; border-radius: 8px; padding: 12px 20px; font-size: 14px; font-weight: 600; cursor: pointer; }
@@ -455,21 +422,6 @@
   .form-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
   .form-grid .form-group { margin-bottom: 0; }
   .btn-save { background: linear-gradient(135deg, var(--gold), var(--gold-dim)); color: #000; border: none; border-radius: 8px; padding: 10px 24px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 16px; }
-
-  /* Product image uploader */
-  .ap-image-uploader {
-    border: 2px dashed var(--border2); border-radius: 12px; background: var(--dark3);
-    padding: 20px; text-align: center; cursor: pointer; transition: all 0.2s; position: relative;
-  }
-  .ap-image-uploader:hover, .ap-image-uploader.dragover { border-color: var(--gold); background: rgba(200,146,42,0.06); }
-  .ap-image-uploader-empty { color: var(--text-muted); pointer-events: none; }
-  #ap-imagePreview { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; }
-  #ap-imagePreview img { height: 90px; width: 90px; border-radius: 10px; border: 2px solid var(--gold); object-fit: cover; }
-  .ap-image-remove {
-    background: rgba(231,76,60,0.15); border: 1px solid rgba(231,76,60,0.35); color: var(--red);
-    border-radius: 8px; padding: 6px 12px; font-size: 12px; font-weight: 700; cursor: pointer;
-  }
-  .ap-image-remove:hover { background: rgba(231,76,60,0.25); }
 
   /* Product table */
   .data-table-wrap { background: var(--surface); border: 1px solid var(--border2); border-radius: 14px; overflow: hidden; }
@@ -606,8 +558,8 @@
 
   @media print {
     body > *:not(.invoice-overlay) { display: none !important; }
-    .invoice-overlay { position: static !important; display: block !important; background: none !important; opacity: 1 !important; }
-    .invoice-wrap { box-shadow: none !important; max-height: none !important; transform: none !important; }
+    .invoice-overlay { position: static !important; display: block !important; background: none !important; }
+    .invoice-wrap { box-shadow: none !important; max-height: none !important; }
     .inv-actions { display: none !important; }
   }
 
@@ -672,16 +624,13 @@
     position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 600;
     display: none; align-items: center; justify-content: center;
     backdrop-filter: blur(8px); padding: 20px;
-    opacity: 0; transition: opacity 0.2s ease;
   }
-  .login-overlay.open { display: flex; opacity: 1; }
+  .login-overlay.open { display: flex; }
   .login-box {
     background: var(--dark2); border: 1px solid var(--border);
     border-radius: 20px; width: 100%; max-width: 420px;
     padding: 40px; box-shadow: 0 32px 80px rgba(0,0,0,0.6);
-    transform: scale(0.96) translateY(8px); transition: transform 0.25s cubic-bezier(0.2,0.8,0.2,1);
   }
-  .login-overlay.open .login-box { transform: scale(1) translateY(0); }
   .login-logo { text-align: center; margin-bottom: 28px; }
   .login-logo-icon {
     width: 64px; height: 64px; background: linear-gradient(135deg, var(--gold), var(--gold-dim));
@@ -788,24 +737,7 @@
     .stats-grid { grid-template-columns: repeat(2, 1fr); }
     .payment-methods { grid-template-columns: repeat(2, 1fr); }
     .admin-body { padding: 16px; }
-    .invoice-overlay { padding: 8px; align-items: flex-start; }
-    .invoice-wrap { max-height: 96vh; border-radius: 12px; }
-    .invoice-inner { padding: 18px; }
-    .inv-header { padding-bottom: 12px; margin-bottom: 12px; }
-    .inv-logo { font-size: 16px; }
-    .inv-meta { text-align: left; font-size: 10px; }
-    .inv-bill-to { grid-template-columns: 1fr; gap: 10px; }
-    .inv-totals { max-width: 100%; }
-    .inv-actions { padding: 12px 18px; flex-direction: column; }
-    .inv-qr-block { flex-direction: column; text-align: center; }
-    .inv-qr-text { text-align: center; max-width: none; }
-  }
-
-  @media (max-width: 420px) {
-    .inv-logo { font-size: 14px; }
-    .inv-logo sub { font-size: 9px; letter-spacing: 1px; }
-    table.inv-table { min-width: 420px; font-size: 11px; }
-    table.inv-table th, table.inv-table td { padding: 6px 7px; }
+    .invoice-inner { padding: 16px; }
   }
 
 
@@ -1649,24 +1581,17 @@
           </div>
           <div class="form-group" style="grid-column:1/-1;">
             <label>Product Image</label>
-            <div class="ap-image-uploader" id="ap-imageDropzone">
-              <input type="file" id="ap-imageFile" accept="image/*" style="display:none;" onchange="handleProductImageFile(this.files[0])">
-              <div class="ap-image-uploader-empty" id="ap-uploaderEmpty">
-                <div style="font-size:28px;margin-bottom:6px;">📷</div>
-                <div style="font-size:13px;font-weight:600;">Tap to upload a product photo</div>
-                <div style="font-size:11px;color:var(--text-dim);margin-top:2px;">or drag & drop · JPG / PNG, auto-resized</div>
-              </div>
-              <div id="ap-imagePreview" style="display:none;">
-                <img id="ap-previewImg" alt="preview">
-                <button type="button" class="ap-image-remove" onclick="removeProductImage(event)">✕ Remove</button>
-              </div>
+            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+              <input class="form-control" id="ap-imageUrl" placeholder="Image URL (paste or search below)" style="flex:1;min-width:200px;">
+              <button type="button" onclick="searchProductImage()" style="background:rgba(52,152,219,0.15);border:1px solid rgba(52,152,219,0.4);color:var(--blue);border-radius:8px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;">🔍 Search Web Image</button>
             </div>
-            <div style="display:flex;align-items:center;gap:8px;margin-top:10px;">
-              <div style="flex:1;height:1px;background:var(--border2);"></div>
-              <span style="font-size:11px;color:var(--text-dim);">OR PASTE AN IMAGE URL</span>
-              <div style="flex:1;height:1px;background:var(--border2);"></div>
+            <div id="ap-imageSearch" style="margin-top:10px;display:none;">
+              <div style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">Click an image to select:</div>
+              <div id="ap-imageResults" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;"></div>
             </div>
-            <input class="form-control" id="ap-imageUrl" placeholder="https://example.com/product-photo.jpg" style="margin-top:10px;" oninput="handleProductImageUrl(this.value)">
+            <div id="ap-imagePreview" style="margin-top:10px;display:none;">
+              <img id="ap-previewImg" style="height:100px;border-radius:8px;border:2px solid var(--gold);object-fit:cover;" alt="preview">
+            </div>
           </div>
         </div>
         <button class="btn-save" onclick="addProduct()">💾 Save Product</button>
@@ -1801,6 +1726,22 @@
               <button onclick="downloadImportTemplate()" style="background:rgba(200,146,42,0.1);border:1px solid rgba(200,146,42,0.3);color:var(--gold);border-radius:8px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer;">⬇ Download Excel Template</button>
             </div>
           </div>
+
+          <!-- ✅ NEW: Master Inventory Import (Paint + Belts + Spanners) -->
+          <div style="grid-column:1/-1;margin-top:8px;padding:14px 16px;background:rgba(155,89,182,0.08);border:1px solid rgba(155,89,182,0.3);border-radius:10px;">
+            <label style="display:block;font-size:12px;font-weight:600;color:#9b59b6;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px;">🗂️ Import Master Inventory (Paint + Belts + Spanners)</label>
+            <p style="font-size:12px;color:var(--text-muted);margin-bottom:10px;">
+              Accepts your <strong style="color:var(--gold);">Master_Inventory.xlsx</strong> format.<br>
+              Columns: <code style="font-size:11px;background:rgba(255,255,255,0.06);padding:2px 5px;border-radius:4px;">#, Category, Product Name, Size, Stock Qty, Unit Price (₹), Total Value (₹), Status</code><br>
+              <span style="color:rgba(255,255,255,0.4);font-size:11px;">Paints → Paint catalogue &nbsp;|&nbsp; Belts / Spanners → Products (category: Belts / Hardware)</span>
+            </p>
+            <input type="file" accept=".xlsx,.xls" id="importMasterXlsx" style="display:none" onchange="importMasterInventory(this)">
+            <button class="import-btn" onclick="document.getElementById('importMasterXlsx').click()"
+              style="width:100%;justify-content:center;background:rgba(155,89,182,0.18);border-color:rgba(155,89,182,0.5);color:#b07fde;">
+              📦 Choose Master_Inventory.xlsx
+            </button>
+            <div id="masterImportProgress" style="display:none;margin-top:10px;font-size:12px;color:var(--text-muted);"></div>
+          </div>
         </div>
       </div>
 
@@ -1849,11 +1790,6 @@
           <label>GST Number</label>
           <input class="form-control" id="set-gst" placeholder="33AACFN4722E1ZR">
         </div>
-        <div class="form-group">
-          <label>UPI ID <span style="color:var(--text-dim);font-weight:400;">(for QR code on invoices)</span></label>
-          <input class="form-control" id="set-upi" placeholder="e.g. newroyal@okaxis or 9443182381@upi">
-          <div style="font-size:11px;color:var(--text-dim);margin-top:6px;">When a customer pays by UPI, a scannable payment QR auto-appears on their invoice.</div>
-        </div>
         <button class="btn-save" onclick="saveStoreSettings()">💾 Save Store Info</button>
       </div>
 
@@ -1868,7 +1804,7 @@
         <div class="form-group">
           <label>Windows EXE URL</label>
           <input class="form-control" id="set-exe-url" placeholder="https://github.com/..."
-            value="https://github.com/Izazkhan8293-dev/NewRoyalApp/releases/download/v1.0.0/New.Royal.Electricals.exe">
+            value="https://github.com/Izazkhan8293-dev/NewRoyalApp/releases/download/v1.0.0/New.Royal.Setup.exe">
         </div>
         <div class="form-group">
           <label>App Version</label>
@@ -2124,9 +2060,6 @@ async function initApp() {
   try { PAINTS   = JSON.parse(localStorage.getItem('nre_paints')   || '[]'); } catch(e) { PAINTS   = []; }
 
   showLoader(false);
-  // Brand-new visitor, nothing cached yet — show skeleton placeholders
-  // instead of the "no products" empty state while the first fetch runs.
-  if (!PRODUCTS.length) showProductSkeleton();
   renderProducts('All');
   renderPaints('All');
   updateCartUI();
@@ -2156,26 +2089,12 @@ async function initApp() {
   } catch(e) {
     // Silently fall back to cached localStorage data — no error shown to customers
     console.warn('Could not sync from MongoDB, using cached data:', e.message);
-    if (!PRODUCTS.length) renderProducts('All'); // clear skeleton, show real empty state
   }
 }
 function showLoader(on) {
   let el = document.getElementById('globalLoader');
   if (!el) return;
   el.style.display = on ? 'flex' : 'none';
-}
-function showProductSkeleton() {
-  const grid = document.getElementById('productGrid');
-  if (!grid) return;
-  grid.innerHTML = Array.from({length: 8}).map(() => `
-    <div class="product-card skeleton-card">
-      <div class="skeleton-block" style="height:150px;"></div>
-      <div class="product-body">
-        <div class="skeleton-line" style="width:75%;height:14px;"></div>
-        <div class="skeleton-line" style="width:45%;height:10px;margin-top:8px;"></div>
-        <div class="skeleton-line" style="width:55%;height:18px;margin-top:14px;"></div>
-      </div>
-    </div>`).join('');
 }
 
 window.onload = () => { initApp(); };
@@ -2339,13 +2258,12 @@ function renderProducts(filter, brandFilter) {
     </p>`;
     return;
   }
-  grid.innerHTML = filtered.map((p, idx) => {
+  grid.innerHTML = filtered.map(p => {
     const isLow = p.stock < 10;
     const imgHtml = p.imageUrl
-      ? `<img src="${p.imageUrl}" alt="${p.name}" loading="lazy" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.nextSibling.style.display='flex'"><div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:44px;">${p.icon||'📦'}</div>`
+      ? `<img src="${p.imageUrl}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.nextSibling.style.display='flex'"><div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:44px;">${p.icon||'📦'}</div>`
       : `<span style="font-size:44px;">${p.icon||'📦'}</span>`;
-    const delay = Math.min(idx, 11) * 0.04;
-    return `<div class="product-card" style="animation-delay:${delay}s">
+    return `<div class="product-card">
       <div class="product-card-img" style="overflow:hidden;">
         ${isLow ? '<span class="product-badge low">Low Stock</span>' : '<span class="product-badge">In Stock</span>'}
         ${imgHtml}
@@ -2401,14 +2319,14 @@ function renderPaints(filter) {
 function addToCart(p) {
   const existing = cart.find(c => c.id === p._id && !c.size);
   if (existing) { existing.qty++; }
-  else { cart.push({ id: p._id, name: p.name, icon: p.icon || '📦', imageUrl: p.imageUrl || null, unit: p.unit, rate: p.rate, qty: 1, size: null, brand: p.brand, gstRate: p.gstRate }); }
+  else { cart.push({ id: p._id, name: p.name, icon: p.icon || '📦', unit: p.unit, rate: p.rate, qty: 1, size: null, brand: p.brand, gstRate: p.gstRate }); }
   updateCartUI(); showToast('✓', p.name + ' added to cart', 'success');
 }
 function addPaintToCart(p) {
   const key = p._id + '_' + p.selectedSize;
   const existing = cart.find(c => c.id === key);
   if (existing) { existing.qty++; }
-  else { cart.push({ id: key, name: p.name + ' ' + p.selectedSize, icon: '🎨', imageUrl: null, unit: 'Tin', rate: p.rate, qty: 1, size: p.selectedSize, brand: p.brand, gstRate: p.gstRate }); }
+  else { cart.push({ id: key, name: p.name + ' ' + p.selectedSize, icon: '🎨', unit: 'Tin', rate: p.rate, qty: 1, size: p.selectedSize, brand: p.brand, gstRate: p.gstRate }); }
   updateCartUI(); showToast('✓', p.name + ' ' + p.selectedSize + ' added', 'success');
 }
 function updateCartQty(id, delta) {
@@ -2430,12 +2348,8 @@ function updateCartUI() {
     itemsEl.innerHTML = '<div class="cart-empty"><div>🛒</div><p>Your cart is empty</p></div>';
     return;
   }
-  itemsEl.innerHTML = cart.map(c => {
-    const thumb = c.imageUrl
-      ? `<img src="${c.imageUrl}" alt="${c.name}" class="cart-item-thumb" onerror="this.outerHTML='<div class=&quot;cart-item-icon&quot;>${c.icon}</div>'">`
-      : `<div class="cart-item-icon">${c.icon}</div>`;
-    return `<div class="cart-item">
-    ${thumb}
+  itemsEl.innerHTML = cart.map(c => `<div class="cart-item">
+    <div class="cart-item-icon">${c.icon}</div>
     <div class="cart-item-info">
       <div class="cart-item-name">${c.name}</div>
       <div class="cart-item-sub">₹${c.rate}/${c.unit}</div>
@@ -2448,8 +2362,7 @@ function updateCartUI() {
         <span class="qty-btn" onclick="updateCartQty('${c.id}',1)">+</span>
       </div>
     </div>
-  </div>`;
-  }).join('');
+  </div>`).join('');
 }
 function openCart() { document.getElementById('cartOverlay').classList.add('open'); document.getElementById('cartPanel').classList.add('open'); }
 function closeCart() { document.getElementById('cartOverlay').classList.remove('open'); document.getElementById('cartPanel').classList.remove('open'); }
@@ -2615,52 +2528,24 @@ function renderInvoice(o) {
     </div>
     <div class="inv-section">
       <div class="inv-section-title">Items</div>
-      <div class="inv-table-scroll">
-        <table class="inv-table">
-          <thead><tr><th>#</th><th>Particulars</th><th class="num">Qty</th><th class="num">Rate ₹</th><th class="num">GST%</th><th class="num">Amount ₹</th></tr></thead>
-          <tbody>
-            ${o.items.map((it, i) => `<tr><td>${i+1}</td><td>${it.name}</td><td class="num">${it.qty}</td><td class="num">${it.rate.toFixed(2)}</td><td class="num">${it.gstRate !== undefined ? it.gstRate : 18}%</td><td class="num">${it.amount.toFixed(2)}</td></tr>`).join('')}
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div class="inv-totals-wrap">
-      <table class="inv-totals">
-        <tr><td>Subtotal</td><td>₹${o.subtotal.toFixed(2)}</td></tr>
-        ${gstRows}
-        <tr><td class="inv-grand" colspan="2" style="padding-top:8px;border-top:2px solid #C8922A;"></td></tr>
-        <tr><td class="inv-grand">Grand Total</td><td class="inv-grand">₹${o.grand.toFixed(2)}</td></tr>
+      <table class="inv-table">
+        <thead><tr><th>#</th><th>Particulars</th><th class="num">Qty</th><th class="num">Rate ₹</th><th class="num">GST%</th><th class="num">Amount ₹</th></tr></thead>
+        <tbody>
+          ${o.items.map((it, i) => `<tr><td>${i+1}</td><td>${it.name}</td><td class="num">${it.qty}</td><td class="num">${it.rate.toFixed(2)}</td><td class="num">${it.gstRate !== undefined ? it.gstRate : 18}%</td><td class="num">${it.amount.toFixed(2)}</td></tr>`).join('')}
+        </tbody>
       </table>
     </div>
-    ${buildUpiQrBlock(o)}
+    <table class="inv-totals">
+      <tr><td>Subtotal</td><td>₹${o.subtotal.toFixed(2)}</td></tr>
+      ${gstRows}
+      <tr><td class="inv-grand" colspan="2" style="padding-top:8px;border-top:2px solid #C8922A;"></td></tr>
+      <tr><td class="inv-grand">Grand Total</td><td class="inv-grand">₹${o.grand.toFixed(2)}</td></tr>
+    </table>
     <div class="inv-footer">
       <p><strong>Goods Once Sold Cannot Be Taken Back</strong> · விற்ற சரக்கு திரும்பி எடுத்துக் கொள்ளப்படமாட்டாது.</p>
       <p style="margin-top:6px;">Thank you for shopping at <strong>New Royal Electricals!</strong> · GSTIN: 33AACFN4722E1ZR</p>
     </div>`;
   document.getElementById('invoiceOverlay').classList.add('open');
-}
-
-// Renders a scannable UPI QR code on the invoice when the customer paid (or
-// is paying) by UPI and the store has a UPI ID configured in Settings.
-// Returns '' (renders nothing) if either condition isn't met — keeps the
-// invoice clean for Cash/Card/Credit payments.
-function buildUpiQrBlock(o) {
-  const isUpi = (o.payment || '').toUpperCase().startsWith('UPI');
-  let settings = {};
-  try { settings = JSON.parse(localStorage.getItem('nrStoreSettings') || '{}'); } catch(e) {}
-  const upiId = (settings.upiId || '').trim();
-  if (!isUpi || !upiId) return '';
-
-  const payeeName = encodeURIComponent(settings.storeName || 'New Royal Electricals & Hardware');
-  const amount = (o.grand || 0).toFixed(2);
-  const note = encodeURIComponent('Bill ' + (o.billNo || o.quoteNo || ''));
-  const upiUri = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${payeeName}&am=${amount}&cu=INR&tn=${note}`;
-  const qrSrc = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&margin=2&data=${encodeURIComponent(upiUri)}`;
-
-  return `<div class="inv-qr-block">
-    <img src="${qrSrc}" alt="UPI payment QR code" loading="lazy">
-    <div class="inv-qr-text"><strong>Scan to Pay via UPI</strong>₹${amount} to ${upiId}<br>GPay · PhonePe · Paytm · any UPI app</div>
-  </div>`;
 }
 
 // ============================================================
@@ -2694,23 +2579,19 @@ function renderQuotation(o) {
     </div>
     <div class="inv-section">
       <div class="inv-section-title">Quoted Items</div>
-      <div class="inv-table-scroll">
-        <table class="inv-table">
-          <thead><tr><th>#</th><th>Particulars</th><th class="num">Qty</th><th class="num">Rate ₹</th><th class="num">GST%</th><th class="num">Amount ₹</th></tr></thead>
-          <tbody>
-            ${o.items.map((it, i) => `<tr><td>${i+1}</td><td>${it.name}</td><td class="num">${it.qty}</td><td class="num">${it.rate.toFixed(2)}</td><td class="num">${it.gstRate !== undefined ? it.gstRate : 18}%</td><td class="num">${it.amount.toFixed(2)}</td></tr>`).join('')}
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div class="inv-totals-wrap">
-      <table class="inv-totals">
-        <tr><td>Subtotal</td><td>₹${o.subtotal.toFixed(2)}</td></tr>
-        ${gstRows}
-        <tr><td class="inv-grand" colspan="2" style="padding-top:8px;border-top:2px solid #C8922A;"></td></tr>
-        <tr><td class="inv-grand">Estimated Total</td><td class="inv-grand">₹${o.grand.toFixed(2)}</td></tr>
+      <table class="inv-table">
+        <thead><tr><th>#</th><th>Particulars</th><th class="num">Qty</th><th class="num">Rate ₹</th><th class="num">GST%</th><th class="num">Amount ₹</th></tr></thead>
+        <tbody>
+          ${o.items.map((it, i) => `<tr><td>${i+1}</td><td>${it.name}</td><td class="num">${it.qty}</td><td class="num">${it.rate.toFixed(2)}</td><td class="num">${it.gstRate !== undefined ? it.gstRate : 18}%</td><td class="num">${it.amount.toFixed(2)}</td></tr>`).join('')}
+        </tbody>
       </table>
     </div>
+    <table class="inv-totals">
+      <tr><td>Subtotal</td><td>₹${o.subtotal.toFixed(2)}</td></tr>
+      ${gstRows}
+      <tr><td class="inv-grand" colspan="2" style="padding-top:8px;border-top:2px solid #C8922A;"></td></tr>
+      <tr><td class="inv-grand">Estimated Total</td><td class="inv-grand">₹${o.grand.toFixed(2)}</td></tr>
+    </table>
     <div class="inv-footer">
       <p><strong>This is a price quotation, not a tax invoice.</strong> Prices and availability are subject to change. Valid until ${o.validTill}.</p>
       <p style="margin-top:6px;">Thank you for considering <strong>New Royal Electricals!</strong> · GSTIN: 33AACFN4722E1ZR</p>
@@ -2760,8 +2641,6 @@ async function openAdmin() {
   document.getElementById('adminOverlay').classList.add('open');
   await loadAdminData();
   renderAdmin();
-  loadStoreSettings();
-  initProductImageDropzone();
 }
 function closeAdmin() {
   document.getElementById('adminOverlay').classList.remove('open');
@@ -2846,24 +2725,19 @@ async function addProduct() {
     imageUrl: document.getElementById('ap-imageUrl').value.trim() || null,
   };
   try {
-    let saved;
-    try {
-      saved = await apiPost('/api/products', p);
-    } catch (apiErr) {
-      // API unreachable — still save locally so the admin's work isn't lost,
-      // but be upfront that it hasn't synced to the server yet.
-      saved = { ...p, _id: p._id || ('local_' + Date.now()) };
-      showToast('⚠', 'Saved locally — will sync once back online', 'error');
-    }
-    const idx2 = PRODUCTS.findIndex(x => x._id === saved._id);
-    if (idx2 >= 0) PRODUCTS[idx2] = saved; else PRODUCTS.push(saved);
+    // Save to localStorage
+    p.id = p.id || Date.now();
+    const idx2 = PRODUCTS.findIndex(x => x.id === p.id);
+    if (idx2 >= 0) PRODUCTS[idx2] = p; else PRODUCTS.push(p);
     localStorage.setItem('nre_products', JSON.stringify(PRODUCTS));
-
+    const saved = p;
+    PRODUCTS.push(saved);
     ['ap-name','ap-brand','ap-rate','ap-stock','ap-hsn','ap-imageUrl'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('ap-gst').value = '';
-    removeProductImage();
+    document.getElementById('ap-imageSearch').style.display = 'none';
+    document.getElementById('ap-imagePreview').style.display = 'none';
     renderAdmin(); renderProducts('All');
-    if (saved._id && !String(saved._id).startsWith('local_')) showToast('✓', 'Product saved!', 'success');
+    showToast('✓', 'Product saved to MongoDB!', 'success');
   } catch(e) { showToast('❌', 'Save failed: ' + e.message, 'error'); }
 }
 
@@ -2878,18 +2752,15 @@ async function addPaint() {
   });
   const p = { name, type: document.getElementById('pp-type').value, brand: document.getElementById('pp-brand').value, colour: document.getElementById('pp-colour').value, sizes };
   try {
-    let saved;
-    try {
-      saved = await apiPost('/api/paints', p);
-    } catch (apiErr) {
-      saved = { ...p, _id: p._id || ('local_' + Date.now()) };
-      showToast('⚠', 'Saved locally — will sync once back online', 'error');
-    }
-    const idx3 = PAINTS.findIndex(x => x._id === saved._id);
-    if (idx3 >= 0) PAINTS[idx3] = saved; else PAINTS.push(saved);
+    // Save to localStorage
+    p.id = p.id || Date.now();
+    const idx3 = PAINTS.findIndex(x => x.id === p.id);
+    if (idx3 >= 0) PAINTS[idx3] = p; else PAINTS.push(p);
     localStorage.setItem('nre_paints', JSON.stringify(PAINTS));
+    const saved = p;
+    PAINTS.push(saved);
     renderAdmin(); renderPaints('All');
-    if (saved._id && !String(saved._id).startsWith('local_')) showToast('🎨', 'Paint saved!', 'success');
+    showToast('🎨', 'Paint saved to MongoDB!', 'success');
   } catch(e) { showToast('❌', 'Save failed: ' + e.message, 'error'); }
 }
 
@@ -3080,6 +2951,103 @@ async function importPVCExcel(input) {
 
   renderAdmin(); renderProducts('All');
   showToast('✅', `${imported} added, ${updated} updated` + (errors ? `, ${errors} skipped` : ''), 'success');
+  input.value = '';
+}
+
+// ============================================================
+//  IMPORT MASTER INVENTORY (Master_Inventory.xlsx)
+//  Handles: Paints (Enamel, Emulsion, Primer, etc.)
+//           Belts (Series A / Series B)
+//           Spanners (Ring / Open D.E.)
+// ============================================================
+async function importMasterInventory(input) {
+  const file = input.files[0];
+  if (!file) return;
+
+  if (!confirm(
+    '📦 Import Master Inventory?\n\n' +
+    '• Paint rows  → Paint Catalogue (upserted by name)\n' +
+    '• Belt rows   → Products (category: Belts)\n' +
+    '• Spanner rows → Products (category: Hardware)\n\n' +
+    'Existing items with matching names will be updated (stock & sizes).\n' +
+    'New items will be added. Unit prices require a separate price update.'
+  )) { input.value = ''; return; }
+
+  const prog = document.getElementById('masterImportProgress');
+  prog.style.display = 'block';
+  prog.textContent = '⏳ Reading Excel file…';
+  showToast('⏳', 'Reading Master Inventory…', 'success');
+
+  let rows;
+  try {
+    const data = await file.arrayBuffer();
+    const wb   = XLSX.read(data, { type: 'array' });
+    const ws   = wb.Sheets[wb.SheetNames[0]];
+    rows = XLSX.utils.sheet_to_json(ws, { defval: '' });
+  } catch (e) {
+    showToast('❌', 'Could not read file: ' + e.message, 'error');
+    prog.textContent = '❌ File read error: ' + e.message;
+    input.value = ''; return;
+  }
+
+  // Filter out header / title / subtotal rows
+  const SKIP_PATTERNS = [
+    /subtotal/i, /grand total/i, /new royal/i, /pennadam/i,
+    /gstin/i, /inventory/i, /register/i, /updated/i,
+    /paint inventory/i, /belt inventory/i, /spanner inventory/i,
+    /add your own/i
+  ];
+  const items = rows.filter(raw => {
+    const keys = Object.values(raw).map(v => String(v));
+    return !SKIP_PATTERNS.some(re => keys.some(v => re.test(v)));
+  });
+
+  if (!items.length) {
+    showToast('⚠', 'No importable rows found in file', 'error');
+    prog.textContent = '⚠ No importable rows found.';
+    input.value = ''; return;
+  }
+
+  prog.textContent = `⏳ Uploading ${items.length} rows to server…`;
+
+  try {
+    const resp  = await fetch('/api/bulk-import', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + ADMIN_TOKEN,
+      },
+      body: JSON.stringify({ items, mode: 'inventory' }),
+    });
+
+    if (resp.status === 401) {
+      showToast('🔒', 'Admin login required for import', 'error');
+      prog.textContent = '🔒 Unauthorised — please log in as admin first.';
+      input.value = ''; return;
+    }
+
+    const result = await resp.json();
+    if (!result.ok) throw new Error(result.error || 'Import failed');
+
+    const summary =
+      `✅ Paints: +${result.paintsAdded} added, ~${result.paintsUpdated} updated  |  ` +
+      `Products: +${result.productsAdded} added, ~${result.productsUpdated} updated` +
+      (result.errors && result.errors.length ? `  |  ⚠ ${result.errors.length} errors` : '');
+
+    prog.innerHTML = summary;
+    showToast('✅', `Import done! Paints +${result.paintsAdded}/${result.paintsUpdated} | Products +${result.productsAdded}/${result.productsUpdated}`, 'success');
+
+    // Refresh local data
+    await loadAdminData();
+    renderAdmin();
+    renderProducts('All');
+    renderPaints('All');
+
+  } catch (e) {
+    showToast('❌', 'Import error: ' + e.message, 'error');
+    prog.textContent = '❌ Error: ' + e.message;
+  }
+
   input.value = '';
 }
 
@@ -3363,92 +3331,43 @@ function openLegal(type) {
 function closeLegal() { document.getElementById('legalModal').classList.remove('open'); }
 
 // ============================================================
-//  PRODUCT IMAGE UPLOAD
-//  Lets the admin pick a real product photo from their device
-//  (compressed client-side to keep MongoDB documents small) or
-//  paste a direct image URL. Replaces the old Unsplash Source
-//  API search, which Unsplash fully shut down — that endpoint
-//  no longer returns results, so it always failed silently.
+//  WEB IMAGE SEARCH for products
 // ============================================================
-const AP_IMG_MAX_DIM = 600; // px — plenty for a 150px product card, keeps payload small
+async function searchProductImage() {
+  const name = document.getElementById('ap-name').value.trim();
+  const brand = document.getElementById('ap-brand').value.trim();
+  const query = (brand ? brand + ' ' : '') + (name || 'electrical product');
+  const searchBox = document.getElementById('ap-imageSearch');
+  const resultsEl = document.getElementById('ap-imageResults');
+  searchBox.style.display = 'block';
+  resultsEl.innerHTML = '<div style="color:var(--text-muted);font-size:12px;padding:10px;">🔍 Searching for images…</div>';
 
-function initProductImageDropzone() {
-  const zone = document.getElementById('ap-imageDropzone');
-  if (!zone || zone.dataset.bound) return;
-  zone.dataset.bound = '1';
-  zone.addEventListener('click', (e) => {
-    if (e.target.closest('.ap-image-remove')) return;
-    document.getElementById('ap-imageFile').click();
-  });
-  ['dragenter','dragover'].forEach(evt => zone.addEventListener(evt, (e) => {
-    e.preventDefault(); zone.classList.add('dragover');
-  }));
-  ['dragleave','drop'].forEach(evt => zone.addEventListener(evt, (e) => {
-    e.preventDefault(); zone.classList.remove('dragover');
-  }));
-  zone.addEventListener('drop', (e) => {
-    const file = e.dataTransfer.files && e.dataTransfer.files[0];
-    if (file) handleProductImageFile(file);
-  });
+  // Use Unsplash Source API for product-like images (free, no key needed)
+  // For hardware/electrical store context, we use DuckDuckGo image search proxy
+  const UNSPLASH_QUERIES = [
+    `https://source.unsplash.com/120x120/?${encodeURIComponent(query)}&sig=1`,
+    `https://source.unsplash.com/120x120/?${encodeURIComponent(query)}&sig=2`,
+    `https://source.unsplash.com/120x120/?${encodeURIComponent(query)}&sig=3`,
+    `https://source.unsplash.com/120x120/?${encodeURIComponent(query)}&sig=4`,
+    `https://source.unsplash.com/120x120/?${encodeURIComponent(query)}&sig=5`,
+    `https://source.unsplash.com/120x120/?${encodeURIComponent(name||'hardware')}&sig=6`,
+  ];
+
+  resultsEl.innerHTML = UNSPLASH_QUERIES.map((url, i) =>
+    `<div onclick="selectProductImage('${url}')" style="cursor:pointer;border-radius:8px;overflow:hidden;border:2px solid var(--border2);transition:all 0.2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--border2)'">
+      <img src="${url}" style="width:100%;height:80px;object-fit:cover;display:block;" loading="lazy"
+        onerror="this.parentNode.style.display='none'" alt="Image ${i+1}">
+    </div>`
+  ).join('');
 }
 
-function handleProductImageFile(file) {
-  if (!file || !file.type.startsWith('image/')) {
-    showToast('⚠', 'Please choose an image file', 'error');
-    return;
-  }
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    const img = new Image();
-    img.onload = () => {
-      // Downscale on a canvas so we never store a multi-MB phone photo
-      const scale = Math.min(1, AP_IMG_MAX_DIM / Math.max(img.width, img.height));
-      const w = Math.round(img.width * scale), h = Math.round(img.height * scale);
-      const canvas = document.createElement('canvas');
-      canvas.width = w; canvas.height = h;
-      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-      const dataUrl = canvas.toDataURL('image/jpeg', 0.82);
-      document.getElementById('ap-imageUrl').value = dataUrl;
-      showProductImagePreview(dataUrl);
-    };
-    img.src = e.target.result;
-  };
-  reader.readAsDataURL(file);
-}
-
-// Live-preview whatever the admin pastes into the URL field, so they can
-// confirm it loaded before saving (broken links show an inline warning
-// instead of silently producing a blank product card).
-let _apUrlPreviewTimer = null;
-function handleProductImageUrl(url) {
-  clearTimeout(_apUrlPreviewTimer);
-  url = url.trim();
-  if (!url) { removeProductImage(); return; }
-  _apUrlPreviewTimer = setTimeout(() => showProductImagePreview(url, true), 400);
-}
-
-function showProductImagePreview(src, fromUrlField) {
+function selectProductImage(url) {
+  document.getElementById('ap-imageUrl').value = url;
+  document.getElementById('ap-imageSearch').style.display = 'none';
   const preview = document.getElementById('ap-imagePreview');
-  const empty = document.getElementById('ap-uploaderEmpty');
   const img = document.getElementById('ap-previewImg');
-  img.onerror = () => {
-    if (fromUrlField) showToast('⚠', "That image link didn't load — double-check the URL", 'error');
-    preview.style.display = 'none';
-    empty.style.display = 'block';
-  };
-  img.onload = () => {
-    preview.style.display = 'flex';
-    empty.style.display = 'none';
-  };
-  img.src = src;
-}
-
-function removeProductImage(e) {
-  if (e) e.stopPropagation();
-  document.getElementById('ap-imageUrl').value = '';
-  document.getElementById('ap-imageFile').value = '';
-  document.getElementById('ap-imagePreview').style.display = 'none';
-  document.getElementById('ap-uploaderEmpty').style.display = 'block';
+  img.src = url;
+  preview.style.display = 'block';
 }
 
 // ============================================================
@@ -3485,51 +3404,35 @@ function showToast(icon, msg, type = 'success') {
 }
 
 // ============================================================
-//  SERVICE WORKER REGISTRATION (required for the PWA install
-//  prompt to fire reliably in Chrome/Edge, and for offline shell)
-// ============================================================
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').catch((err) => {
-      console.warn('Service worker registration failed:', err.message);
-    });
-  });
-}
-
-// ============================================================
 //  PWA INSTALL BUTTON
-//  (single source of truth for the deferred install prompt —
-//   the smart-app-banner IIFE further down reuses this via
-//   window._nrePwaPrompt instead of attaching its own listener)
 // ============================================================
 (function() {
+  let _pwaPrompt = null;
   const _btn = document.getElementById('pwaInstallBtn');
+  if (!_btn) return;
 
   window.addEventListener('beforeinstallprompt', function(e) {
     e.preventDefault();
-    window._nrePwaPrompt = e;
-    if (_btn) _btn.style.display = 'flex';
+    _pwaPrompt = e;
+    _btn.style.display = 'flex';
   });
 
-  if (_btn) {
-    _btn.addEventListener('click', async function() {
-      const promptEvent = window._nrePwaPrompt;
-      if (!promptEvent) return;
-      promptEvent.prompt();
-      const choice = await promptEvent.userChoice;
-      if (choice.outcome === 'accepted') {
-        _btn.style.display = 'none';
-      }
-      window._nrePwaPrompt = null;
-    });
-  }
+  _btn.addEventListener('click', async function() {
+    if (!_pwaPrompt) return;
+    _pwaPrompt.prompt();
+    const choice = await _pwaPrompt.userChoice;
+    if (choice.outcome === 'accepted') {
+      _btn.style.display = 'none';
+    }
+    _pwaPrompt = null;
+  });
 
   window.addEventListener('appinstalled', function() {
-    if (_btn) _btn.style.display = 'none';
-    window._nrePwaPrompt = null;
+    _btn.style.display = 'none';
+    _pwaPrompt = null;
   });
 
-  if (window.matchMedia('(display-mode: standalone)').matches && _btn) {
+  if (window.matchMedia('(display-mode: standalone)').matches) {
     _btn.style.display = 'none';
   }
 })();
@@ -3544,25 +3447,10 @@ function saveStoreSettings() {
     phone:     document.getElementById('set-phone')?.value||'',
     whatsapp:  document.getElementById('set-whatsapp')?.value||'',
     address:   document.getElementById('set-address')?.value||'',
-    gst:       document.getElementById('set-gst')?.value||'',
-    upiId:     document.getElementById('set-upi')?.value.trim()||''
+    gst:       document.getElementById('set-gst')?.value||''
   };
   localStorage.setItem('nrStoreSettings', JSON.stringify(s));
   showToast('✅', 'Store settings saved!', 'success');
-}
-// Pre-fills the Settings form from localStorage so saved values (incl. UPI ID)
-// persist across admin sessions instead of appearing blank every time.
-function loadStoreSettings() {
-  let s = {};
-  try { s = JSON.parse(localStorage.getItem('nrStoreSettings') || '{}'); } catch(e) {}
-  const map = {
-    'set-storename': s.storeName, 'set-tagline': s.tagline, 'set-phone': s.phone,
-    'set-whatsapp': s.whatsapp, 'set-address': s.address, 'set-gst': s.gst, 'set-upi': s.upiId
-  };
-  Object.entries(map).forEach(([id, val]) => {
-    const el = document.getElementById(id);
-    if (el && val) el.value = val;
-  });
 }
 function saveAppLinks() {
   const links = {
@@ -3722,7 +3610,7 @@ function toggleFeature(feature, enabled) {
   'use strict';
   const BANNER_KEY = 'nrBannerDismissed2';
   const APK_URL   = 'https://github.com/Izazkhan8293-dev/NewRoyalApp/releases/download/v1.0.0/New.Royal.apk';
-  const EXE_URL   = 'https://github.com/Izazkhan8293-dev/NewRoyalApp/releases/download/v1.0.0/New.Royal.Electricals.exe';
+  const EXE_URL   = 'https://github.com/Izazkhan8293-dev/NewRoyalApp/releases/download/v1.0.0/New.Royal.Setup.exe';
 
   const banner    = document.getElementById('smart-app-banner');
   const btnsCont  = document.getElementById('sab-btns-container');
@@ -3740,14 +3628,16 @@ function toggleFeature(feature, enabled) {
   const isMac     = /macintosh|mac os x/i.test(ua);
   const isMobile  = isAndroid || isIOS;
 
+  let pwaPrompt = null;
   let pwaInstallBtn = null;
 
-  // Reuse the single deferred prompt captured by the main PWA install
-  // handler above — avoids two competing beforeinstallprompt listeners,
-  // which some browsers only deliver the event to once.
-  window.addEventListener('beforeinstallprompt', function() {
+  // Capture PWA install prompt (works on Android Chrome, Desktop Chrome/Edge)
+  window.addEventListener('beforeinstallprompt', function(e) {
+    e.preventDefault();
+    pwaPrompt = e;
     if (pwaInstallBtn) {
       pwaInstallBtn.style.display = 'inline-flex';
+      // Also show nav chip
       const chip = document.getElementById('nav-pwa-chip');
       if (chip) chip.style.display = 'flex';
     }
@@ -3818,19 +3708,18 @@ function toggleFeature(feature, enabled) {
   }
 
   async function triggerPWA() {
-    const promptEvent = window._nrePwaPrompt;
-    if (!promptEvent) {
+    if (!pwaPrompt) {
       showToast('ℹ️', 'Use your browser menu → "Install App" or "Add to Home Screen"', 'info');
       return;
     }
-    promptEvent.prompt();
-    const result = await promptEvent.userChoice;
+    pwaPrompt.prompt();
+    const result = await pwaPrompt.userChoice;
     if (result.outcome === 'accepted') {
       dismiss();
       const chip = document.getElementById('nav-pwa-chip');
       if (chip) chip.style.display = 'none';
     }
-    window._nrePwaPrompt = null;
+    pwaPrompt = null;
   }
 
   function showBanner() {
